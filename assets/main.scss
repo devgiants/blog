@@ -3,3 +3,8 @@
 ---
 
 @import "minima";
+@import "variables";
+
+body {
+  background-color: $main-color;
+}
