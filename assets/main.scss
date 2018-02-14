@@ -3,8 +3,21 @@
 ---
 
 @import "minima";
-@import "variables";
+//@import "_variables";
+
+@import "syntax.css";
+
+$main-color: #1E1B18;
+$second-color: #468C98;
+$third-color: #F78154;
+$fourth-color: #7E7C7F;
 
 body {
   background-color: $main-color;
+  color: $fourth-color;
+
+  a {
+    color: $second-color;
+    text-decoration: none;
+  }
 }
