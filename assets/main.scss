@@ -53,8 +53,19 @@ body {
     line-height: 20px;
   }
 
-  ul, ol {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  .page-content {
+    ul, ol {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .svg-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #468C98;
+    border-radius: 50%;
+    padding-left: 4px;
+    padding-top: 4px;
   }
 }
