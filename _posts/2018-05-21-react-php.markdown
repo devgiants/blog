@@ -69,7 +69,7 @@ Short and sweet. This must be the script last instruction because it will enter 
  $loop->run();
  ```
  
- Here start the magic. Thie above script will echo 'hello' 0.3s after script beginning then 'world' at 0.5s (0.8s from start). No matter timer registration order, loop will handle orders.
+ Here start the magic. The above script will echo 'hello' 0.3s after script beginning then 'world' at 0.5s (0.8s from start). No matter timer registration order, loop will handle orders.
  Thanks to closures/callbacks, you can put your processes inline for shortness.
  
 _Note: you can (and certainly will) use the `use` keyword to port any variables in the callback code block context_.
