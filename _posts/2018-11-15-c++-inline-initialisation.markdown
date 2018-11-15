@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "C++ allow inline initilisation"
+title:  "C++ allow inline initialisation"
 date:   2018-11-15 10:00:00 +0100
 categories: c++ initialisation inline
 ---
@@ -74,7 +74,7 @@ public:
 
 user.cpp
 ```c++
-#include "ZFraction.h"
+#include "user.h"
 
 User::User(int id, std::string name) : m_id(id), m_name(name) {
     // Other logic in constructor
