@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
     <url>
+    <loc>/blog/2018/11/16/fos-rest-query-param-strict/</loc>
+    <lastmod>2018-11-16T17:15:00+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
     <loc>/blog/2018/11/15/composer-global/</loc>
     <lastmod>2018-11-15T10:00:00+01:00</lastmod>
     <changefreq>weekly</changefreq>

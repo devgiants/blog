@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head lang="en">
-        <title>Symfony Config : how to handle entire section require status ? &mdash; devGiants &mdash; dev &amp; training</title>
+        <title>FOS REST Bundle : enforce strict behavior with query params requirements &mdash; devGiants &mdash; dev &amp; training</title>
         <meta charset="utf-8">
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -49,29 +49,113 @@
                 <div class="col-12">
                         <article>
         <header>
-            <h2>Symfony Config : how to handle entire section require status ?</h2>
+            <h2>FOS REST Bundle : enforce strict behavior with query params requirements</h2>
         </header>
         <div>
             <h2 id="context">Context</h2>
 
-<p><a href="http://symfony.com/doc/current/components/config.html">Symfony Config Component</a> is an extremely powerful way of configuring bundles and apps. 
-For my work in progress in <a href="https://github.com/compagnie-hyperactive/UserBundle">LCH User bundle</a>, I wanted to set <code>templates</code> array node as <strong>not required</strong>.</p>
+<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
 
-<h2 id="what%27s-at-stake">What's at stake</h2>
+<pre><code class="php">/**
+     * @param PostHandler $postHandler
+     * @param ParamFetcherInterface $paramFetcher
+     * @Rest\Get("/posts/list")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]*",     
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",     
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="3",     
+     *     description="Max number of posts per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default="1",     
+     *     description="The page wanted"
+     * )
+     * @Rest\View(
+     *     statusCode = 200,
+     *     serializerGroups = {"list"}
+     * )
+     *
+     * @return Paginator
+     */
+    public function list(PostHandler $postHandler, ParamFetcherInterface $paramFetcher)
+    {
 
-<p>All other nodes types are not required unless you add the <code>isRequired()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L62">example</a>) method to your node. Doing so, you will have an exception thrown saying that you have to define this key, which is what you want.</p>
 
-<p>For the array node, it's <strong>different</strong> : it's enabled by default and you have to specify the <code>canBeEnabled()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L83">example</a>) method to your array node to ensure that it will be disabled by default, but enabled if needed.</p>
+        $postsList = $postHandler-&gt;search(
+            intval($paramFetcher-&gt;get('limit')),
+            intval($paramFetcher-&gt;get('page')),
+            $paramFetcher-&gt;get('order'),
+            $paramFetcher-&gt;get('keyword')
+        );
+
+        return $postsList;
+    }
+</code></pre>
+
+<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a... posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :
+- <code>/posts/list?page=2</code> to get page 2, with default <code>limit</code>
+- <code>/posts/list?order=desc</code> to order posts by ID descendant
+- <code>/posts/list?keyword=test</code> to retrieves only posts with 'test' keyword.</p>
+
+<h2 id="what-if...-we-don%27t-follow-requirements-%3F">What if... we don't follow requirements ?</h2>
+
+<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
+
+<ul>
+<li><code>/posts/list?page=a</code></li>
+<li><code>/posts/list?order=other</code></li>
+<li><p><code>/posts/list?keyword=test%20test2</code></p>
+
+<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
+
+<h2 id="what-if-we-want-to-raise-an-error%3F">What if we want to raise an error?</h2>
+
+<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
+
+<pre><code>GET http://localhost:8081/posts/list?page=a
+
+HTTP/1.1 400 Bad Request
+Date: Fri, 16 Nov 2018 16:34:15 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Cache-Control: no-cache, private
+X-Debug-Token: 34ff9b
+X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
+X-Previous-Debug-Token: fd05dc
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
+
+{
+"error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+}
+
+Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
+</code></pre></li>
+</ul>
 
         </div>
                             <p class="tags">
             Tags:
-                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/config">config</a>                        </p>
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/FOS">FOS</a>                        </p>
         
                     <nav class="article">
                 <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/04/09/create-quick-swap/" title="How to create a swap for session usage"><span class="title">How to create a swap for session usage</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/" title="Flex : mixing autowiring and old-fashioned service way"><span class="title">Flex : mixing autowiring and old-fashioned service way</span></a></li>
+                                                                <li>Previous: <a class="previous" href="/blog/2018/11/15/composer-global/" title="Composer usage can also be global"><span class="title">Composer usage can also be global</span></a></li>
                                     </ul>
             </nav>
             </article>

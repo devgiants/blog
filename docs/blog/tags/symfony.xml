@@ -3,9 +3,111 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/symfony.xml" rel="self"/>
     <link href="/"/>
-    <updated>2018-11-16T12:02:00+01:00</updated>
+    <updated>2018-11-16T17:35:38+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[FOS REST Bundle : enforce strict behavior with query params requirements]]></title>
+            <link href="/blog/2018/11/16/fos-rest-query-param-strict/"/>
+            <updated>2018-11-16T17:15:00+01:00</updated>
+            <id>/blog/2018/11/16/fos-rest-query-param-strict/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
+
+<pre><code class="php">/**
+     * @param PostHandler $postHandler
+     * @param ParamFetcherInterface $paramFetcher
+     * @Rest\Get("/posts/list")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]*",     
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",     
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="3",     
+     *     description="Max number of posts per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default="1",     
+     *     description="The page wanted"
+     * )
+     * @Rest\View(
+     *     statusCode = 200,
+     *     serializerGroups = {"list"}
+     * )
+     *
+     * @return Paginator
+     */
+    public function list(PostHandler $postHandler, ParamFetcherInterface $paramFetcher)
+    {
+
+
+        $postsList = $postHandler-&gt;search(
+            intval($paramFetcher-&gt;get('limit')),
+            intval($paramFetcher-&gt;get('page')),
+            $paramFetcher-&gt;get('order'),
+            $paramFetcher-&gt;get('keyword')
+        );
+
+        return $postsList;
+    }
+</code></pre>
+
+<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a... posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :
+- <code>/posts/list?page=2</code> to get page 2, with default <code>limit</code>
+- <code>/posts/list?order=desc</code> to order posts by ID descendant
+- <code>/posts/list?keyword=test</code> to retrieves only posts with 'test' keyword.</p>
+
+<h2 id="what-if...-we-don%27t-follow-requirements-%3F">What if... we don't follow requirements ?</h2>
+
+<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
+
+<ul>
+<li><code>/posts/list?page=a</code></li>
+<li><code>/posts/list?order=other</code></li>
+<li><p><code>/posts/list?keyword=test%20test2</code></p>
+
+<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
+
+<h2 id="what-if-we-want-to-raise-an-error%3F">What if we want to raise an error?</h2>
+
+<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
+
+<pre><code>GET http://localhost:8081/posts/list?page=a
+
+HTTP/1.1 400 Bad Request
+Date: Fri, 16 Nov 2018 16:34:15 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Cache-Control: no-cache, private
+X-Debug-Token: 34ff9b
+X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
+X-Previous-Debug-Token: fd05dc
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
+
+{
+"error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+}
+
+Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
+</code></pre></li>
+</ul>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Symfony Config : how to handle entire section require status ?]]></title>
             <link href="/blog/2018/02/20/entire-section-requirements-symfony-config/"/>
