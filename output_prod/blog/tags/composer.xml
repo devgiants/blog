@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/composer.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2018-11-16T12:02:00+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Composer usage can also be global]]></title>
+            <link href="/blog/2018/11/15/composer-global/"/>
+            <updated>2018-11-15T10:00:00+01:00</updated>
+            <id>/blog/2018/11/15/composer-global/</id>
+            <content type="html"><![CDATA[<p>As an every-day <a href="https://getcomposer.org">Composer</a> user, I always used it on a project scope, i.e with a <code>composer.json</code> lying in a specific project directory.
+I discover recently than it can also be used on a <a href="https://getcomposer.org/doc/03-cli.md#global">global way</a> (meaning not related to a project) using <code>global</code> modifier:</p>
+
+<pre><code>composer global require squizlabs/php_codesniffer
+</code></pre>
+
+<p>The globally installed package will be accessible user-system wide. On my Ubuntu system, global <code>vendor</code> folder lies on <code>~/.config/composer/</code>.</p>
+
+<p>It strikes me yesterday that this feature is exactly the same one which is provided by <code>npm</code>, <code>yarn</code> or <code>bower</code>, other packages/dependencies manager.</p>
+]]></content>
+        </entry>
+    </feed>

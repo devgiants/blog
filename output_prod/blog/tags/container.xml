@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/container.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2018-11-16T12:02:00+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Flex : mixing autowiring and old-fashioned service way]]></title>
+            <link href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"/>
+            <updated>2018-02-20T16:44:24+01:00</updated>
+            <id>/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p><a href="https://symfony.com/doc/current/setup/flex.html">Symfony Flex</a> incredibly reduces and simplifies day-to-day Symfony usage. Among other things, <a href="https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container">autowiring</a> is one of the biggest.
+<strong>But what if you need to use some old-school service naming for further usage ?</strong></p>
+
+<h2 id="solution">Solution</h2>
+
+<p>For the CMS bundle I'm working on, I needed to refer to an handler for security (successful/failure authentication). Docs states I can use a service name in <code>security.yaml</code> :</p>
+
+<pre><code class="yaml">admin:
+    provider: db_provider # Use any declared provider above
+    form_login:
+        login_path: /admin/login
+        check_path: /admin/login
+        default_target_path: /admin
+        username_parameter: login[username_or_email]
+        password_parameter: login[password]
+
+        success_handler:    app.security_handler
+        failure_handler:    app.security_handler
+</code></pre>
+
+<p>The handler :</p>
+
+<pre><code class="php">use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+
+class SecurityHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
+{
+
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this-&gt;router = $router;
+    }
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
+        // TODO make necessary check to ensure proper redirection after successful authentication   
+        return new RedirectResponse($this-&gt;router-&gt;generate('index'));
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        // TODO make necessary check to ensure proper redirection after failure authen authentication
+        return new RedirectResponse($this-&gt;router-&gt;generate('app_login'));
+    }
+}
+
+</code></pre>
+
+<p>But from a Flex point of view, <strong>the constructor with type-hinted arguments is enough</strong>.</p>
+
+<p>The solution is in 2 steps</p>
+
+<ol>
+<li>Define the service "old-fashioned" way</li>
+</ol>
+
+<pre><code class="yaml">app.security_handler:
+  class: App\Listener\Security\SecurityHandler
+</code></pre>
+
+<p>But doing so, to core will switch to old way to load service. Meaning that you would have to provide parameters/services for dependancy injection manually.</p>
+
+<ol start="2">
+<li>Define a <a href="https://github.com/compagnie-hyperactive/UserBundle">service alias</a></li>
+</ol>
+
+<pre><code class="yaml">App\Listener\Security\SecurityHandler: '@app.security_handler'
+</code></pre>
+
+<p>This very last step <strong>enable autowiring for your service</strong>. I can use the name in security.yaml as above.</p>
+]]></content>
+        </entry>
+    </feed>

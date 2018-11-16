@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/swap.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2018-11-16T12:02:00+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[How to create a swap for session usage]]></title>
+            <link href="/blog/2018/04/09/create-quick-swap/"/>
+            <updated>2018-04-09T17:44:24+02:00</updated>
+            <id>/blog/2018/04/09/create-quick-swap/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>Long silence from me past weeks as I was working on my home automation architecture, especially on IoT POV. I will publish everything here, but today I wanted to share a quick tip to create <strong>a swap space on a Linx system that doesn't have one</strong>.</p>
+
+<h2 id="why-so%3F">Why so?</h2>
+
+<p>I'm deeply testing <a href="http://www.friendlyarm.com/index.php?route=product/product&amp;product_id=132">NanoPi NEO</a> these days and without any doubt it will be my home automation corner stone. I started using the 256Mo version and the Ubuntu Core Linux image provided comes without any swap space.</p>
+
+<p>As I started to make some <code>composer update</code> (because all my low level interaction is done with <a href="https://reactphp.org/">ReactPHP</a>, stay tuned !), device exploded in such messages :</p>
+
+<pre><code>The following exception is caused by a lack of memory or swap, or not having swap configured
+Check https://getcomposer.org/doc/articles/troubleshooting.md#proc-open-fork-failed-errors for details
+
+PHP Warning:  proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+Warning: proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+  [ErrorException]                                   
+  proc_open(): fork failed - Cannot allocate memory  
+
+
+</code></pre>
+
+<p>I forgot that 256Mo is not a lot... Solution : make a swap (that will stand until the next reboot)</p>
+
+<pre><code># Use dd to create a 256 Mo sxap space, filled with 0, and named /var/swap.1
+sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=256
+
+# Inform system that swap exists and where
+sudo /sbin/mkswap /var/swap.1
+
+# Enable
+sudo /sbin/swapon /var/swap.1
+</code></pre>
+]]></content>
+        </entry>
+    </feed>

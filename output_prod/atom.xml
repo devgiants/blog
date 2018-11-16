@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/atom.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2018-11-16T12:02:00+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Composer usage can also be global]]></title>
+            <link href="/blog/2018/11/15/composer-global/"/>
+            <updated>2018-11-15T10:00:00+01:00</updated>
+            <id>/blog/2018/11/15/composer-global/</id>
+            <content type="html"><![CDATA[<p>As an every-day <a href="https://getcomposer.org">Composer</a> user, I always used it on a project scope, i.e with a <code>composer.json</code> lying in a specific project directory.
+I discover recently than it can also be used on a <a href="https://getcomposer.org/doc/03-cli.md#global">global way</a> (meaning not related to a project) using <code>global</code> modifier:</p>
+
+<pre><code>composer global require squizlabs/php_codesniffer
+</code></pre>
+
+<p>The globally installed package will be accessible user-system wide. On my Ubuntu system, global <code>vendor</code> folder lies on <code>~/.config/composer/</code>.</p>
+
+<p>It strikes me yesterday that this feature is exactly the same one which is provided by <code>npm</code>, <code>yarn</code> or <code>bower</code>, other packages/dependencies manager.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[C++ allow inline initialisation]]></title>
+            <link href="/blog/2018/11/15/c++-inline-initialisation/"/>
+            <updated>2018-11-15T10:00:00+01:00</updated>
+            <id>/blog/2018/11/15/c++-inline-initialisation/</id>
+            <content type="html"><![CDATA[<p>As a PHP developer, I was greatly surprised when discovering, while learning C++, the <strong>inline initialisation</strong> process</p>
+
+<p>Using PHP 7, you would start a class for example with :</p>
+
+<pre><code class="php">/**
+ * Class User
+ * @package
+ */
+class User {
+    /**
+     * @var int $id
+     */
+    private int $id;
+
+    /**
+     * @var string $name
+     */
+    private string $name;
+
+    /**
+     * User constructor.
+     *
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct(int $id, string $name) {
+        $this-&gt;id = $id;
+        $this-&gt;name = $name;
+    }
+}
+</code></pre>
+
+<p>Using C++, same class would become</p>
+
+<p><strong>user.h</strong></p>
+
+<pre><code class="c">#ifndef USER_USER_H
+#define USER_USER_H
+
+#include &lt;iostream&gt;
+
+
+class User {
+private:
+    /**
+     *
+     */
+    int m_id;
+
+    /**
+     *
+     */
+    std::string m_name;
+public:
+    /**
+     * Constructor
+     * @param id
+     * @param name
+     */
+    User(int id, std::string name);
+};
+
+#endif //USER_USER_H
+</code></pre>
+
+<p><strong>user.cpp</strong></p>
+
+<pre><code class="c">#include "user.h"
+
+User::User(int id, std::string name) : m_id(id), m_name(name) {
+    // Other logic in constructor
+}
+</code></pre>
+
+<p>The inline initialization takes place where nowadays in PHP you would specify return type. Using this notation, you clearly <strong>light up constructor method body</strong>.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Introduce React PHP]]></title>
+            <link href="/blog/2018/05/21/react-php/"/>
+            <updated>2018-05-21T12:00:00+02:00</updated>
+            <id>/blog/2018/05/21/react-php/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>On a recent Angular 5 training I could luckily attend to, trainer introduces JS reactive programming (using <a href="https://beta-rxjsdocs.firebaseapp.com/">RXJS</a>). Complete new paradigm as everything is event, nested one with others. 
+Way different way to code... But extremely powerful.</p>
+
+<p>Then I tought : what a wonderful way to stick to my home automation real life modeling. As a matter of fact, IoT and home automation are mainly composed of <strong>stimuli</strong> and <strong>reactions</strong>.</p>
+
+<p>What could be better in this context than reactive loop to events? That's what lead me to <a href="https://reactphp.org/">ReactPHP</a>, which is a PHP implementation of <a href="https://fr.wikipedia.org/wiki/Reactor">Reactor pattern</a>.
+This library is very well-done, concern separated.</p>
+
+<h2 id="few-examples">Few examples</h2>
+
+<h3 id="main-brick-%3A-event-loop">Main brick : <a href="https://github.com/reactphp/event-loop">event-loop</a></h3>
+
+<h4 id="factory-for-loop-object-creation">Factory for loop object creation</h4>
+
+<pre><code class="php">$loop = React\EventLoop\Factory::create();
+</code></pre>
+
+<p>Behind the scenes, this named constructor will use the best scenario according to your configuration.</p>
+
+<pre><code class="php">  public static function create()
+    {
+        // @codeCoverageIgnoreStart
+        if (class_exists('libev\EventLoop', false)) {
+            return new ExtLibevLoop();
+        } elseif (class_exists('EvLoop', false)) {
+            return new ExtEvLoop();
+        } elseif (class_exists('EventBase', false)) {
+            return new ExtEventLoop();
+        } elseif (function_exists('event_base_new') &amp;&amp; PHP_VERSION_ID &lt; 70000) {
+            // only use ext-libevent on PHP &lt; 7 for now
+            return new ExtLibeventLoop();
+        }
+        return new StreamSelectLoop();
+        // @codeCoverageIgnoreEnd
+    }
+</code></pre>
+
+<p>More details on differents implementations and extensions related <a href="https://github.com/reactphp/event-loop#loop-implementations">here</a>. So far I'm using the fallback one (StreamSelect) but will enhance this point soon.</p>
+
+<h4 id="loop-run">Loop run</h4>
+
+<pre><code class="php">$loop-&gt;run();
+</code></pre>
+
+<p>Short and sweet. This must be the script last instruction because it will enter in infinite loop from here.</p>
+
+<h4 id="timers">Timers</h4>
+
+<p>```php
+ $loop->addTimer(0.8, function () {
+     echo 'world!' . PHP_EOL;
+ });</p>
+
+<p>$loop->addTimer(0.3, function () {
+     echo 'hello ';
+ });
+ $loop->run();
+ ```</p>
+
+<p>Here start the magic. The above script will echo 'hello' 0.3s after script beginning then 'world' at 0.5s (0.8s from start). No matter timer registration order, loop will handle orders.
+ Thanks to closures/callbacks, you can put your processes inline for shortness.</p>
+
+<p><em>Note: you can (and certainly will) use the <code>use</code> keyword to port any variables in the callback code block context</em>.</p>
+
+<p>```php
+function hello($name, LoopInterface $loop)
+{
+    $loop->addTimer(1.0, function () use ($name) {
+        echo "hello $name\n";
+    });
+}</p>
+
+<p>hello('Tester', $loop);
+ $loop->run();
+ ```</p>
+
+<h3 id="stream"><a href="https://github.com/reactphp/stream">stream</a></h3>
+
+<h4 id="readablestreaminterface">ReadableStreamInterface</h4>
+
+<p>```php
+$stream->on('data', function ($data) {
+    echo $data;
+});</p>
+
+<p>$loop->run();
+ ```</p>
+
+<p>Forr example, the end event will be emitted once the source stream has successfully reached the end of the stream (EOF).</p>
+
+<p>```php
+$stream->on('end', function () {
+    echo 'END';
+});</p>
+
+<p>$loop->run();
+ ```</p>
+
+<p>Among available events: pipe, pause, resume, close...</p>
+
+<h4 id="writablestreaminterface">WritableStreamInterface</h4>
+
+<p>Same idea <a href="https://github.com/reactphp/stream#writablestreaminterface">write-oriented</a>.</p>
+
+<p>As far as I write this, this is only what I can practically test and use.</p>
+
+<p>More to be discussed here in future : socket, promise...</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[How to create a swap for session usage]]></title>
+            <link href="/blog/2018/04/09/create-quick-swap/"/>
+            <updated>2018-04-09T17:44:24+02:00</updated>
+            <id>/blog/2018/04/09/create-quick-swap/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>Long silence from me past weeks as I was working on my home automation architecture, especially on IoT POV. I will publish everything here, but today I wanted to share a quick tip to create <strong>a swap space on a Linx system that doesn't have one</strong>.</p>
+
+<h2 id="why-so%3F">Why so?</h2>
+
+<p>I'm deeply testing <a href="http://www.friendlyarm.com/index.php?route=product/product&amp;product_id=132">NanoPi NEO</a> these days and without any doubt it will be my home automation corner stone. I started using the 256Mo version and the Ubuntu Core Linux image provided comes without any swap space.</p>
+
+<p>As I started to make some <code>composer update</code> (because all my low level interaction is done with <a href="https://reactphp.org/">ReactPHP</a>, stay tuned !), device exploded in such messages :</p>
+
+<pre><code>The following exception is caused by a lack of memory or swap, or not having swap configured
+Check https://getcomposer.org/doc/articles/troubleshooting.md#proc-open-fork-failed-errors for details
+
+PHP Warning:  proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+Warning: proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+  [ErrorException]                                   
+  proc_open(): fork failed - Cannot allocate memory  
+
+
+</code></pre>
+
+<p>I forgot that 256Mo is not a lot... Solution : make a swap (that will stand until the next reboot)</p>
+
+<pre><code># Use dd to create a 256 Mo sxap space, filled with 0, and named /var/swap.1
+sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=256
+
+# Inform system that swap exists and where
+sudo /sbin/mkswap /var/swap.1
+
+# Enable
+sudo /sbin/swapon /var/swap.1
+</code></pre>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Symfony Config : how to handle entire section require status ?]]></title>
+            <link href="/blog/2018/02/20/entire-section-requirements-symfony-config/"/>
+            <updated>2018-02-20T16:44:24+01:00</updated>
+            <id>/blog/2018/02/20/entire-section-requirements-symfony-config/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p><a href="http://symfony.com/doc/current/components/config.html">Symfony Config Component</a> is an extremely powerful way of configuring bundles and apps. 
+For my work in progress in <a href="https://github.com/compagnie-hyperactive/UserBundle">LCH User bundle</a>, I wanted to set <code>templates</code> array node as <strong>not required</strong>.</p>
+
+<h2 id="what%27s-at-stake">What's at stake</h2>
+
+<p>All other nodes types are not required unless you add the <code>isRequired()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L62">example</a>) method to your node. Doing so, you will have an exception thrown saying that you have to define this key, which is what you want.</p>
+
+<p>For the array node, it's <strong>different</strong> : it's enabled by default and you have to specify the <code>canBeEnabled()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L83">example</a>) method to your array node to ensure that it will be disabled by default, but enabled if needed.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Flex : mixing autowiring and old-fashioned service way]]></title>
+            <link href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"/>
+            <updated>2018-02-20T16:44:24+01:00</updated>
+            <id>/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p><a href="https://symfony.com/doc/current/setup/flex.html">Symfony Flex</a> incredibly reduces and simplifies day-to-day Symfony usage. Among other things, <a href="https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container">autowiring</a> is one of the biggest.
+<strong>But what if you need to use some old-school service naming for further usage ?</strong></p>
+
+<h2 id="solution">Solution</h2>
+
+<p>For the CMS bundle I'm working on, I needed to refer to an handler for security (successful/failure authentication). Docs states I can use a service name in <code>security.yaml</code> :</p>
+
+<pre><code class="yaml">admin:
+    provider: db_provider # Use any declared provider above
+    form_login:
+        login_path: /admin/login
+        check_path: /admin/login
+        default_target_path: /admin
+        username_parameter: login[username_or_email]
+        password_parameter: login[password]
+
+        success_handler:    app.security_handler
+        failure_handler:    app.security_handler
+</code></pre>
+
+<p>The handler :</p>
+
+<pre><code class="php">use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+
+class SecurityHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
+{
+
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this-&gt;router = $router;
+    }
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
+        // TODO make necessary check to ensure proper redirection after successful authentication   
+        return new RedirectResponse($this-&gt;router-&gt;generate('index'));
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        // TODO make necessary check to ensure proper redirection after failure authen authentication
+        return new RedirectResponse($this-&gt;router-&gt;generate('app_login'));
+    }
+}
+
+</code></pre>
+
+<p>But from a Flex point of view, <strong>the constructor with type-hinted arguments is enough</strong>.</p>
+
+<p>The solution is in 2 steps</p>
+
+<ol>
+<li>Define the service "old-fashioned" way</li>
+</ol>
+
+<pre><code class="yaml">app.security_handler:
+  class: App\Listener\Security\SecurityHandler
+</code></pre>
+
+<p>But doing so, to core will switch to old way to load service. Meaning that you would have to provide parameters/services for dependancy injection manually.</p>
+
+<ol start="2">
+<li>Define a <a href="https://github.com/compagnie-hyperactive/UserBundle">service alias</a></li>
+</ol>
+
+<pre><code class="yaml">App\Listener\Security\SecurityHandler: '@app.security_handler'
+</code></pre>
+
+<p>This very last step <strong>enable autowiring for your service</strong>. I can use the name in security.yaml as above.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[VoterInterface interface constants]]></title>
+            <link href="/blog/2018/02/16/voter-interface-constants/"/>
+            <updated>2018-02-16T11:39:24+01:00</updated>
+            <id>/blog/2018/02/16/voter-interface-constants/</id>
+            <content type="html"><![CDATA[<h2 id="what%27s-happening">What's happening</h2>
+
+<p>Few weeks ago, I got <strong>strange behavior</strong> in voters return while using constants from <code>VoterInterface</code> interface ( <code>VoterInterface::ACCESS_GRANTED</code>, <code>VoterInterface::ACCESS_DENIED</code> and <code>VoterInterface::ACCESS_ABSTAIN</code>). As sidenote, here is the <a href="http://api.symfony.com/3.4/Symfony/Component/Security/Core/Authorization/Voter/VoterInterface.html">involved interface</a>.</p>
+
+<p>Below my <code>Voter</code> initial code:</p>
+
+<pre><code class="php"> /**
+     * @param string $attributes
+     * @param mixed $subject
+     * @param TokenInterface $token
+     * @return int
+     */
+    public function voteOnAttribute($attributes, $subject, TokenInterface $token) {
+
+      $user = $token-&gt;getUser();
+
+      // If managed here, meaning support method said yes and subject got Rolable trait, and therefore getAuthorizedRoles() method.
+
+      // skip everything if no roles set
+      if(count($subject-&gt;getAuthorizedRoles()) &gt; 0) {
+
+        // Roles set and no user. Deny
+        if(!$user instanceof User) {
+            return static::ACCESS_DENIED;
+        }
+
+        // user connected (but skip if admin)
+        if(!$user-&gt;hasRole(User::ROLE_ADMIN)) {
+
+          // User connected, not admin, check roles intersections
+          if(count(array_intersect($subject-&gt;getAuthorizedRoles(), $user-&gt;getRoles())) === 0) {
+            return static::ACCESS_DENIED;
+          }
+        }
+      }
+
+      return static::ACCESS_GRANTED;
+    }
+</code></pre>
+
+<h2 id="a-legacy">A legacy</h2>
+
+<p>As a matter of fact, my <a href="https://stackoverflow.com/questions/44906743/symfony-voter-constant-usages#answer-46253196">StackOverflow post</a> on topic is pointed on <strong>a back-compatibility SF 2.5-</strong>. Doc says for SF 2.5+, voters must return <code>true</code> or <code>false</code>.</p>
+
+<p>It’s really important when it comes to <code>VoterInterface::ACCESS_DENIED</code> because where a today regular Voter must return <code>false</code> in <strong>denied access</strong> case, the matching constant got assigned to -1.</p>
+
+<p>Nonetheless, still a question from my point of view so far : what about <code>VoterInterface::ACCESS_ABSTAIN</code> ? I found the abstaining capability very useful if <code>Voter</code> concludes that it can’t vote.</p>
+
+<p>I will keep this post updated as soon as I will have the answer.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Docker Apache impossible restart : httpd already running]]></title>
+            <link href="/blog/2018/02/15/docker-apache-impossible-restart/"/>
+            <updated>2018-02-15T18:35:36+01:00</updated>
+            <id>/blog/2018/02/15/docker-apache-impossible-restart/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>In Docker stacks I created (<a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress">here</a> and <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony">here</a>), I realized after few usages that I could encounter problem during stack restart. <strong>Apache will not start</strong> with following message : <code>httpd (pid: XX) already running.</code></p>
+
+<h2 id="explanation">Explanation</h2>
+
+<p>I usually use <code>docker-compose stop</code> to stop my stacks between projects. It's different from <code>docker-compose down</code> because it doesn't destroy containers, but just stop them. In an ideal world, no problem with that, furthermore it's a bit faster.</p>
+
+<p>In other hand, if stack stops because of any crash, <strong>containers can be totally unusable</strong>. Due to Apache internal architecture, a new start will find <code>/var/run/apache2/apache2.pid</code> file and container system will not launch Apache <strong>to avoid (as it seems to it) second running instance</strong>.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>2 parts here :
+1. Use <code>docker-compose down</code> rather than <code>docker-compose stop</code>. Dockerily speaking, it's best practice because <strong>each container will be recreated from scratch</strong> each time you need to work with. As you have persisted what you need to store in volumes, you lost nothing.
+2. Customize you Apache image <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress/blob/f7086f7fa23362b6c64707816fafaee2dbf73e6c/docker/images/apache2.4/Dockerfile#L17">to remove this lock file</a> when container is re-created.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Docker stacks presentation]]></title>
+            <link href="/blog/2018/02/15/docker-stack-presentation/"/>
+            <updated>2018-02-15T13:24:14+01:00</updated>
+            <id>/blog/2018/02/15/docker-stack-presentation/</id>
+            <content type="html"><![CDATA[<h2 id="my-goals">My goals</h2>
+
+<p>Docker is one the (too many) things <strong>I wanted to step into</strong> for a while now, without necessary time to dive in. I finally board the train, and even if I stay closer from padawan to guru, I could build <strong>2 stacks I will introduce below</strong> : one for <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony">Symfony</a>, and another one for <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress">Wordpress</a>.</p>
+
+<p>Both are new boilerplates used for all news projects either <a href="https://www.compagnie-hyperactive.com">@LCH</a> or personal.</p>
+
+<h2 id="symfony-stack">Symfony stack</h2>
+
+<p>![Symfony stack](/assets/posts-images/stack-symfony.png)</p>
+
+<p>It allows to install <strong>a complete working environment for Symfony 2.X or 3.X</strong>. Symfony Flex (usable on 3.4+) is not in here, we created a 4.X <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/tree/symfony4">specific branch</a>). Here you find 4 containers:</p>
+
+<ul>
+<li>mysql</li>
+<li>php</li>
+<li>apache</li>
+<li>phpmyadmin</li>
+</ul>
+
+<p>Below the specifics highlighted.</p>
+
+<h3 id="environment-vars">Environment vars</h3>
+
+<p>All <code>docker-compose.yml</code> needed variables are stored in a <code>.env</code> file (Docker documentation <a href="https://docs.docker.com/compose/environment-variables/#the-env-file">here</a>). 
+This <code>.env</code> file is also defined inside the very containers to expose needed environment variables. To do so, just pass <code>.env</code> file as <code>env_file</code> option (documentation <a href="https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option">here</a>)</p>
+
+<p>This gives the interesting ability <strong>to use them in files added to container</strong> (like the <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker/images/apache2.4/app.conf">app.conf</a> which defines app vhost by using <code>$FPM_HOST</code>). You can do the same in the very <code>Dockerfile</code>.</p>
+
+<p><em>Important note : to do so, just explicitely define them with the <code>ARG</code> keyword (<a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker/images/apache2.4/Dockerfile#L5">example</a>).</em></p>
+
+<h3 id="volumes">Volumes</h3>
+
+<p>I create 3 volumes in here :
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L11">Database one</a>
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L30">Application files</a>
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L47">Apache logs</a></p>
+
+<p><em>Stay tuned for a volume focused post to come.</em></p>
+
+<h3 id="start-bash">Start bash</h3>
+
+<p>To help starting with, I created a <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/init.bash">bash file</a> that executes following actions :
+1. Volume folders creation (if it turns they does not exist already)
+2. Download and setup Symfony installer (if <code>symfony</code> command not already registered)
+3. Install Symfony using the version number specified in <code>.env</code> file.
+4. <code>.env</code> file copy to allow Symfony application access to its variables (described <a href="https://symfony.com/doc/3.3/components/dotenv.html">here</a> and <a href="https://symfony.com/doc/current/configuration/external_parameters.html">here</a>)
+5. <code>parameters.yml.dist</code> file copy and params substitution using <code>envsubst</code> command. <em>Note: I chosed not to use <a href="https://symfony.com/doc/3.3/components/dotenv.html">DotEnv component</a> to ensure total 2.X and 3.4- retro-compatibility.</em>
+6. <code>docker-compose</code> install if not already here and registered as <code>docker-compose</code>
+7. Set container up (with building)
+8. <code>parameters.yml</code> file removing to trigger regeneration (I've bumped to this case during my tests where a <code>composer update</code> will not refresh <code>parameters.yml</code> file)
+9. <code>composer update</code></p>
+
+<h2 id="wordpress-stack">Wordpress stack</h2>
+
+<p>![Wordpress stack](/assets/posts-images/stack-wordpress.png)</p>
+
+<p>Wordpress stack does the same trick as above, adding WP-CLI. I set it up using <a href="https://make.wordpress.org/cli/handbook/config/#config-files">YAML configuration file way</a> to execute commands bare, without any arguments (as they are specified <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress/blob/master/wp-cli.yml">in file</a>)</p>
+
+<p>Bash script interesting actions : last version core download, installation, configuration, first user creation, remove Hello Dolly (RIP) and tests page/post, permalink configuration to <code>%postname%</code></p>
+
+<p>Finally, the script installs an sets up a <a href="https://roots.io/sage/">ready-to-work-with Sage theme</a> (8.5.3 version, gulp/bower/npm one).</p>
+
+<h2 id="what%27s-next-%3F">What's next ?</h2>
+
+<p>This is just a start. Several noticeable features will eventually be added.</p>
+
+<h3 id="for-both">For both</h3>
+
+<ul>
+<li>Elastic stack integration</li>
+<li>Test addition</li>
+</ul>
+
+<h3 id="for-symfony-stack">For Symfony stack</h3>
+
+<ul>
+<li>Continue <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/tree/symfony4">Symfony 4 branch</a></li>
+<li>Add Webpack Encore for assets management</li>
+<li>Add Angular for front boilerplate</li>
+</ul>
+
+<h3 id="for-wordpress-stack">For Wordpress stack</h3>
+
+<ul>
+<li>ACF Pro setup</li>
+</ul>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Website backup PHP component]]></title>
+            <link href="/blog/2018/02/12/website-backup-php-component/"/>
+            <updated>2018-02-12T16:55:24+01:00</updated>
+            <id>/blog/2018/02/12/website-backup-php-component/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>I needed for a while to package a PHP component which will allow me to <strong>quickly</strong> and <strong>safely</strong> backup websites I do. Goals below :
+* Command line execution (automation approach)
+* Highly configurable (websites addition, backup medias…)
+* Composer-based approach (PHAR, auto-update).</p>
+
+<p>So I developed <a href="https://github.com/devgiants/websites-backup">websites-backup</a>. Details are below.</p>
+
+<h2 id="component-usage">Component usage</h2>
+
+<p>Using a <a href="https://github.com/devgiants/websites-backup#backup">YAML configuration</a> file, you can setup :
+* <strong>Several sites to backup</strong> (physically on the server and accessible to command system user) : each site is composed with a couple database/files (only MySQL so far)
+* <strong>Several backup medias</strong> : So far, only FTP is developed. Eventually I would like to setup an Amazon and Dropbox gateway. Main goal here is clearly allowing simultaneous and synchronised muliple backup storages.</p>
+
+<p><em>Note : from a security point of view, I recommand to create a system user per site, with read-only rights.</em></p>
+
+<h2 id="symfony-components-based...">Symfony components based...</h2>
+
+<p>I used this project as a <strong>training to use only few Symfony components</strong>. As far as I’m concerned, it’s a very good way to really handle them and focus on their perimeters &amp; limitations. Quick check on <code>composer.json</code> gives the components list:
+* <strong>Console component</strong> : it gives the command line approach &amp; tools. Arguments, options, console styling…
+* <strong>Config component</strong> : it provides the configuration ability, with powerful chained methods to allow you to check and decides what to do with configuration values transmitted to your application.
+* <strong>YAML component</strong> :  the YAML parser, useful to read the quoted above configuration file.</p>
+
+<h2 id="...but-not-only">...But not only</h2>
+
+<p>In order to strenghten the application on usage and maintenance point of views, I alwo use packages :
+* <a href="https://github.com/box-project/box2">The excellent Box</a> : allows you to make configurable PHAR in no-time.
+* Phar update (old but still working) : with a manifest system, provide necessary logic to check newer versions and update if necessary.
+Below is the process I follow :
+1. Make the updates (code, README…) which will be future release
+2. Git updates and coherent tag creation (i.e : 1.0.13)
+3. Application packaging  with Box
+4. Archive and up-to-date manifest publication on GitHub pages (gh-pages branch)</p>
+
+<p>Then, next time application runs, it decides using the manifest if a newer version is available (version numeric comparison, that’s why coherent and consecutive tagging does the trick).  <code>self-update</code> command will actually update the application.</p>
+
+<h2 id="also">Also</h2>
+
+<p>Considering the fact that multiple commands are available using websites-backup, I chose <a href="https://pimple.symfony.com/">Pimple</a> to have a simple but powerful dependency injection container system. I can instanciate dependencies on main application entry point :</p>
+
+<pre><code class="php">$container = new Container();
+$container['tools'] = new BackupTools();
+</code></pre>
+
+<p>And then pass container to all commands :</p>
+
+<pre><code class="php">$application-&gt;add(new Command\BackupCommand('backup', $container));
+$application-&gt;add(new Command\RetrieveBackupCommand('retrieve', $container));
+</code></pre>
+
+<h2 id="roadmap">Roadmap</h2>
+
+<p>OK, things work, but there are <a href="https://github.com/devgiants/websites-backup/projects/1">numerous features and improvements</a> I wish to add. If you find the project interesting and would like to give an hand, fell free to contact me !</p>
+]]></content>
+        </entry>
+    </feed>
