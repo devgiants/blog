@@ -78,30 +78,30 @@ For each `QueryParam`, requirements are given in [an regexp way](https://symfony
  - `/posts/list?order=other`
  - `/posts/list?keyword=test%20test2`
  
- What will happen? Nothing. By default, FOS REST Bundle will take __the offending `QueryParam` default value instead__ of your offending value.
+What will happen? Nothing. By default, FOS REST Bundle will take __the offending `QueryParam` default value instead__ of your offending value.
  
- ## What if we want to raise an error?
- Depending to which `QueryParam` you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those `QueryParam`. The solution for that is simple : just add the `QueryParam` attribute `strict` to true in order to force FOS REST Bundle to raise an Exception.
- With proper configuration (such as `ExceptionController`), you achieve to throw out-of-the-box exceptions like this :
+## What if we want to raise an error?
+Depending to which `QueryParam` you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those `QueryParam`. The solution for that is simple : just add the `QueryParam` attribute `strict` to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as `ExceptionController`), you achieve to throw out-of-the-box exceptions like this :
  
- ```
- GET http://localhost:8081/posts/list?page=a
+```
+GET http://localhost:8081/posts/list?page=a
  
- HTTP/1.1 400 Bad Request
- Date: Fri, 16 Nov 2018 16:34:15 GMT
- Server: Apache/2.4.18 (Ubuntu)
- Cache-Control: no-cache, private
- X-Debug-Token: 34ff9b
- X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
- X-Previous-Debug-Token: fd05dc
- Connection: close
- Transfer-Encoding: chunked
- Content-Type: application/json
+HTTP/1.1 400 Bad Request
+Date: Fri, 16 Nov 2018 16:34:15 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Cache-Control: no-cache, private
+X-Debug-Token: 34ff9b
+X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
+X-Previous-Debug-Token: fd05dc
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
  
- {
-   "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
- }
+{
+  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+}
  
- Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
- ```
+Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
+```
  

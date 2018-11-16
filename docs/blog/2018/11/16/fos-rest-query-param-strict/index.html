@@ -118,7 +118,8 @@
 <ul>
 <li><code>/posts/list?page=a</code></li>
 <li><code>/posts/list?order=other</code></li>
-<li><p><code>/posts/list?keyword=test%20test2</code></p>
+<li><code>/posts/list?keyword=test%20test2</code></li>
+</ul>
 
 <p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
 
@@ -141,12 +142,11 @@ Transfer-Encoding: chunked
 Content-Type: application/json
 
 {
-"error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
 }
 
 Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
-</code></pre></li>
-</ul>
+</code></pre>
 
         </div>
                             <p class="tags">
