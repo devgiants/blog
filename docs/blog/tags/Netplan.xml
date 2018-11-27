@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/Netplan.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2018-11-27T18:15:11+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Netplan : new way to handle network in Ubuntu 17+]]></title>
+            <link href="/blog/2018/11/27/netplan-handling-network/"/>
+            <updated>2018-11-27T17:55:00+01:00</updated>
+            <id>/blog/2018/11/27/netplan-handling-network/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>I started recently a new project : turn a fanless computer to a router (actually it will handle more than that but it goes beyond this post focus). I chose Ubuntu Server 18.10, and when I came to network management and configuration, I discover <a href="https://netplan.io/">Netplan</a>.</p>
+
+<h2 id="what-it-does">What it does</h2>
+
+<p>It gives a bit of <strong>abstraction on network management</strong> mainly by using __ YAML configuration files__. Examples :</p>
+
+<p><strong>For allowing DHCP address assignation for a given interface</strong></p>
+
+<pre><code class="yaml">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp3s0:
+      dhcp4: true
+</code></pre>
+
+<p>You may notice there is a <code>renderer</code> key : you can choose between 2 renderers, networkd (used on server) and NetworkManager (used on desktop machines)
+Below is the system design explanation : 
+<img src="https://assets.ubuntu.com/v1/a1a80854-netplan_design_overview.svg" alt="Netplan design explanation" /></p>
+
+<h2 id="my-needs">My needs</h2>
+
+<p>Having 5 network interfaces on my machine (4 Gigabits LAN + 1 wifi), I wanted to start by assigning comprehensive names. Here it starts :</p>
+
+<p>To rename for example my future WAN interface :</p>
+
+<pre><code class="yaml">network:
+    ethernets:
+        enp1s0:
+            match:
+                macaddress: 40:62:31:01:14:ad
+            addresses: []
+            dhcp4: true
+            set-name: wan
+</code></pre>
+
+<p>This makes sure I handle the right one by matching with MAC address, and set the comprehensive name I'm waiting for.</p>
+
+<p>After each modification, y ou must run <code>sudo netplan apply</code> to handle changes.</p>
+
+<p>After reboot, the <code>ifconfig</code> command gives me :</p>
+
+<pre><code>wan: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.0.108  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::4262:31ff:fe01:14ad  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 40:62:31:01:14:ad  txqueuelen 1000  (Ethernet)
+        RX packets 376  bytes 393184 (393.1 KB)
+        RX errors 0  dropped 7  overruns 0  frame 0
+        TX packets 321  bytes 28694 (28.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device memory 0xf7c00000-f7c1ffff  
+
+</code></pre>
+]]></content>
+        </entry>
+    </feed>

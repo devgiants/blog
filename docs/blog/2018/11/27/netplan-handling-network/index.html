@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head lang="en">
-        <title>Posts Archive &mdash; devGiants &mdash; dev &amp; training</title>
+        <title>Netplan : new way to handle network in Ubuntu 17+ &mdash; devGiants &mdash; dev &amp; training</title>
         <meta charset="utf-8">
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-                    <meta name="robots" content="noindex, follow">
-                <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+            <meta name="robots" content="index, follow">
+        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="/css/style.css" rel="stylesheet" type="text/css" />
 
         <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
@@ -47,47 +47,82 @@
         <main role="main" class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Posts Archive</h2>
-        <h3>November 2018</h3>
-  <div>
-    <a href="/blog/2018/11/27/netplan-handling-network/">Netplan : new way to handle network in Ubuntu 17+</a>
-  </div>
-  <div>
-    <a href="/blog/2018/11/16/fos-rest-query-param-strict/">FOS REST Bundle : enforce strict behavior with query params requirements</a>
-  </div>
-  <div>
-    <a href="/blog/2018/11/15/composer-global/">Composer usage can also be global</a>
-  </div>
-  <div>
-    <a href="/blog/2018/11/15/c++-inline-initialisation/">C++ allow inline initialisation</a>
-  </div>
-    <h3>May 2018</h3>
-  <div>
-    <a href="/blog/2018/05/21/react-php/">Introduce React PHP</a>
-  </div>
-    <h3>April 2018</h3>
-  <div>
-    <a href="/blog/2018/04/09/create-quick-swap/">How to create a swap for session usage</a>
-  </div>
-    <h3>February 2018</h3>
-  <div>
-    <a href="/blog/2018/02/20/entire-section-requirements-symfony-config/">Symfony Config : how to handle entire section require status ?</a>
-  </div>
-  <div>
-    <a href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/">Flex : mixing autowiring and old-fashioned service way</a>
-  </div>
-  <div>
-    <a href="/blog/2018/02/16/voter-interface-constants/">VoterInterface interface constants</a>
-  </div>
-  <div>
-    <a href="/blog/2018/02/15/docker-apache-impossible-restart/">Docker Apache impossible restart : httpd already running</a>
-  </div>
+                        <article>
+        <header>
+            <h2>Netplan : new way to handle network in Ubuntu 17+</h2>
+        </header>
+        <div>
+            <h2 id="context">Context</h2>
 
-<div>
-    <nav class="article clearfix">
-            <a class="next" href="/blog/page/2.html" title="Next Page"><span class="title">Next Page</span></a>
-        </nav>
-</div>                </div>
+<p>I started recently a new project : turn a fanless computer to a router (actually it will handle more than that but it goes beyond this post focus). I chose Ubuntu Server 18.10, and when I came to network management and configuration, I discover <a href="https://netplan.io/">Netplan</a>.</p>
+
+<h2 id="what-it-does">What it does</h2>
+
+<p>It gives a bit of <strong>abstraction on network management</strong> mainly by using __ YAML configuration files__. Examples :</p>
+
+<p><strong>For allowing DHCP address assignation for a given interface</strong></p>
+
+<pre><code class="yaml">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp3s0:
+      dhcp4: true
+</code></pre>
+
+<p>You may notice there is a <code>renderer</code> key : you can choose between 2 renderers, networkd (used on server) and NetworkManager (used on desktop machines)
+Below is the system design explanation : 
+<img src="https://assets.ubuntu.com/v1/a1a80854-netplan_design_overview.svg" alt="Netplan design explanation" /></p>
+
+<h2 id="my-needs">My needs</h2>
+
+<p>Having 5 network interfaces on my machine (4 Gigabits LAN + 1 wifi), I wanted to start by assigning comprehensive names. Here it starts :</p>
+
+<p>To rename for example my future WAN interface :</p>
+
+<pre><code class="yaml">network:
+    ethernets:
+        enp1s0:
+            match:
+                macaddress: 40:62:31:01:14:ad
+            addresses: []
+            dhcp4: true
+            set-name: wan
+</code></pre>
+
+<p>This makes sure I handle the right one by matching with MAC address, and set the comprehensive name I'm waiting for.</p>
+
+<p>After each modification, y ou must run <code>sudo netplan apply</code> to handle changes.</p>
+
+<p>After reboot, the <code>ifconfig</code> command gives me :</p>
+
+<pre><code>wan: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.0.108  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::4262:31ff:fe01:14ad  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 40:62:31:01:14:ad  txqueuelen 1000  (Ethernet)
+        RX packets 376  bytes 393184 (393.1 KB)
+        RX errors 0  dropped 7  overruns 0  frame 0
+        TX packets 321  bytes 28694 (28.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device memory 0xf7c00000-f7c1ffff  
+
+</code></pre>
+
+        </div>
+                            <p class="tags">
+            Tags:
+                        <a href="/blog/tags/Ubuntu">Ubuntu</a>,                         <a href="/blog/tags/system">system</a>,                         <a href="/blog/tags/Netplan">Netplan</a>,                         <a href="/blog/tags/network">network</a>                        </p>
+        
+                    <nav class="article">
+                <ul>
+                                                                <li>Previous: <a class="previous" href="/blog/2018/11/16/fos-rest-query-param-strict/" title="FOS REST Bundle : enforce strict behavior with query params requirements"><span class="title">FOS REST Bundle : enforce strict behavior with query params requirements</span></a></li>
+                                    </ul>
+            </nav>
+            </article>
+
+
+
+                </div>
                 <!--<div class="col-sm-4 sidebar">-->
                     <!--<div class="card bg-light">-->
                         <!--<div class="card-header">devGiants</div>-->

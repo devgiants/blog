@@ -49,6 +49,104 @@
                 <div class="col-12">
                         <article>
         <header>
+            <h2><a href="/blog/2018/02/15/docker-stack-presentation/">Docker stacks presentation</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="my-goals">My goals</h2>
+
+<p>Docker is one the (too many) things <strong>I wanted to step into</strong> for a while now, without necessary time to dive in. I finally board the train, and even if I stay closer from padawan to guru, I could build <strong>2 stacks I will introduce below</strong> : one for <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony">Symfony</a>, and another one for <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress">Wordpress</a>.</p>
+
+<p>Both are new boilerplates used for all news projects either <a href="https://www.compagnie-hyperactive.com">@LCH</a> or personal.</p>
+
+<h2 id="symfony-stack">Symfony stack</h2>
+
+<p>![Symfony stack](/assets/posts-images/stack-symfony.png)</p>
+
+<p>It allows to install <strong>a complete working environment for Symfony 2.X or 3.X</strong>. Symfony Flex (usable on 3.4+) is not in here, we created a 4.X <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/tree/symfony4">specific branch</a>). Here you find 4 containers:</p>
+
+<ul>
+<li>mysql</li>
+<li>php</li>
+<li>apache</li>
+<li>phpmyadmin</li>
+</ul>
+
+<p>Below the specifics highlighted.</p>
+
+<h3 id="environment-vars">Environment vars</h3>
+
+<p>All <code>docker-compose.yml</code> needed variables are stored in a <code>.env</code> file (Docker documentation <a href="https://docs.docker.com/compose/environment-variables/#the-env-file">here</a>). 
+This <code>.env</code> file is also defined inside the very containers to expose needed environment variables. To do so, just pass <code>.env</code> file as <code>env_file</code> option (documentation <a href="https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option">here</a>)</p>
+
+<p>This gives the interesting ability <strong>to use them in files added to container</strong> (like the <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker/images/apache2.4/app.conf">app.conf</a> which defines app vhost by using <code>$FPM_HOST</code>). You can do the same in the very <code>Dockerfile</code>.</p>
+
+<p><em>Important note : to do so, just explicitely define them with the <code>ARG</code> keyword (<a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker/images/apache2.4/Dockerfile#L5">example</a>).</em></p>
+
+<h3 id="volumes">Volumes</h3>
+
+<p>I create 3 volumes in here :
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L11">Database one</a>
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L30">Application files</a>
+* <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/blob/master/docker-compose.yml#L47">Apache logs</a></p>
+
+<p><em>Stay tuned for a volume focused post to come.</em></p>
+
+<h3 id="start-bash">Start bash</h3>
+
+<p>To help starting with, I created a <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/init.bash">bash file</a> that executes following actions :
+1. Volume folders creation (if it turns they does not exist already)
+2. Download and setup Symfony installer (if <code>symfony</code> command not already registered)
+3. Install Symfony using the version number specified in <code>.env</code> file.
+4. <code>.env</code> file copy to allow Symfony application access to its variables (described <a href="https://symfony.com/doc/3.3/components/dotenv.html">here</a> and <a href="https://symfony.com/doc/current/configuration/external_parameters.html">here</a>)
+5. <code>parameters.yml.dist</code> file copy and params substitution using <code>envsubst</code> command. <em>Note: I chosed not to use <a href="https://symfony.com/doc/3.3/components/dotenv.html">DotEnv component</a> to ensure total 2.X and 3.4- retro-compatibility.</em>
+6. <code>docker-compose</code> install if not already here and registered as <code>docker-compose</code>
+7. Set container up (with building)
+8. <code>parameters.yml</code> file removing to trigger regeneration (I've bumped to this case during my tests where a <code>composer update</code> will not refresh <code>parameters.yml</code> file)
+9. <code>composer update</code></p>
+
+<h2 id="wordpress-stack">Wordpress stack</h2>
+
+<p>![Wordpress stack](/assets/posts-images/stack-wordpress.png)</p>
+
+<p>Wordpress stack does the same trick as above, adding WP-CLI. I set it up using <a href="https://make.wordpress.org/cli/handbook/config/#config-files">YAML configuration file way</a> to execute commands bare, without any arguments (as they are specified <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress/blob/master/wp-cli.yml">in file</a>)</p>
+
+<p>Bash script interesting actions : last version core download, installation, configuration, first user creation, remove Hello Dolly (RIP) and tests page/post, permalink configuration to <code>%postname%</code></p>
+
+<p>Finally, the script installs an sets up a <a href="https://roots.io/sage/">ready-to-work-with Sage theme</a> (8.5.3 version, gulp/bower/npm one).</p>
+
+<h2 id="what%27s-next-%3F">What's next ?</h2>
+
+<p>This is just a start. Several noticeable features will eventually be added.</p>
+
+<h3 id="for-both">For both</h3>
+
+<ul>
+<li>Elastic stack integration</li>
+<li>Test addition</li>
+</ul>
+
+<h3 id="for-symfony-stack">For Symfony stack</h3>
+
+<ul>
+<li>Continue <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony/tree/symfony4">Symfony 4 branch</a></li>
+<li>Add Webpack Encore for assets management</li>
+<li>Add Angular for front boilerplate</li>
+</ul>
+
+<h3 id="for-wordpress-stack">For Wordpress stack</h3>
+
+<ul>
+<li>ACF Pro setup</li>
+</ul>
+-->
+            This post presents the stack I created for my everyday job around Symfony and Wordpress.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/docker">docker</a>,                         <a href="/blog/tags/stack">stack</a>                        </p>
+            </article>
+    <article>
+        <header>
             <h2><a href="/blog/2018/02/12/website-backup-php-component/">Website backup PHP component</a></h2>
         </header>
         <div>
