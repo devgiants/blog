@@ -7,7 +7,8 @@ tags:
     - system
     - Netplan
     - network
-excerpt: "Netplan is a new network configuration abstraction renderer, available in Ubuntu 17+. It drastically simplifies stuff when it comes to network handling."
+    - router
+excerpt: "Netplan is a new network configuration abstraction renderer, available in Ubuntu 17+. It drastically simplifies stuff when it comes to network handling... Or not."
     
 ---
 
@@ -64,3 +65,8 @@ wan: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         device memory 0xf7c00000-f7c1ffff  
 
 ```
+
+## The trap
+Few scratches after, I started realizing than it seems to be a bad idea. Many people are angry with it because seems to have no propper and simple way to get rid of it (meaning returning back to `/etc/network/interfaces`). Also, there is many limitations, the first one I encountered about wifi. I tried to rename wifi interface the same way I did above, and I got an error message telling me for wifi the match condition cannot be used.
+
+That's why I changed my plans by using a Debian 9.6 distro for starting my machine.

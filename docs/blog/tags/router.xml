@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><![CDATA[devGiants]]></title>
-    <link href="/blog/tags/network.xml" rel="self"/>
+    <link href="/blog/tags/router.xml" rel="self"/>
     <link href="/"/>
     <updated>2018-11-28T17:24:47+01:00</updated>
     <id>/</id>

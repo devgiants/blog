@@ -2,12 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc></loc>
-    <lastmod>2018-11-27</lastmod>
+    <lastmod>2018-11-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
     <url>
     <loc>/blog/2018/11/27/netplan-handling-network/</loc>
+    <lastmod>2018-11-27T17:55:00+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
+    <loc>/blog/2018/11/27/interfaces-configuration-with-debian-9/</loc>
     <lastmod>2018-11-27T17:55:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
