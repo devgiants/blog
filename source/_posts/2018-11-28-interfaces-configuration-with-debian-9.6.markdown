@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Interfaces configuration with Debian 9.6"
-date:   2018-11-27 17:55:00 +0100
+date:   2018-11-28 17:26:00 +0100
 tags:
     - Ubuntu
     - system
