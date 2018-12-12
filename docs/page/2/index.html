@@ -238,6 +238,106 @@ $application-&gt;add(new Command\RetrieveBackupCommand('retrieve', $container));
             Tags:
                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/console">console</a>,                         <a href="/blog/tags/command">command</a>                        </p>
             </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/12/02/systemd-presentation/"></a></h2>
+        </header>
+        <div>
+            <!--<hr />
+
+<p>draft
+layout: post
+title:  "Systemd presetation"
+date:   2018-12-02 17:21:00 +0100
+tags:
+    - Linux
+    - systemd
+excerpt: "This post presents briefly systemd, Linux daemon and init system used on all major distros today."</p>
+
+<hr />
+
+<h2 id="ethymology">Ethymology</h2>
+
+<p>Name comes from "system daemon" shrinkage.</p>
+-->
+            
+        </div>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/12/11/api-versionning/"></a></h2>
+        </header>
+        <div>
+            <!--<hr />
+
+<p>draft
+layout: post
+title:  "API versionning strategies"
+date:   2018-12-11 17:04:00 +0100
+tags:
+    - php
+    - symfony
+    - API
+    - REST
+    - FOS<br />
+excerpt: "This post presents few ways for versionning APIs."</p>
+
+<hr />
+
+<h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+- Domain name : <code>https://v4.your-api.com</code>
+- URI prefix : <code>https://your-api.com/api/v4</code>
+- Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+- Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+- <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+-->
+            
+        </div>
+            </article>
     <nav>
         <a href="/.">Newer Posts</a><br />
         <br />

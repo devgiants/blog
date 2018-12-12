@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head lang="en">
-        <title>Posts Archive &mdash; devGiants &mdash; dev &amp; training</title>
+        <title> &mdash; devGiants &mdash; dev &amp; training</title>
         <meta charset="utf-8">
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-                    <meta name="robots" content="noindex, follow">
-                <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+            <meta name="robots" content="index, follow">
+        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="/css/style.css" rel="stylesheet" type="text/css" />
 
         <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
@@ -47,30 +47,90 @@
         <main role="main" class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Posts Archive</h2>
-        <h3>February 2018</h3>
-  <div>
-    <a href="/blog/2018/02/15/docker-apache-impossible-restart/">Docker Apache impossible restart : httpd already running</a>
-  </div>
-  <div>
-    <a href="/blog/2018/02/15/docker-stack-presentation/">Docker stacks presentation</a>
-  </div>
-  <div>
-    <a href="/blog/2018/02/12/website-backup-php-component/">Website backup PHP component</a>
-  </div>
-    <h3>December 2018</h3>
-  <div>
-    <a href="/blog/2018/12/02/systemd-presentation/"></a>
-  </div>
-  <div>
-    <a href="/blog/2018/12/11/api-versionning/"></a>
-  </div>
+                        <article>
+        <header>
+            <h2></h2>
+        </header>
+        <div>
+            <hr />
 
-<div>
-    <nav class="article clearfix">
-        <a class="previous" href="/blog" title="Previous Page"><span class="title">Previous Page</span></a>
+<p>draft
+layout: post
+title:  "API versionning strategies"
+date:   2018-12-11 17:04:00 +0100
+tags:
+    - php
+    - symfony
+    - API
+    - REST
+    - FOS<br />
+excerpt: "This post presents few ways for versionning APIs."</p>
+
+<hr />
+
+<h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+- Domain name : <code>https://v4.your-api.com</code>
+- URI prefix : <code>https://your-api.com/api/v4</code>
+- Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+- Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+- <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+
+        </div>
+                
+                    <nav class="article">
+                <ul>
+                                            <li>Next: <a class="next" href="/blog/2018/12/02/systemd-presentation/" title=""><span class="title"></span></a></li>
+                                                        </ul>
             </nav>
-</div>                </div>
+            </article>
+
+
+
+                </div>
                 <!--<div class="col-sm-4 sidebar">-->
                     <!--<div class="card bg-light">-->
                         <!--<div class="card-header">devGiants</div>-->

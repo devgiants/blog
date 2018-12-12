@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc></loc>
-    <lastmod>2018-11-28</lastmod>
+    <lastmod>2018-12-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -81,6 +81,18 @@
     <url>
     <loc>/blog/2018/02/12/website-backup-php-component/</loc>
     <lastmod>2018-02-12T16:55:24+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
+    <loc>/blog/2018/12/02/systemd-presentation/</loc>
+    <lastmod>2018-12-02T00:00:00+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
+    <loc>/blog/2018/12/11/api-versionning/</loc>
+    <lastmod>2018-12-11T00:00:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

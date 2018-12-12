@@ -5,6 +5,7 @@ date:   2018-11-16 17:15:00 +0100
 tags:
     - php
     - symfony
+    - API
     - REST
     - FOS
 excerpt: "FOS REST Bundle allows you to choose what to do when query params requirements are not met. Let's see how to choose."
