@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/symfony.xml" rel="self"/>
     <link href="/"/>
-    <updated>2018-12-12T10:03:04+01:00</updated>
+    <updated>2018-12-12T10:04:53+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -20,11 +20,11 @@
 <p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
 
 <p>Few ways : 
-- Domain name : <code>https://v4.your-api.com</code>
-- URI prefix : <code>https://your-api.com/api/v4</code>
-- Query string : <code>https://your-api.com/api/?v=4.0.0</code>
-- Custom HTTP header : <code>X-API-Version: 4.0.0</code>
-- <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+ - Domain name : <code>https://v4.your-api.com</code>
+ - URI prefix : <code>https://your-api.com/api/v4</code>
+ - Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+ - Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+ - <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
 
 <p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
 
