@@ -1,5 +1,5 @@
 ---
-draft
+draft: true
 layout: post
 title:  "Systemd presetation"
 date:   2018-12-02 17:21:00 +0100

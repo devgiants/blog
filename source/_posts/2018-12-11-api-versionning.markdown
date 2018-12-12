@@ -1,5 +1,4 @@
 ---
-draft
 layout: post
 title:  "API versionning strategies"
 date:   2018-12-11 17:04:00 +0100

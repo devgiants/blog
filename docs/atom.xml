@@ -3,9 +3,66 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2018-12-12T10:01:58+01:00</updated>
+    <updated>2018-12-12T10:03:04+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[API versionning strategies]]></title>
+            <link href="/blog/2018/12/11/api-versionning/"/>
+            <updated>2018-12-11T17:04:00+01:00</updated>
+            <id>/blog/2018/12/11/api-versionning/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+- Domain name : <code>https://v4.your-api.com</code>
+- URI prefix : <code>https://your-api.com/api/v4</code>
+- Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+- Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+- <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Interfaces configuration with Debian 9.6]]></title>
             <link href="/blog/2018/11/28/interfaces-configuration-with-debian-9/"/>
@@ -600,62 +657,6 @@ class SecurityHandler implements AuthenticationSuccessHandlerInterface, Authenti
 </code></pre>
 
 <p>This very last step <strong>enable autowiring for your service</strong>. I can use the name in security.yaml as above.</p>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[VoterInterface interface constants]]></title>
-            <link href="/blog/2018/02/16/voter-interface-constants/"/>
-            <updated>2018-02-16T11:39:24+01:00</updated>
-            <id>/blog/2018/02/16/voter-interface-constants/</id>
-            <content type="html"><![CDATA[<h2 id="what%27s-happening">What's happening</h2>
-
-<p>Few weeks ago, I got <strong>strange behavior</strong> in voters return while using constants from <code>VoterInterface</code> interface ( <code>VoterInterface::ACCESS_GRANTED</code>, <code>VoterInterface::ACCESS_DENIED</code> and <code>VoterInterface::ACCESS_ABSTAIN</code>). As sidenote, here is the <a href="http://api.symfony.com/3.4/Symfony/Component/Security/Core/Authorization/Voter/VoterInterface.html">involved interface</a>.</p>
-
-<p>Below my <code>Voter</code> initial code:</p>
-
-<pre><code class="php"> /**
-     * @param string $attributes
-     * @param mixed $subject
-     * @param TokenInterface $token
-     * @return int
-     */
-    public function voteOnAttribute($attributes, $subject, TokenInterface $token) {
-
-      $user = $token-&gt;getUser();
-
-      // If managed here, meaning support method said yes and subject got Rolable trait, and therefore getAuthorizedRoles() method.
-
-      // skip everything if no roles set
-      if(count($subject-&gt;getAuthorizedRoles()) &gt; 0) {
-
-        // Roles set and no user. Deny
-        if(!$user instanceof User) {
-            return static::ACCESS_DENIED;
-        }
-
-        // user connected (but skip if admin)
-        if(!$user-&gt;hasRole(User::ROLE_ADMIN)) {
-
-          // User connected, not admin, check roles intersections
-          if(count(array_intersect($subject-&gt;getAuthorizedRoles(), $user-&gt;getRoles())) === 0) {
-            return static::ACCESS_DENIED;
-          }
-        }
-      }
-
-      return static::ACCESS_GRANTED;
-    }
-</code></pre>
-
-<h2 id="a-legacy">A legacy</h2>
-
-<p>As a matter of fact, my <a href="https://stackoverflow.com/questions/44906743/symfony-voter-constant-usages#answer-46253196">StackOverflow post</a> on topic is pointed on <strong>a back-compatibility SF 2.5-</strong>. Doc says for SF 2.5+, voters must return <code>true</code> or <code>false</code>.</p>
-
-<p>It’s really important when it comes to <code>VoterInterface::ACCESS_DENIED</code> because where a today regular Voter must return <code>false</code> in <strong>denied access</strong> case, the matching constant got assigned to -1.</p>
-
-<p>Nonetheless, still a question from my point of view so far : what about <code>VoterInterface::ACCESS_ABSTAIN</code> ? I found the abstaining capability very useful if <code>Voter</code> concludes that it can’t vote.</p>
-
-<p>I will keep this post updated as soon as I will have the answer.</p>
 ]]></content>
         </entry>
     </feed>
