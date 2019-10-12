@@ -2,7 +2,7 @@
 
 mv docs/CNAME /tmp
 
-vendor/bin/sculpin generate --env=prod --clean
+#vendor/bin/sculpin generate --env=prod --clean
 
 rm -rf docs
 mv output_prod docs
