@@ -1,0 +1,18 @@
+# pack-refs with: peeled fully-peeled 
+e8f7fe00dacfa13f8a3a39a676ddc9f07985e197 refs/heads/caching-stream-forward-seek
+360faaec4b563958b673fb52bbe94e37f14bc686 refs/heads/master
+d58d7091693b79563f4fcc039aed1dac43dfcd3b refs/pull/1/head
+6d77d8ca40c4c297297461ed67ffcc14666b5f0b refs/pull/2/head
+6d77d8ca40c4c297297461ed67ffcc14666b5f0b refs/pull/3/head
+b02693e7622ca6f41b641a6ed06327ad8f1770dc refs/pull/3/merge
+dcf104bd98ec4926643194f435338e1e7ed1d89d refs/pull/4/head
+2eff6dd1b9559aacc7e14332d7fec2b726828733 refs/pull/5/head
+3fbed396a9f684a34224a7d6244444bd9dcbe81f refs/pull/6/head
+215a67a5bc00e3f5e0002254824837d3a4b205d3 refs/tags/1.0.0
+^19e510056d8d671d9d9e25dc16937b3dd3802ae6
+e301f04a015781e6c7192ca62fe56345f8705ed9 refs/tags/1.1.0
+^af0e1758de355eb113917ad79c3c0e3604bce4bd
+483576f243eca1badfaf934e678209aef1e90577 refs/tags/1.2.0
+^898bba9e2c787bb39743c8c2ab13920c0ab10b2d
+2594fb47cdc659f3fcf0aa1559b7355460555303 refs/tags/1.2.1
+dcd84bbb49b96c616d1dcc8bfb9bef3f2cd53d1c refs/tags/1.2.2
