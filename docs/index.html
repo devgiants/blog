@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <title>Home &mdash; devGiants &mdash; dev &amp; training</title>
+        <meta charset="utf-8">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <meta name="robots" content="noindex, follow">
+                <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+        <link rel="manifest" href="/images/site.webmanifest">
+        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
+        <meta name="msapplication-TileColor" content="#1e1b18">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
+        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
+                                    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="/">
+                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col-12">
+                        <article>
+        <header>
+            <h2><a href="/blog/2019/10/12/domofony-presentation/">Domofony presentation</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="home-automation">Home automation</h2>
+
+<p>On my previous attempts on DIY home automation, I used the excellent <a href="https://www.openhab.org/">openHAB</a>.
+At first glance, it seemed to have everything I looked for in an home automation context :
+- Completely open-source
+- <strong>Technology and vendor agnostic</strong> : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation
+- <strong>Ability to program for serious work</strong> : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using <a href="https://www.eclipse.org/xtend/">Xtend</a> (because openHAB written in Java), it allows to create programs to drive your installation.</p>
+
+<p>So why change? Some cons :
+- I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me
+- Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)
+- All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)</p>
+
+<p>Don't misunderstand me : OpenHAB is great job used y thousand of people accross the world. I just needed something else.</p>
+
+<h2 id="domofony">Domofony</h2>
+
+<p><em>Domotique</em> + <em>Symfony</em> = <a href="https://github.com/devgiants/domofony"><strong>Domofony</strong></a>.</p>
+
+<p><em>Domotique</em> is the french word for home automation. First thing to know, I created this project for myself, and share it a good practice, but at start, not all things will be usable by everyone (such as the front-end app I plan to develop tailored to my use).</p>
+
+<p><strong>This is a solution provided by a developer for developers</strong>. Exit click-land, all configuration is done in YAML.</p>
+
+<h3 id="technical-components">Technical components</h3>
+
+<p><img src="https://devgiants.fr/images/posts/domofony/technical_components.png" alt="Technical components" /></p>
+
+<p>All part showed on above layout will be described and detailed in future posts. That being said, below is a quick description for bigger parts.</p>
+
+<h4 id="front-end-application">Front-end application</h4>
+
+<p>This is the application allowing user to interact with the system. It will consume REST API exposed by the server application.</p>
+
+<h4 id="mosquitto-broker">Mosquitto broker</h4>
+
+<p>The system relies so far on <a href="https://en.wikipedia.org/wiki/MQTT">MQTT protocol</a> 
+(<a href="https://www.linkedin.com/pulse/mqtt-un-protocole-bas%C3%A9-sur-tcp-et-orient%C3%A9-iot-nicolas-bonniot/">here</a> a protocol tour in french) for exchanges between <strong>central system</strong> and <strong>items</strong>.
+This protocol is ideal regarding it's asynchronous sequence and its lightweight. 
+Security is not left aside, although TLS certificate usage means items must be more powerful than simple microcontrollers.</p>
+
+<p><em>Note : an item is the end-device, such as sensor or actuator (or both). In my home automation system, this is mostly <a href="https://en.wikipedia.org/wiki/Single-board_computer">SBC</a> or ESP series microcontrollers</em></p>
+
+<p>Future posts will handle in details <strong>items</strong>, <strong>Symfony application</strong>, <strong>Mosquitto broker &amp; client configuration</strong> and <strong>front-end application</strong>.</p>
+-->
+            This post presents Domofony application for home automation control
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/home">home</a>,                         <a href="/blog/tags/automation">automation</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/12/11/api-versionning/">API versionning strategies</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+ - Domain name : <code>https://v4.your-api.com</code>
+ - URI prefix : <code>https://your-api.com/api/v4</code>
+ - Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+ - Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+ - <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+-->
+            This post presents few ways for versionning APIs.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/FOS">FOS</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/11/28/interfaces-configuration-with-debian-9/">Interfaces configuration with Debian 9.6</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>As I stated <a href="https://devgiants.fr/blog/2018/11/27/netplan-handling-network/">in my previous post</a>, I changed from ubuntu Server 18.10 to Debian 9.6 for the system I'm building (a router/firewall and application server for home automation). Below ismytraces for interface configuration.</p>
+
+<h2 id="renaming">Renaming</h2>
+
+<p>As I also stated <a href="https://devgiants.fr/blog/2018/11/27/netplan-handling-network/">in my previous post</a>, I need renaming for 2 reasons :
+- 5 interfaces (4 LAN + 1 Wifi) : need to know which one I'm using, with <strong>a meaningful way according to my system</strong>.
+- To be sure to have <strong>interfaces always linked to the same adapter</strong> (by using MAC address matching).</p>
+
+<h3 id="for-the-session">For the session</h3>
+
+<p>Following code will effectively rename your interface <strong>until next reboot</strong>.</p>
+
+<pre><code>ip link set eth0 down
+ip link set eth0 name your_new_name
+ip link set your_new_name up
+</code></pre>
+
+<p>Quite useless on a production usage.</p>
+
+<h3 id="definitely">Definitely</h3>
+
+<p>The persistent solution goes through 2 steps :</p>
+
+<h4 id="70-persistent-net.rules">70-persistent-net.rules</h4>
+
+<p>This is a file (normally) generated by <code>/lib/udev/write_net_rules</code>, a command-line tool from <a href="https://www.debian.org/doc/manuals/debian-reference/ch03.en.html#_the_udev_system">with udev system</a>. I said normally becasue on my fresh Debian install, it's not here. I created one from examples found on the web :</p>
+
+<pre><code>/etc/udev/rules.d/70-persistent-net.rules
+# This file was automatically generated by the /lib/udev/write_net_rules
+# program, run by the persistent-net-generator.rules rules file.
+#
+# You can modify it, as long as you keep each rule on a single
+# line, and change only the value of the NAME= key.
+
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:11:22:33:44:55", ATTR{type}=="1", NAME="wan"
+</code></pre>
+
+<p>So just replace your MAC address above, and the mathcing interface will take the given name.</p>
+
+<h4 id="%2Fetc%2Fnetwork%2Finterfaces">/etc/network/interfaces</h4>
+
+<p>Next step is to adjust interface declaration in <code>/etc/network/interfaces</code>. For my case, so far it is :</p>
+
+<pre><code># The primary network interface
+allow-hotplug wan
+iface wan inet dhcp
+</code></pre>
+
+<p>Now, my <code>wan</code> interface, which will be linked to my 4G modem, will be the wan entry for all the system. The 4G router will allow address with DHCP, according to configuration done above.</p>
+
+<p>Next steps to come :
+- Create LAN interface with another available adapter
+- Configure Wifi interface as an Access Point
+- Setup a DHCP server for both
+- Traffic forwarding from LAN/Wifi to WAN
+- Setup a DNS server
+- Firewall both ways</p>
+
+<p>Stay tuned !</p>
+-->
+            This post explains how to persist interfaces attributions and tuning them for your needs
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/Ubuntu">Ubuntu</a>,                         <a href="/blog/tags/system">system</a>,                         <a href="/blog/tags/Netplan">Netplan</a>,                         <a href="/blog/tags/network">network</a>,                         <a href="/blog/tags/router">router</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/11/27/netplan-handling-network/">Netplan : new way to handle network in Ubuntu 17+</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>I started recently a new project : turn a fanless computer to a router (actually it will handle more than that but it goes beyond this post focus). I chose Ubuntu Server 18.10, and when I came to network management and configuration, I discover <a href="https://netplan.io/">Netplan</a>.</p>
+
+<h2 id="what-it-does">What it does</h2>
+
+<p>It gives a bit of <strong>abstraction on network management</strong> mainly by using __ YAML configuration files__. Examples :</p>
+
+<p><strong>For allowing DHCP address assignation for a given interface</strong></p>
+
+<pre><code class="yaml">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp3s0:
+      dhcp4: true
+</code></pre>
+
+<p>You may notice there is a <code>renderer</code> key : you can choose between 2 renderers, networkd (used on server) and NetworkManager (used on desktop machines)
+Below is the system design explanation : 
+<img src="https://assets.ubuntu.com/v1/a1a80854-netplan_design_overview.svg" alt="Netplan design explanation" /></p>
+
+<h2 id="my-needs">My needs</h2>
+
+<p>Having 5 network interfaces on my machine (4 Gigabits LAN + 1 wifi), I wanted to start by assigning comprehensive names. Here it starts :</p>
+
+<p>To rename for example my future WAN interface :</p>
+
+<pre><code class="yaml">network:
+    ethernets:
+        enp1s0:
+            match:
+                macaddress: 40:62:31:01:14:ad
+            addresses: []
+            dhcp4: true
+            set-name: wan
+</code></pre>
+
+<p>This makes sure I handle the right one by matching with MAC address, and set the comprehensive name I'm waiting for.</p>
+
+<p>After each modification, y ou must run <code>sudo netplan apply</code> to handle changes.</p>
+
+<p>After reboot, the <code>ifconfig</code> command gives me :</p>
+
+<pre><code>wan: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.0.108  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::4262:31ff:fe01:14ad  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 40:62:31:01:14:ad  txqueuelen 1000  (Ethernet)
+        RX packets 376  bytes 393184 (393.1 KB)
+        RX errors 0  dropped 7  overruns 0  frame 0
+        TX packets 321  bytes 28694 (28.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device memory 0xf7c00000-f7c1ffff  
+
+</code></pre>
+
+<h2 id="the-trap">The trap</h2>
+
+<p>Few scratches after, I started realizing than it seems to be a bad idea. Many people are angry with it because seems to have no propper and simple way to get rid of it (meaning returning back to <code>/etc/network/interfaces</code>). Also, there is many limitations, the first one I encountered about wifi. I tried to rename wifi interface the same way I did above, and I got an error message telling me for wifi the match condition cannot be used.</p>
+
+<p>That's why I changed my plans by using a Debian 9.6 distro for starting my machine.</p>
+-->
+            Netplan is a new network configuration abstraction renderer, available in Ubuntu 17+. It drastically simplifies stuff when it comes to network handling... Or not.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/Ubuntu">Ubuntu</a>,                         <a href="/blog/tags/system">system</a>,                         <a href="/blog/tags/Netplan">Netplan</a>,                         <a href="/blog/tags/network">network</a>,                         <a href="/blog/tags/router">router</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/11/16/fos-rest-query-param-strict/">FOS REST Bundle : enforce strict behavior with query params requirements</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
+
+<pre><code class="php">/**
+     * @param PostHandler $postHandler
+     * @param ParamFetcherInterface $paramFetcher
+     * @Rest\Get("/posts/list")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]*",     
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",     
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="3",     
+     *     description="Max number of posts per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default="1",     
+     *     description="The page wanted"
+     * )
+     * @Rest\View(
+     *     statusCode = 200,
+     *     serializerGroups = {"list"}
+     * )
+     *
+     * @return Paginator
+     */
+    public function list(PostHandler $postHandler, ParamFetcherInterface $paramFetcher)
+    {
+
+
+        $postsList = $postHandler-&gt;search(
+            intval($paramFetcher-&gt;get('limit')),
+            intval($paramFetcher-&gt;get('page')),
+            $paramFetcher-&gt;get('order'),
+            $paramFetcher-&gt;get('keyword')
+        );
+
+        return $postsList;
+    }
+</code></pre>
+
+<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a... posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :
+- <code>/posts/list?page=2</code> to get page 2, with default <code>limit</code>
+- <code>/posts/list?order=desc</code> to order posts by ID descendant
+- <code>/posts/list?keyword=test</code> to retrieves only posts with 'test' keyword.</p>
+
+<h2 id="what-if...-we-don%27t-follow-requirements-%3F">What if... we don't follow requirements ?</h2>
+
+<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
+
+<ul>
+<li><code>/posts/list?page=a</code></li>
+<li><code>/posts/list?order=other</code></li>
+<li><code>/posts/list?keyword=test%20test2</code></li>
+</ul>
+
+<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
+
+<h2 id="what-if-we-want-to-raise-an-error%3F">What if we want to raise an error?</h2>
+
+<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
+
+<pre><code>GET http://localhost:8081/posts/list?page=a
+
+HTTP/1.1 400 Bad Request
+Date: Fri, 16 Nov 2018 16:34:15 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Cache-Control: no-cache, private
+X-Debug-Token: 34ff9b
+X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
+X-Previous-Debug-Token: fd05dc
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
+
+{
+  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+}
+
+Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
+</code></pre>
+-->
+            FOS REST Bundle allows you to choose what to do when query params requirements are not met. Let&#039;s see how to choose.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/FOS">FOS</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/11/15/composer-global/">Composer usage can also be global</a></h2>
+        </header>
+        <div>
+            <!--<p>As an every-day <a href="https://getcomposer.org">Composer</a> user, I always used it on a project scope, i.e with a <code>composer.json</code> lying in a specific project directory.
+I discover recently than it can also be used on a <a href="https://getcomposer.org/doc/03-cli.md#global">global way</a> (meaning not related to a project) using <code>global</code> modifier:</p>
+
+<pre><code>composer global require squizlabs/php_codesniffer
+</code></pre>
+
+<p>The globally installed package will be accessible user-system wide. On my Ubuntu system, global <code>vendor</code> folder lies on <code>~/.config/composer/</code>.</p>
+
+<p>It strikes me yesterday that this feature is exactly the same one which is provided by <code>npm</code>, <code>yarn</code> or <code>bower</code>, other packages/dependencies manager.</p>
+-->
+            Composer can be used globally. Wander to see how?
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/composer">composer</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/11/15/c++-inline-initialisation/">C++ allow inline initialisation</a></h2>
+        </header>
+        <div>
+            <!--<p>As a PHP developer, I was greatly surprised when discovering, while learning C++, the <strong>inline initialisation</strong> process</p>
+
+<p>Using PHP 7, you would start a class for example with :</p>
+
+<pre><code class="php">/**
+ * Class User
+ * @package
+ */
+class User {
+    /**
+     * @var int $id
+     */
+    private int $id;
+
+    /**
+     * @var string $name
+     */
+    private string $name;
+
+    /**
+     * User constructor.
+     *
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct(int $id, string $name) {
+        $this-&gt;id = $id;
+        $this-&gt;name = $name;
+    }
+}
+</code></pre>
+
+<p>Using C++, same class would become</p>
+
+<p><strong>user.h</strong></p>
+
+<pre><code class="c">#ifndef USER_USER_H
+#define USER_USER_H
+
+#include &lt;iostream&gt;
+
+
+class User {
+private:
+    /**
+     *
+     */
+    int m_id;
+
+    /**
+     *
+     */
+    std::string m_name;
+public:
+    /**
+     * Constructor
+     * @param id
+     * @param name
+     */
+    User(int id, std::string name);
+};
+
+#endif //USER_USER_H
+</code></pre>
+
+<p><strong>user.cpp</strong></p>
+
+<pre><code class="c">#include "user.h"
+
+User::User(int id, std::string name) : m_id(id), m_name(name) {
+    // Other logic in constructor
+}
+</code></pre>
+
+<p>The inline initialization takes place where nowadays in PHP you would specify return type. Using this notation, you clearly <strong>light up constructor method body</strong>.</p>
+-->
+            I recently discover this C++ syntaxic sugar to light up C++ constructor
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/c%2B%2B">c++</a>,                         <a href="/blog/tags/initialisation">initialisation</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/05/21/react-php/">Introduce React PHP</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>On a recent Angular 5 training I could luckily attend to, trainer introduces JS reactive programming (using <a href="https://beta-rxjsdocs.firebaseapp.com/">RXJS</a>). Complete new paradigm as everything is event, nested one with others. 
+Way different way to code... But extremely powerful.</p>
+
+<p>Then I tought : what a wonderful way to stick to my home automation real life modeling. As a matter of fact, IoT and home automation are mainly composed of <strong>stimuli</strong> and <strong>reactions</strong>.</p>
+
+<p>What could be better in this context than reactive loop to events? That's what lead me to <a href="https://reactphp.org/">ReactPHP</a>, which is a PHP implementation of <a href="https://fr.wikipedia.org/wiki/Reactor">Reactor pattern</a>.
+This library is very well-done, concern separated.</p>
+
+<h2 id="few-examples">Few examples</h2>
+
+<h3 id="main-brick-%3A-event-loop">Main brick : <a href="https://github.com/reactphp/event-loop">event-loop</a></h3>
+
+<h4 id="factory-for-loop-object-creation">Factory for loop object creation</h4>
+
+<pre><code class="php">$loop = React\EventLoop\Factory::create();
+</code></pre>
+
+<p>Behind the scenes, this named constructor will use the best scenario according to your configuration.</p>
+
+<pre><code class="php">  public static function create()
+    {
+        // @codeCoverageIgnoreStart
+        if (class_exists('libev\EventLoop', false)) {
+            return new ExtLibevLoop();
+        } elseif (class_exists('EvLoop', false)) {
+            return new ExtEvLoop();
+        } elseif (class_exists('EventBase', false)) {
+            return new ExtEventLoop();
+        } elseif (function_exists('event_base_new') &amp;&amp; PHP_VERSION_ID &lt; 70000) {
+            // only use ext-libevent on PHP &lt; 7 for now
+            return new ExtLibeventLoop();
+        }
+        return new StreamSelectLoop();
+        // @codeCoverageIgnoreEnd
+    }
+</code></pre>
+
+<p>More details on differents implementations and extensions related <a href="https://github.com/reactphp/event-loop#loop-implementations">here</a>. So far I'm using the fallback one (StreamSelect) but will enhance this point soon.</p>
+
+<h4 id="loop-run">Loop run</h4>
+
+<pre><code class="php">$loop-&gt;run();
+</code></pre>
+
+<p>Short and sweet. This must be the script last instruction because it will enter in infinite loop from here.</p>
+
+<h4 id="timers">Timers</h4>
+
+<p>```php
+ $loop->addTimer(0.8, function () {
+     echo 'world!' . PHP_EOL;
+ });</p>
+
+<p>$loop->addTimer(0.3, function () {
+     echo 'hello ';
+ });
+ $loop->run();
+ ```</p>
+
+<p>Here start the magic. The above script will echo 'hello' 0.3s after script beginning then 'world' at 0.5s (0.8s from start). No matter timer registration order, loop will handle orders.
+ Thanks to closures/callbacks, you can put your processes inline for shortness.</p>
+
+<p><em>Note: you can (and certainly will) use the <code>use</code> keyword to port any variables in the callback code block context</em>.</p>
+
+<p>```php
+function hello($name, LoopInterface $loop)
+{
+    $loop->addTimer(1.0, function () use ($name) {
+        echo "hello $name\n";
+    });
+}</p>
+
+<p>hello('Tester', $loop);
+ $loop->run();
+ ```</p>
+
+<h3 id="stream"><a href="https://github.com/reactphp/stream">stream</a></h3>
+
+<h4 id="readablestreaminterface">ReadableStreamInterface</h4>
+
+<p>```php
+$stream->on('data', function ($data) {
+    echo $data;
+});</p>
+
+<p>$loop->run();
+ ```</p>
+
+<p>Forr example, the end event will be emitted once the source stream has successfully reached the end of the stream (EOF).</p>
+
+<p>```php
+$stream->on('end', function () {
+    echo 'END';
+});</p>
+
+<p>$loop->run();
+ ```</p>
+
+<p>Among available events: pipe, pause, resume, close...</p>
+
+<h4 id="writablestreaminterface">WritableStreamInterface</h4>
+
+<p>Same idea <a href="https://github.com/reactphp/stream#writablestreaminterface">write-oriented</a>.</p>
+
+<p>As far as I write this, this is only what I can practically test and use.</p>
+
+<p>More to be discussed here in future : socket, promise...</p>
+-->
+            See how to use reactive programming with PHP !
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/react">react</a>,                         <a href="/blog/tags/reactive">reactive</a>,                         <a href="/blog/tags/programming">programming</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/04/09/create-quick-swap/">How to create a swap for session usage</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p>Long silence from me past weeks as I was working on my home automation architecture, especially on IoT POV. I will publish everything here, but today I wanted to share a quick tip to create <strong>a swap space on a Linx system that doesn't have one</strong>.</p>
+
+<h2 id="why-so%3F">Why so?</h2>
+
+<p>I'm deeply testing <a href="http://www.friendlyarm.com/index.php?route=product/product&amp;product_id=132">NanoPi NEO</a> these days and without any doubt it will be my home automation corner stone. I started using the 256Mo version and the Ubuntu Core Linux image provided comes without any swap space.</p>
+
+<p>As I started to make some <code>composer update</code> (because all my low level interaction is done with <a href="https://reactphp.org/">ReactPHP</a>, stay tuned !), device exploded in such messages :</p>
+
+<pre><code>The following exception is caused by a lack of memory or swap, or not having swap configured
+Check https://getcomposer.org/doc/articles/troubleshooting.md#proc-open-fork-failed-errors for details
+
+PHP Warning:  proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+Warning: proc_open(): fork failed - Cannot allocate memory in phar:///usr/local/bin/composer/vendor/symfony/console/Application.php on line 958
+
+  [ErrorException]                                   
+  proc_open(): fork failed - Cannot allocate memory  
+
+
+</code></pre>
+
+<p>I forgot that 256Mo is not a lot... Solution : make a swap (that will stand until the next reboot)</p>
+
+<pre><code># Use dd to create a 256 Mo sxap space, filled with 0, and named /var/swap.1
+sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=256
+
+# Inform system that swap exists and where
+sudo /sbin/mkswap /var/swap.1
+
+# Enable
+sudo /sbin/swapon /var/swap.1
+</code></pre>
+-->
+            Quick way to create temporary swap.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/linux">linux</a>,                         <a href="/blog/tags/swap">swap</a>,                         <a href="/blog/tags/session">session</a>                        </p>
+            </article>
+    <article>
+        <header>
+            <h2><a href="/blog/2018/02/20/entire-section-requirements-symfony-config/">Symfony Config : how to handle entire section require status ?</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p><a href="http://symfony.com/doc/current/components/config.html">Symfony Config Component</a> is an extremely powerful way of configuring bundles and apps. 
+For my work in progress in <a href="https://github.com/compagnie-hyperactive/UserBundle">LCH User bundle</a>, I wanted to set <code>templates</code> array node as <strong>not required</strong>.</p>
+
+<h2 id="what%27s-at-stake">What's at stake</h2>
+
+<p>All other nodes types are not required unless you add the <code>isRequired()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L62">example</a>) method to your node. Doing so, you will have an exception thrown saying that you have to define this key, which is what you want.</p>
+
+<p>For the array node, it's <strong>different</strong> : it's enabled by default and you have to specify the <code>canBeEnabled()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L83">example</a>) method to your array node to ensure that it will be disabled by default, but enabled if needed.</p>
+-->
+            See how to force entire section to be specified in YAML config file.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/config">config</a>                        </p>
+            </article>
+    <nav>
+        <br />
+        <a href="/page/2">Older Posts</a><br />
+    </nav>
+                </div>
+                <!--<div class="col-sm-4 sidebar">-->
+                    <!--<div class="card bg-light">-->
+                        <!--<div class="card-header">devGiants</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<small>dev &amp; training</small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="card bg-light sidebar-nav">-->
+                        <!--<div class="card-header">Links</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<ul class="nav flex-column">-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </main>
+        <footer class="container">
+            <span class="text-muted">&copy; 2019 devGiants</span>
+        </footer>
+
+        <script src="/components/jquery/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
+                
+                <script src="/components/highlightjs/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+                    </body>
+</html>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/symfony.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2019-10-12T22:52:30+02:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Domofony presentation]]></title>
+            <link href="/blog/2019/10/12/domofony-presentation/"/>
+            <updated>2019-10-12T14:51:00+02:00</updated>
+            <id>/blog/2019/10/12/domofony-presentation/</id>
+            <content type="html"><![CDATA[<h2 id="home-automation">Home automation</h2>
+
+<p>On my previous attempts on DIY home automation, I used the excellent <a href="https://www.openhab.org/">openHAB</a>.
+At first glance, it seemed to have everything I looked for in an home automation context :
+- Completely open-source
+- <strong>Technology and vendor agnostic</strong> : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation
+- <strong>Ability to program for serious work</strong> : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using <a href="https://www.eclipse.org/xtend/">Xtend</a> (because openHAB written in Java), it allows to create programs to drive your installation.</p>
+
+<p>So why change? Some cons :
+- I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me
+- Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)
+- All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)</p>
+
+<p>Don't misunderstand me : OpenHAB is great job used y thousand of people accross the world. I just needed something else.</p>
+
+<h2 id="domofony">Domofony</h2>
+
+<p><em>Domotique</em> + <em>Symfony</em> = <a href="https://github.com/devgiants/domofony"><strong>Domofony</strong></a>.</p>
+
+<p><em>Domotique</em> is the french word for home automation. First thing to know, I created this project for myself, and share it a good practice, but at start, not all things will be usable by everyone (such as the front-end app I plan to develop tailored to my use).</p>
+
+<p><strong>This is a solution provided by a developer for developers</strong>. Exit click-land, all configuration is done in YAML.</p>
+
+<h3 id="technical-components">Technical components</h3>
+
+<p><img src="https://devgiants.fr/images/posts/domofony/technical_components.png" alt="Technical components" /></p>
+
+<p>All part showed on above layout will be described and detailed in future posts. That being said, below is a quick description for bigger parts.</p>
+
+<h4 id="front-end-application">Front-end application</h4>
+
+<p>This is the application allowing user to interact with the system. It will consume REST API exposed by the server application.</p>
+
+<h4 id="mosquitto-broker">Mosquitto broker</h4>
+
+<p>The system relies so far on <a href="https://en.wikipedia.org/wiki/MQTT">MQTT protocol</a> 
+(<a href="https://www.linkedin.com/pulse/mqtt-un-protocole-bas%C3%A9-sur-tcp-et-orient%C3%A9-iot-nicolas-bonniot/">here</a> a protocol tour in french) for exchanges between <strong>central system</strong> and <strong>items</strong>.
+This protocol is ideal regarding it's asynchronous sequence and its lightweight. 
+Security is not left aside, although TLS certificate usage means items must be more powerful than simple microcontrollers.</p>
+
+<p><em>Note : an item is the end-device, such as sensor or actuator (or both). In my home automation system, this is mostly <a href="https://en.wikipedia.org/wiki/Single-board_computer">SBC</a> or ESP series microcontrollers</em></p>
+
+<p>Future posts will handle in details <strong>items</strong>, <strong>Symfony application</strong>, <strong>Mosquitto broker &amp; client configuration</strong> and <strong>front-end application</strong>.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[API versionning strategies]]></title>
+            <link href="/blog/2018/12/11/api-versionning/"/>
+            <updated>2018-12-11T17:04:00+01:00</updated>
+            <id>/blog/2018/12/11/api-versionning/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+ - Domain name : <code>https://v4.your-api.com</code>
+ - URI prefix : <code>https://your-api.com/api/v4</code>
+ - Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+ - Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+ - <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[FOS REST Bundle : enforce strict behavior with query params requirements]]></title>
+            <link href="/blog/2018/11/16/fos-rest-query-param-strict/"/>
+            <updated>2018-11-16T17:15:00+01:00</updated>
+            <id>/blog/2018/11/16/fos-rest-query-param-strict/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
+
+<pre><code class="php">/**
+     * @param PostHandler $postHandler
+     * @param ParamFetcherInterface $paramFetcher
+     * @Rest\Get("/posts/list")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]*",     
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",     
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="3",     
+     *     description="Max number of posts per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default="1",     
+     *     description="The page wanted"
+     * )
+     * @Rest\View(
+     *     statusCode = 200,
+     *     serializerGroups = {"list"}
+     * )
+     *
+     * @return Paginator
+     */
+    public function list(PostHandler $postHandler, ParamFetcherInterface $paramFetcher)
+    {
+
+
+        $postsList = $postHandler-&gt;search(
+            intval($paramFetcher-&gt;get('limit')),
+            intval($paramFetcher-&gt;get('page')),
+            $paramFetcher-&gt;get('order'),
+            $paramFetcher-&gt;get('keyword')
+        );
+
+        return $postsList;
+    }
+</code></pre>
+
+<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a... posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :
+- <code>/posts/list?page=2</code> to get page 2, with default <code>limit</code>
+- <code>/posts/list?order=desc</code> to order posts by ID descendant
+- <code>/posts/list?keyword=test</code> to retrieves only posts with 'test' keyword.</p>
+
+<h2 id="what-if...-we-don%27t-follow-requirements-%3F">What if... we don't follow requirements ?</h2>
+
+<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
+
+<ul>
+<li><code>/posts/list?page=a</code></li>
+<li><code>/posts/list?order=other</code></li>
+<li><code>/posts/list?keyword=test%20test2</code></li>
+</ul>
+
+<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
+
+<h2 id="what-if-we-want-to-raise-an-error%3F">What if we want to raise an error?</h2>
+
+<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
+
+<pre><code>GET http://localhost:8081/posts/list?page=a
+
+HTTP/1.1 400 Bad Request
+Date: Fri, 16 Nov 2018 16:34:15 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Cache-Control: no-cache, private
+X-Debug-Token: 34ff9b
+X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
+X-Previous-Debug-Token: fd05dc
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
+
+{
+  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
+}
+
+Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
+</code></pre>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Symfony Config : how to handle entire section require status ?]]></title>
+            <link href="/blog/2018/02/20/entire-section-requirements-symfony-config/"/>
+            <updated>2018-02-20T16:44:24+01:00</updated>
+            <id>/blog/2018/02/20/entire-section-requirements-symfony-config/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p><a href="http://symfony.com/doc/current/components/config.html">Symfony Config Component</a> is an extremely powerful way of configuring bundles and apps. 
+For my work in progress in <a href="https://github.com/compagnie-hyperactive/UserBundle">LCH User bundle</a>, I wanted to set <code>templates</code> array node as <strong>not required</strong>.</p>
+
+<h2 id="what%27s-at-stake">What's at stake</h2>
+
+<p>All other nodes types are not required unless you add the <code>isRequired()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L62">example</a>) method to your node. Doing so, you will have an exception thrown saying that you have to define this key, which is what you want.</p>
+
+<p>For the array node, it's <strong>different</strong> : it's enabled by default and you have to specify the <code>canBeEnabled()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L83">example</a>) method to your array node to ensure that it will be disabled by default, but enabled if needed.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Flex : mixing autowiring and old-fashioned service way]]></title>
+            <link href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"/>
+            <updated>2018-02-20T16:44:24+01:00</updated>
+            <id>/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p><a href="https://symfony.com/doc/current/setup/flex.html">Symfony Flex</a> incredibly reduces and simplifies day-to-day Symfony usage. Among other things, <a href="https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container">autowiring</a> is one of the biggest.
+<strong>But what if you need to use some old-school service naming for further usage ?</strong></p>
+
+<h2 id="solution">Solution</h2>
+
+<p>For the CMS bundle I'm working on, I needed to refer to an handler for security (successful/failure authentication). Docs states I can use a service name in <code>security.yaml</code> :</p>
+
+<pre><code class="yaml">admin:
+    provider: db_provider # Use any declared provider above
+    form_login:
+        login_path: /admin/login
+        check_path: /admin/login
+        default_target_path: /admin
+        username_parameter: login[username_or_email]
+        password_parameter: login[password]
+
+        success_handler:    app.security_handler
+        failure_handler:    app.security_handler
+</code></pre>
+
+<p>The handler :</p>
+
+<pre><code class="php">use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+
+class SecurityHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
+{
+
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this-&gt;router = $router;
+    }
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
+        // TODO make necessary check to ensure proper redirection after successful authentication   
+        return new RedirectResponse($this-&gt;router-&gt;generate('index'));
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        // TODO make necessary check to ensure proper redirection after failure authen authentication
+        return new RedirectResponse($this-&gt;router-&gt;generate('app_login'));
+    }
+}
+
+</code></pre>
+
+<p>But from a Flex point of view, <strong>the constructor with type-hinted arguments is enough</strong>.</p>
+
+<p>The solution is in 2 steps</p>
+
+<ol>
+<li>Define the service "old-fashioned" way</li>
+</ol>
+
+<pre><code class="yaml">app.security_handler:
+  class: App\Listener\Security\SecurityHandler
+</code></pre>
+
+<p>But doing so, to core will switch to old way to load service. Meaning that you would have to provide parameters/services for dependancy injection manually.</p>
+
+<ol start="2">
+<li>Define a <a href="https://github.com/compagnie-hyperactive/UserBundle">service alias</a></li>
+</ol>
+
+<pre><code class="yaml">App\Listener\Security\SecurityHandler: '@app.security_handler'
+</code></pre>
+
+<p>This very last step <strong>enable autowiring for your service</strong>. I can use the name in security.yaml as above.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[VoterInterface interface constants]]></title>
+            <link href="/blog/2018/02/16/voter-interface-constants/"/>
+            <updated>2018-02-16T11:39:24+01:00</updated>
+            <id>/blog/2018/02/16/voter-interface-constants/</id>
+            <content type="html"><![CDATA[<h2 id="what%27s-happening">What's happening</h2>
+
+<p>Few weeks ago, I got <strong>strange behavior</strong> in voters return while using constants from <code>VoterInterface</code> interface ( <code>VoterInterface::ACCESS_GRANTED</code>, <code>VoterInterface::ACCESS_DENIED</code> and <code>VoterInterface::ACCESS_ABSTAIN</code>). As sidenote, here is the <a href="http://api.symfony.com/3.4/Symfony/Component/Security/Core/Authorization/Voter/VoterInterface.html">involved interface</a>.</p>
+
+<p>Below my <code>Voter</code> initial code:</p>
+
+<pre><code class="php"> /**
+     * @param string $attributes
+     * @param mixed $subject
+     * @param TokenInterface $token
+     * @return int
+     */
+    public function voteOnAttribute($attributes, $subject, TokenInterface $token) {
+
+      $user = $token-&gt;getUser();
+
+      // If managed here, meaning support method said yes and subject got Rolable trait, and therefore getAuthorizedRoles() method.
+
+      // skip everything if no roles set
+      if(count($subject-&gt;getAuthorizedRoles()) &gt; 0) {
+
+        // Roles set and no user. Deny
+        if(!$user instanceof User) {
+            return static::ACCESS_DENIED;
+        }
+
+        // user connected (but skip if admin)
+        if(!$user-&gt;hasRole(User::ROLE_ADMIN)) {
+
+          // User connected, not admin, check roles intersections
+          if(count(array_intersect($subject-&gt;getAuthorizedRoles(), $user-&gt;getRoles())) === 0) {
+            return static::ACCESS_DENIED;
+          }
+        }
+      }
+
+      return static::ACCESS_GRANTED;
+    }
+</code></pre>
+
+<h2 id="a-legacy">A legacy</h2>
+
+<p>As a matter of fact, my <a href="https://stackoverflow.com/questions/44906743/symfony-voter-constant-usages#answer-46253196">StackOverflow post</a> on topic is pointed on <strong>a back-compatibility SF 2.5-</strong>. Doc says for SF 2.5+, voters must return <code>true</code> or <code>false</code>.</p>
+
+<p>It’s really important when it comes to <code>VoterInterface::ACCESS_DENIED</code> because where a today regular Voter must return <code>false</code> in <strong>denied access</strong> case, the matching constant got assigned to -1.</p>
+
+<p>Nonetheless, still a question from my point of view so far : what about <code>VoterInterface::ACCESS_ABSTAIN</code> ? I found the abstaining capability very useful if <code>Voter</code> concludes that it can’t vote.</p>
+
+<p>I will keep this post updated as soon as I will have the answer.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Website backup PHP component]]></title>
+            <link href="/blog/2018/02/12/website-backup-php-component/"/>
+            <updated>2018-02-12T16:55:24+01:00</updated>
+            <id>/blog/2018/02/12/website-backup-php-component/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>I needed for a while to package a PHP component which will allow me to <strong>quickly</strong> and <strong>safely</strong> backup websites I do. Goals below :
+* Command line execution (automation approach)
+* Highly configurable (websites addition, backup medias…)
+* Composer-based approach (PHAR, auto-update).</p>
+
+<p>So I developed <a href="https://github.com/devgiants/websites-backup">websites-backup</a>. Details are below.</p>
+
+<h2 id="component-usage">Component usage</h2>
+
+<p>Using a <a href="https://github.com/devgiants/websites-backup#backup">YAML configuration</a> file, you can setup :
+* <strong>Several sites to backup</strong> (physically on the server and accessible to command system user) : each site is composed with a couple database/files (only MySQL so far)
+* <strong>Several backup medias</strong> : So far, only FTP is developed. Eventually I would like to setup an Amazon and Dropbox gateway. Main goal here is clearly allowing simultaneous and synchronised muliple backup storages.</p>
+
+<p><em>Note : from a security point of view, I recommand to create a system user per site, with read-only rights.</em></p>
+
+<h2 id="symfony-components-based...">Symfony components based...</h2>
+
+<p>I used this project as a <strong>training to use only few Symfony components</strong>. As far as I’m concerned, it’s a very good way to really handle them and focus on their perimeters &amp; limitations. Quick check on <code>composer.json</code> gives the components list:
+* <strong>Console component</strong> : it gives the command line approach &amp; tools. Arguments, options, console styling…
+* <strong>Config component</strong> : it provides the configuration ability, with powerful chained methods to allow you to check and decides what to do with configuration values transmitted to your application.
+* <strong>YAML component</strong> :  the YAML parser, useful to read the quoted above configuration file.</p>
+
+<h2 id="...but-not-only">...But not only</h2>
+
+<p>In order to strenghten the application on usage and maintenance point of views, I alwo use packages :
+* <a href="https://github.com/box-project/box2">The excellent Box</a> : allows you to make configurable PHAR in no-time.
+* Phar update (old but still working) : with a manifest system, provide necessary logic to check newer versions and update if necessary.
+Below is the process I follow :
+1. Make the updates (code, README…) which will be future release
+2. Git updates and coherent tag creation (i.e : 1.0.13)
+3. Application packaging  with Box
+4. Archive and up-to-date manifest publication on GitHub pages (gh-pages branch)</p>
+
+<p>Then, next time application runs, it decides using the manifest if a newer version is available (version numeric comparison, that’s why coherent and consecutive tagging does the trick).  <code>self-update</code> command will actually update the application.</p>
+
+<h2 id="also">Also</h2>
+
+<p>Considering the fact that multiple commands are available using websites-backup, I chose <a href="https://pimple.symfony.com/">Pimple</a> to have a simple but powerful dependency injection container system. I can instanciate dependencies on main application entry point :</p>
+
+<pre><code class="php">$container = new Container();
+$container['tools'] = new BackupTools();
+</code></pre>
+
+<p>And then pass container to all commands :</p>
+
+<pre><code class="php">$application-&gt;add(new Command\BackupCommand('backup', $container));
+$application-&gt;add(new Command\RetrieveBackupCommand('retrieve', $container));
+</code></pre>
+
+<h2 id="roadmap">Roadmap</h2>
+
+<p>OK, things work, but there are <a href="https://github.com/devgiants/websites-backup/projects/1">numerous features and improvements</a> I wish to add. If you find the project interesting and would like to give an hand, fell free to contact me !</p>
+]]></content>
+        </entry>
+    </feed>
