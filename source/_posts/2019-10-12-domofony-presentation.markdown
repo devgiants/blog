@@ -17,14 +17,16 @@ excerpt: "This post presents Domofony application for home automation control"
 ## Home automation
 On my previous attempts on DIY home automation, I used the excellent [openHAB](https://www.openhab.org/).
 At first glance, it seemed to have everything I looked for in an home automation context :
-- Completely open-source
-- __Technology and vendor agnostic__ : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation
-- __Ability to program for serious work__ : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using [Xtend](https://www.eclipse.org/xtend/) (because openHAB written in Java), it allows to create programs to drive your installation.
+
+ - Completely open-source
+ - __Technology and vendor agnostic__ : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation
+ - __Ability to program for serious work__ : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using [Xtend](https://www.eclipse.org/xtend/) (because openHAB written in Java), it allows to create programs to drive your installation.
 
 So why change? Some cons :
-- I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me
-- Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)
-- All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)
+
+ - I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me
+ - Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)
+ - All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)
 
 Don't misunderstand me : OpenHAB is great job used y thousand of people accross the world. I just needed something else.
 
@@ -37,7 +39,7 @@ __This is a solution provided by a developer for developers__. Exit click-land, 
 
 ### Technical components
 
-![Technical components](https://devgiants.fr/images/posts/domofony/technical_components.png)
+![Technical components](https://devgiants.fr/images/posts/domofony/technical_components_with_items.png)
 
 All part showed on above layout will be described and detailed in future posts. That being said, below is a quick description for bigger parts.
 

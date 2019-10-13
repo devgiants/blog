@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/automation.xml" rel="self"/>
     <link href="/"/>
-    <updated>2019-10-12T22:52:30+02:00</updated>
+    <updated>2019-10-13T09:33:11+02:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -14,15 +14,21 @@
             <content type="html"><![CDATA[<h2 id="home-automation">Home automation</h2>
 
 <p>On my previous attempts on DIY home automation, I used the excellent <a href="https://www.openhab.org/">openHAB</a>.
-At first glance, it seemed to have everything I looked for in an home automation context :
-- Completely open-source
-- <strong>Technology and vendor agnostic</strong> : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation
-- <strong>Ability to program for serious work</strong> : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using <a href="https://www.eclipse.org/xtend/">Xtend</a> (because openHAB written in Java), it allows to create programs to drive your installation.</p>
+At first glance, it seemed to have everything I looked for in an home automation context :</p>
 
-<p>So why change? Some cons :
-- I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me
-- Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)
-- All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)</p>
+<ul>
+<li>Completely open-source</li>
+<li><strong>Technology and vendor agnostic</strong> : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation</li>
+<li><strong>Ability to program for serious work</strong> : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using <a href="https://www.eclipse.org/xtend/">Xtend</a> (because openHAB written in Java), it allows to create programs to drive your installation.</li>
+</ul>
+
+<p>So why change? Some cons :</p>
+
+<ul>
+<li>I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me</li>
+<li>Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)</li>
+<li>All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)</li>
+</ul>
 
 <p>Don't misunderstand me : OpenHAB is great job used y thousand of people accross the world. I just needed something else.</p>
 
@@ -36,7 +42,7 @@ At first glance, it seemed to have everything I looked for in an home automation
 
 <h3 id="technical-components">Technical components</h3>
 
-<p><img src="https://devgiants.fr/images/posts/domofony/technical_components.png" alt="Technical components" /></p>
+<p><img src="https://devgiants.fr/images/posts/domofony/technical_components_with_items.png" alt="Technical components" /></p>
 
 <p>All part showed on above layout will be described and detailed in future posts. That being said, below is a quick description for bigger parts.</p>
 

@@ -2,6 +2,17 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
+publish: up
+    mv docs/CNAME /tmp
+    docker-compose exec -u www-data php vendor/bin/sculpin generate --env=prod --clean
+    rm -rf docs
+    mv output_prod docs
+    mv /tmp/CNAME docs
+
+    git add .
+    git commit -m "Add post"
+    git push origin master
+
 # Provides a bash in PHP container (user www-data)
 bash-php: up
 	docker-compose exec -u www-data php bash
