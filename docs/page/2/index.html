@@ -49,6 +49,28 @@
                 <div class="col-12">
                         <article>
         <header>
+            <h2><a href="/blog/2018/02/20/entire-section-requirements-symfony-config/">Symfony Config : how to handle entire section require status ?</a></h2>
+        </header>
+        <div>
+            <!--<h2 id="context">Context</h2>
+
+<p><a href="http://symfony.com/doc/current/components/config.html">Symfony Config Component</a> is an extremely powerful way of configuring bundles and apps. 
+For my work in progress in <a href="https://github.com/compagnie-hyperactive/UserBundle">LCH User bundle</a>, I wanted to set <code>templates</code> array node as <strong>not required</strong>.</p>
+
+<h2 id="what%27s-at-stake">What's at stake</h2>
+
+<p>All other nodes types are not required unless you add the <code>isRequired()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L62">example</a>) method to your node. Doing so, you will have an exception thrown saying that you have to define this key, which is what you want.</p>
+
+<p>For the array node, it's <strong>different</strong> : it's enabled by default and you have to specify the <code>canBeEnabled()</code> (<a href="https://github.com/compagnie-hyperactive/UserBundle/blob/master/DependencyInjection/Configuration.php#L83">example</a>) method to your array node to ensure that it will be disabled by default, but enabled if needed.</p>
+-->
+            See how to force entire section to be specified in YAML config file.
+        </div>
+                    <p class="tags">
+            Tags:
+                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/config">config</a>                        </p>
+            </article>
+    <article>
+        <header>
             <h2><a href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/">Flex : mixing autowiring and old-fashioned service way</a></h2>
         </header>
         <div>
