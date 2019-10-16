@@ -48,3 +48,7 @@ a:hover {
 article {
     margin-bottom: 2em;
 }
+
+article img {
+    width: 100%;
+}
