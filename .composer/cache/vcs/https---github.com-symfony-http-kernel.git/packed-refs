@@ -17,9 +17,9 @@ e75e7ff97254d5bc3fbf9c76831dd3b47edb9df7 refs/heads/4.0
 5cafdc218d07a97650a262140e1ba3326611d406 refs/heads/4.1
 2d63b744d589c1adb8952e16c03b6515d531b4ba refs/heads/4.2
 aa9b275e58c22b23ed15b105343c813c050ec5e3 refs/heads/4.3
-e6b63f4016f497ad0d19f748c19c92c0a1dc76de refs/heads/4.4
+a228a47b9d327c33254d24d2c3a26f456cfaae54 refs/heads/4.4
 7bbff955936f1b8298b8160b65c0d56f7540a9ca refs/heads/fix-11341
-e7e40b604842edda68dead5fa077948a1c52b134 refs/heads/master
+3dd63a4abf153b46c391743b2177be00fb413a06 refs/heads/master
 afeef07e2b92e76475bbe91d089c567176dc76ed refs/heads/session-listeners
 125cb1a6312cc6d5b2fceb84042fd7185355ba82 refs/pull/1/head
 e23a0c5e1d92ed74ceee8f9a23b984bb17cb1161 refs/pull/1/merge
