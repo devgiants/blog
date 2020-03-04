@@ -86,9 +86,9 @@ become :
 
 So instead of doing `$ticket = new Ticket()` you would do `$ticket = Ticket::fromTitle('new title')`.
 
-_Notes :_
+_Notes : 
 - _Pay attention to `self` return type. This allow not to hardcode the class return type, hence offers 
-dynamism on override (with precautions though)._
+dynamism on override (with precautions though).
 - _In the same way, the `new static()` allow to instantiate current object instance. In case you extended `Ticket`,
 you will obtain here the last-in-chain class type._ 
 
@@ -103,7 +103,8 @@ intent__ which is a key part in complex applications.
 
 ### Override constructors
 Unlike other languages (such as C++) , __PHP can only have one constructor per class__. If you stick to your class 
-to get an instance, the only way to fulfill different instance creation scenarii is to 
+to get an instance, the only way to fulfill different instance creation scenarii is to: 
+ 
 - Low the signature exigence (parameters type-hinting, nullable,...)
 - Creates several checks and tests to ensure params passed on creation are still consistent
 

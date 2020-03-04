@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/semantic.xml" rel="self"/>
     <link href="/"/>
-    <updated>2020-03-04T17:51:40+01:00</updated>
+    <updated>2020-03-04T17:54:28+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -85,10 +85,10 @@ become :</p>
 
 <p>So instead of doing <code>$ticket = new Ticket()</code> you would do <code>$ticket = Ticket::fromTitle('new title')</code>.</p>
 
-<p><em>Notes :</em>
-- <em>Pay attention to <code>self</code> return type. This allow not to hardcode the class return type, hence offers 
-dynamism on override (with precautions though).</em>
-- <em>In the same way, the <code>new static()</code> allow to instantiate current object instance. In case you extended <code>Ticket</code>,
+<p><em>Notes : 
+- _Pay attention to <code>self</code> return type. This allow not to hardcode the class return type, hence offers 
+dynamism on override (with precautions though).
+- _In the same way, the <code>new static()</code> allow to instantiate current object instance. In case you extended <code>Ticket</code>,
 you will obtain here the last-in-chain class type.</em></p>
 
 <h2 id="advantages-and...-advantages">Advantages and... advantages</h2>
@@ -103,9 +103,12 @@ intent</strong> which is a key part in complex applications.</p>
 <h3 id="override-constructors">Override constructors</h3>
 
 <p>Unlike other languages (such as C++) , <strong>PHP can only have one constructor per class</strong>. If you stick to your class 
-to get an instance, the only way to fulfill different instance creation scenarii is to 
-- Low the signature exigence (parameters type-hinting, nullable,...)
-- Creates several checks and tests to ensure params passed on creation are still consistent</p>
+to get an instance, the only way to fulfill different instance creation scenarii is to:</p>
+
+<ul>
+<li>Low the signature exigence (parameters type-hinting, nullable,...)</li>
+<li>Creates several checks and tests to ensure params passed on creation are still consistent</li>
+</ul>
 
 <p>As named constructors are simple static methods, and considering the fact that <code>__construct()</code> is no more available 
 from outside world, you can create <strong>as much named constructors as you want</strong>. And guess what ?</p>
