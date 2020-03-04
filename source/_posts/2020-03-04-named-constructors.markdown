@@ -52,7 +52,7 @@ This is mostly a kind of static factory (a system to create an object) embedded 
 become :
 
 ```php
- /**
+/**
   * All attributes protected, stick to SOLID principles    
   */
  class Ticket
@@ -77,10 +77,7 @@ become :
         $ticket = new static();
         $ticket->setTitle($title);
         return $ticket;  
-     }
-
-
- 
+     } 
  }
  ```
 
