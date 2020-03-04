@@ -51,7 +51,7 @@ This is where __named constructors__ come into light.
 This is mostly a kind of static factory (a system to create an object) embedded in object class itself. Above example 
 become :
 
- ```php
+```php
  /**
   * All attributes protected, stick to SOLID principles    
   */
