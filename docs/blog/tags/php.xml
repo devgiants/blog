@@ -3,9 +3,122 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/php.xml" rel="self"/>
     <link href="/"/>
-    <updated>2020-03-03T16:31:33+01:00</updated>
+    <updated>2020-03-04T17:48:36+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Named constructor]]></title>
+            <link href="/blog/2020/03/04/named-constructors/"/>
+            <updated>2020-03-04T17:30:00+01:00</updated>
+            <id>/blog/2020/03/04/named-constructors/</id>
+            <content type="html"><![CDATA[<h2 id="how-to-create-an-instance-%3F">How to create an instance ?</h2>
+
+<h3 id="classical-oop">Classical OOP</h3>
+
+<p>In classical OOP approach, you will use the
+<code>__construct</code> magic method to do the job. Let's reuse our <code>Ticket</code> entity 
+described in <a href="https://devgiants.fr/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/">SymfonyWorkflow journey - part 1</a></p>
+
+<pre><code class="php">/**
+ * All attributes protected, stick to SOLID principles    
+ */
+class Ticket
+{       
+    protected $id;
+
+    protected $title;
+
+    /**
+    * Classical constructor magic method
+    */
+    public function __construct()
+    {
+
+    }
+
+}
+</code></pre>
+
+<p><em>Note : I cleared unnecessary stuff, such as getters/setters, annotations... 
+So the rest look much more like a <strong>value object</strong>.</em></p>
+
+<p>So far, so good. What's wrong with this? Nothing technically speaking, <strong>this does the job</strong>.
+But what if the object is complex, and you have more than one way to create instance (from a business POV) ?
+This is where <strong>named constructors</strong> come into light.</p>
+
+<h3 id="named-constructor">Named constructor</h3>
+
+<p>This is mostly a kind of static factory (a system to create an object) embedded in object class itself. Above example 
+become :</p>
+
+<p>```php
+ /**
+  * All attributes protected, stick to SOLID principles<br />
+  */
+ class Ticket
+ {<br />
+     protected $id;</p>
+
+<pre><code> protected $title;
+
+ /**
+ * Constructor becomes protected to ensure there is direct call
+ */
+ protected function __construct()
+ {
+
+ }
+
+ /**
+ * Named constructor example. Static to be called from class itself
+ */
+ public static function fromTitle(string $title): self
+ {
+    $ticket = new static();
+    $ticket-&gt;setTitle($title);
+    return $ticket;  
+ }
+</code></pre>
+
+<p>}
+ ```</p>
+
+<p>So instead of doing <code>$ticket = new Ticket()</code> you would do <code>$ticket = Ticket::fromTitle('new title')</code>.</p>
+
+<p><em>Notes :</em>
+- <em>Pay attention to <code>self</code> return type. This allow not to hardcode the class return type, hence offers 
+dynamism on override (with precautions though).</em>
+- <em>In the same way, the <code>new static()</code> allow to instantiate current object instance. In case you extended <code>Ticket</code>,
+you will obtain here the last-in-chain class type.</em></p>
+
+<h2 id="advantages-and...-advantages">Advantages and... advantages</h2>
+
+<p>Not really drawbacks here, let's focus on the advantages</p>
+
+<h3 id="%C2%A0nice-semantics"> Nice semantics</h3>
+
+<p><code>$ticket = Ticket::fromTitle('new title')</code> speaks for itself. More than creating an instance, you <strong>describe the
+intent</strong> which is a key part in complex applications.</p>
+
+<h3 id="override-constructors">Override constructors</h3>
+
+<p>Unlike other languages (such as C++) , <strong>PHP can only have one constructor per class</strong>. If you stick to your class 
+to get an instance, the only way to fulfill different instance creation scenarii is to 
+- Low the signature exigence (parameters type-hinting, nullable,...)
+- Creates several checks and tests to ensure params passed on creation are still consistent</p>
+
+<p>As named constructors are simple static methods, and considering the fact that <code>__construct()</code> is no more available 
+from outside world, you can create <strong>as much named constructors as you want</strong>. And guess what ?</p>
+
+<ul>
+<li>Design intents are still here (<code>Ticket::fromTitle()</code>, <code>Ticket::fromAnotherTicket()</code>...).</li>
+<li>All coherence checks are separated and lies only in named constructor they belong to.</li>
+</ul>
+
+<p>Last but not least, this is totally <strong>framework agnostic</strong>. You can start using them now, with nothing but
+intention.</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Symfony Workflow component - part 1]]></title>
             <link href="/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/"/>
