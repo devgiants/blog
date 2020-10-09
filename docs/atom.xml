@@ -3,9 +3,60 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2020-10-09T10:03:22+02:00</updated>
+    <updated>2020-10-09T10:33:24+02:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Simple  method to override configuration for your MySQL container]]></title>
+            <link href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/"/>
+            <updated>2020-09-10T10:00:00+02:00</updated>
+            <id>/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</id>
+            <content type="html"><![CDATA[<h2 id="first-approach-%3A-wrong-one">First approach : wrong one</h2>
+
+<p>All started while I was doing another dumb import, first using PhpMyAdmin. Despite the fact than the file wasn't
+particularily large, it keeped ended by error <code>MySQL server has gone away</code> with a strange mention to missing data close
+to an <code>ON</code> directive.</p>
+
+<p>Few searches quickly pointed me on configuration directive <code>max_allowed_packet</code>. If too short, it indeed leads to above 
+error. Beware the packet size here refers to a TCP packet, on transport layer. Too large query can trigger this.</p>
+
+<p>As I use <a href="https://github.com/devgiants/docker-boilerplate-wordpress">my stack</a> for making project live on local, I first
+thought that I would have to overkill stuff by making custom image from MySQL one, with overriding <code>my.ini</code>, exactly as I
+did for <a href="https://github.com/devgiants/docker-boilerplate-wordpress/blob/master/docker/images/php-fpm7.3/Dockerfile">PHP container</a>.</p>
+
+<p>Then I realized that exactly like PHP and Apache, a <code>conf.d</code> folder was existing with MySQL folder architecture.</p>
+
+<h2 id="lightweight-approach">Lightweight approach</h2>
+
+<p>So the solution was quite easier : just define a <code>override_max_packet_size.cnf</code> (you name it like you want), that lies
+in <code>docker/images/mysql/conf</code>. I put this inside :</p>
+
+<pre><code class="ini">[mysqld]
+max_allowed_packet=64M
+</code></pre>
+
+<p>Then just mount a volume targeting this host folder and bind it with <code>/etc/mysql/conf.d</code></p>
+
+<pre><code class="yaml">services:
+  mysql:
+    env_file: ./.env
+    image: mysql:5.7
+    ports:
+      - ${MYSQL_HOST_PORT}:${MYSQL_PORT}
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ${MYSQL_HOST_VOLUME_PATH}:/var/lib/mysql
+      - ./docker/images/mysql/config:/etc/mysql/conf.d
+</code></pre>
+
+<p>Complete stack rebuild, and try to reimport : bingo, it works.
+Using this method, you can safely override any MySQL configuration directive while keeping image untouched.</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Named constructor]]></title>
             <link href="/blog/2020/03/04/named-constructors/"/>
@@ -1211,88 +1262,6 @@ I discover recently than it can also be used on a <a href="https://getcomposer.o
 <p>The globally installed package will be accessible user-system wide. On my Ubuntu system, global <code>vendor</code> folder lies on <code>~/.config/composer/</code>.</p>
 
 <p>It strikes me yesterday that this feature is exactly the same one which is provided by <code>npm</code>, <code>yarn</code> or <code>bower</code>, other packages/dependencies manager.</p>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[C++ allow inline initialisation]]></title>
-            <link href="/blog/2018/11/15/c++-inline-initialisation/"/>
-            <updated>2018-11-15T10:00:00+01:00</updated>
-            <id>/blog/2018/11/15/c++-inline-initialisation/</id>
-            <content type="html"><![CDATA[<p>As a PHP developer, I was greatly surprised when discovering, while learning C++, the <strong>inline initialisation</strong> process</p>
-
-<p>Using PHP 7, you would start a class for example with :</p>
-
-<pre><code class="php">/**
- * Class User
- * @package
- */
-class User {
-    /**
-     * @var int $id
-     */
-    private int $id;
-
-    /**
-     * @var string $name
-     */
-    private string $name;
-
-    /**
-     * User constructor.
-     *
-     * @param int $id
-     * @param string $name
-     */
-    public function __construct(int $id, string $name) {
-        $this-&gt;id = $id;
-        $this-&gt;name = $name;
-    }
-}
-</code></pre>
-
-<p>Using C++, same class would become</p>
-
-<p><strong>user.h</strong></p>
-
-<pre><code class="c">#ifndef USER_USER_H
-#define USER_USER_H
-
-#include &lt;iostream&gt;
-
-
-class User {
-private:
-    /**
-     *
-     */
-    int m_id;
-
-    /**
-     *
-     */
-    std::string m_name;
-public:
-    /**
-     * Constructor
-     * @param id
-     * @param name
-     */
-    User(int id, std::string name);
-};
-
-#endif //USER_USER_H
-</code></pre>
-
-<p><strong>user.cpp</strong></p>
-
-<pre><code class="c">#include "user.h"
-
-User::User(int id, std::string name) : m_id(id), m_name(name) {
-    // Other logic in constructor
-}
-</code></pre>
-
-<p>The inline initialization takes place where nowadays in PHP you would specify return type. Using this notation, you clearly <strong>light up constructor method body</strong>.</p>
 ]]></content>
         </entry>
     </feed>

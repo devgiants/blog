@@ -8,6 +8,7 @@ tags:
         
 excerpt: "How to quickly override any configuration parameter for a MySQL parameter"
 
+---
 ## First approach : wrong one
 
 All started while I was doing another dumb import, first using PhpMyAdmin. Despite the fact than the file wasn't

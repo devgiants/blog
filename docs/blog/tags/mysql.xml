@@ -1,15 +1,17 @@
-<hr />
-
-<p>layout: post
-title:  "Simple  method to override configuration for your MySQL container"
-date:   2020-09-10 09:00:00 +0100
-tags:
-    - docker
-    - mysql</p>
-
-<p>excerpt: "How to quickly override any configuration parameter for a MySQL parameter"</p>
-
-<h2 id="first-approach-%3A-wrong-one">First approach : wrong one</h2>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/mysql.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2020-10-09T10:33:24+02:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Simple  method to override configuration for your MySQL container]]></title>
+            <link href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/"/>
+            <updated>2020-09-10T10:00:00+02:00</updated>
+            <id>/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</id>
+            <content type="html"><![CDATA[<h2 id="first-approach-%3A-wrong-one">First approach : wrong one</h2>
 
 <p>All started while I was doing another dumb import, first using PhpMyAdmin. Despite the fact than the file wasn't
 particularily large, it keeped ended by error <code>MySQL server has gone away</code> with a strange mention to missing data close
@@ -53,3 +55,6 @@ max_allowed_packet=64M
 
 <p>Complete stack rebuild, and try to reimport : bingo, it works.
 Using this method, you can safely override any MySQL configuration directive while keeping image untouched.</p>
+]]></content>
+        </entry>
+    </feed>
