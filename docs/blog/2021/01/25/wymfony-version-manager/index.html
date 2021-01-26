@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <title> &mdash; devGiants &mdash; dev &amp; training</title>
+        <meta charset="utf-8">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="robots" content="index, follow">
+        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+        <link rel="manifest" href="/images/site.webmanifest">
+        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
+        <meta name="msapplication-TileColor" content="#1e1b18">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
+        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
+                                    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="/">
+                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col-12">
+                        <article>
+        <header>
+            <h1></h1>
+        </header>
+        <div>
+            <hr />
+
+<p>layout: post
+title:  "Symfony version manager"
+date:   2021-01-25 09:40:00 +0100
+tags:
+- symfony
+- version</p>
+
+<p>excerpt: "For quite a long time now I wondered how could I gracefully handle version management &amp; display
+inside Symfony application. Do you now Shivas Versioning Bundle?"</p>
+
+<hr />
+
+<h2 id="version-display.-what-for-%3F">Version display. What for ?</h2>
+
+<p>From a long-term usage point of view, display application version is critical for <strong>marking</strong> purposes.
+Your users can refer to this number when contacting support, and you can also use this number to quickly ensure
+propoer deploy happened (among other tools provided by your CI/CD stack of course).</p>
+
+<h2 id="how-to-handle-it-%3F">How to handle it ?</h2>
+
+<p>Despite having the point in mind for a long, I never gave a go to a simple search around this topic.
+Doing so I found <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. It just does <strong>everything</strong> I wanted :
+- Twig extension for version number management.
+- Several versions providers (from <code>VERSION</code> file to Git tag handling) tailored for common uses.
+- <a href="https://semver.org/">SemVer</a> based.
+- Default formatters to let you go out-of-the-box</p>
+
+<p>As for all well-developed bundles, you can register your own providers &amp; formatters as services.</p>
+
+<p>Cheers to its author for this work to the community.</p>
+
+        </div>
+                
+                    <nav class="article">
+                <ul>
+                                            <li>Next: <a class="next" href="/blog/2018/02/12/website-backup-php-component/" title="Website backup PHP component"><span class="title">Website backup PHP component</span></a></li>
+                                                        </ul>
+            </nav>
+            </article>
+
+
+
+                </div>
+                <!--<div class="col-sm-4 sidebar">-->
+                    <!--<div class="card bg-light">-->
+                        <!--<div class="card-header">devGiants</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<small>dev &amp; training</small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="card bg-light sidebar-nav">-->
+                        <!--<div class="card-header">Links</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<ul class="nav flex-column">-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </main>
+        <footer class="container">
+            <span class="text-muted">&copy; 2021 devGiants</span>
+        </footer>
+
+        <script src="/components/jquery/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
+                
+                <script src="/components/highlightjs/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+                    </body>
+</html>

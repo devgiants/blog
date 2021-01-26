@@ -1,0 +1,82 @@
+body {
+    font: 300 16px/1.5 "Ubuntu", Arial, sans-serif;
+    color: #BFB5B5;
+    background-color: #1E1B18;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+    -o-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+}
+
+body span.first {
+    color: #468C98;
+}
+
+body span.second {
+    color: #F78154;
+}
+
+small {
+    display: block;
+    color: #888;
+}
+
+main.container, footer.container {
+    max-width: 900px;
+}
+
+footer.container {
+    margin-top: 30px;
+    padding: 30px 0;
+    border-top: 1px dashed #aaa;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        padding-top: 30px;
+    }
+}
+
+@media (min-width: 980px) {
+    body {
+        padding-bottom: 40px;
+    }
+}
+
+body > main.container {
+    padding: 80px 15px 0; /* 80px to make the container go all the way to the bottom of the topbar */
+}
+
+pre, code {
+    font-size: 15px;
+    border: 1px solid #BFB5B5;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #FFF;
+    padding: 3px;
+    margin: 0 3px;
+}
+
+a {
+    color: #468C98;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #468C98;
+    text-decoration: underline;
+}
+
+article {
+    margin-bottom: 2em;
+}
+
+article img {
+    width: 100%;
+}
+
+b, strong {
+    font-weight: 900;
+}

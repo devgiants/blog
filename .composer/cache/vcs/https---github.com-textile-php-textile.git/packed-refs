@@ -3,6 +3,7 @@ fb955efcaae7f42e7f4d11020344d962d3028e29 refs/heads/2.4
 cfbb92dfd0fa46bd96173d161b277353f680dda2 refs/heads/2.5
 5d4ace919b843e181d5d966d3241046c5f2362e8 refs/heads/3.5
 d7c869ea16d41ace40e8419550ea72762354121e refs/heads/3.6
+63005005d9f2351429607123c6452e8935808529 refs/heads/4.0
 583eb7eec0a400ee43a29d6371cfefae7a53a069 refs/heads/doc-updates
 11a09c917ee486319cc3270f70f334878ba68748 refs/heads/exp/unicode-img-title
 4feddb494185564f8c19307f65c8df4e466cf060 refs/heads/feature-63
@@ -15,7 +16,7 @@ dca35f7991674a3248ca8cdc06f08327f76609f5 refs/heads/issue-164
 ba39b1604d88940bf9caa57b0e4a78be2b0fd7b3 refs/heads/issue-168
 ed53bb0e023bdca2bf1b1490e676531776c55712 refs/heads/issue-22-take-3
 78f9d5364876e4744505f78b8456a84bd431dfec refs/heads/issue-96
-aa76ed1cfec4763f661152ce6d79d10193c5e861 refs/heads/master
+d64e1f8424afd600cc2732f4f99f262aef55fca2 refs/heads/master
 f3510cce9fba52b5a604b90b17a601334dbd31c6 refs/heads/self-link-scheme-visibility-control
 24f0392f2f6f82c58c9650a865f1ece3749529b7 refs/heads/website
 b3eb0a38db95862d723ee20cbb1e18e52e9fb3fd refs/pull/104/head
@@ -36,6 +37,14 @@ e097bcba1701613be3cffce38c50c0f1717ccf8b refs/pull/163/merge
 50f95f09a87d25aefe956ee32ed1cccbf8ee1457 refs/pull/176/head
 62b26234c66733b4ad3edc87f896b7213563d0d1 refs/pull/176/merge
 2b4cbf03ff5ec0543e3c73246ad86420d13227c2 refs/pull/188/head
+690cb8bd1d2a2cd7efddf169f1d909b08cdc983e refs/pull/201/head
+690cb8bd1d2a2cd7efddf169f1d909b08cdc983e refs/pull/203/head
+009b68ced69dbe9a3414c728ef0a3cba72b863de refs/pull/204/head
+009b68ced69dbe9a3414c728ef0a3cba72b863de refs/pull/205/head
+51d957b948235ce868f410232e8c9cd229f888d8 refs/pull/206/head
+61b54e9673704a2f7143fe743beb708fbc1448bb refs/pull/208/head
+1095e9e034c940f12e50a3f9563673cf7873959b refs/pull/208/merge
+e394eaa726e644cbfbc97f4821433bc2f6cccbb4 refs/pull/209/head
 5c084fa5ae0c1762e07a0d7af74fa8acb44f5b86 refs/pull/28/head
 802ebaedadf5ad93259e434073a0409ef46e82a8 refs/pull/30/head
 2b24bb598eaf9997613f8baf94d1c8f4afc25ddb refs/pull/30/merge
@@ -110,3 +119,9 @@ c2fdd9d0e12d657eec6017a7ad01bf144e72853f refs/tags/v3.7.1
 ^c24d68d9f4d099f9c2434e71024f2a6140dc1594
 0327ad4d1bb15dcb3e46774e8ee1747ebdbf20ab refs/tags/v3.7.3
 ^e7c94c4bb531bc83d18c50d7dbbc604fa4f1b00f
+04fd7c76ec0def21688b2ca002f189a6ce87e282 refs/tags/v3.7.4
+^6003369f5ed1a2a86fd0b0f93a7afc006c6c1890
+e3c3ecd1869b08c9d96c273c15f8ef411642103e refs/tags/v3.7.5
+^78fe097c9354f47dd369a3f8f92cbf2a4ff1ca38
+259293ab122655bdc33f1aa6ebab087286d858bc refs/tags/v3.7.6
+^1846fd5aeace2a0dd57c4f770f693d12bcd7fa26

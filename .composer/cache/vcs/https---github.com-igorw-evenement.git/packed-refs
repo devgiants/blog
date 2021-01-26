@@ -1,7 +1,8 @@
 # pack-refs with: peeled fully-peeled 
 e24176d20f6dab44dd4768b32c897f63b6f2b7c3 refs/heads/1.0
 3ace3b354131847d17b2a6a9a92f599dca1fca02 refs/heads/2.0
-db9b6035f219660e23aba8f4192ea008bc54d03c refs/heads/master
+16e36d805686f8f97ded84d70cec1bf2399c6e94 refs/heads/make-unit-test-work-on-php-8
+a5115030eb8f369099d6265778556bdfcb662e89 refs/heads/master
 b8322ebd76fb905dbebaeb7e139f5218319e3cfa refs/notes/composer
 b79b259cce729dd7efdbf800ff61f452b2fdce56 refs/pull/10/head
 35b0254d49961d51b1ed79b3a74c7f5b700f8b0e refs/pull/10/merge
@@ -65,6 +66,20 @@ c6e30efba1c0a7d279d157559efd9d8b6e886f04 refs/pull/60/head
 76ddc4bcbb9c1b8465c0a59e56552b4a7075f13a refs/pull/61/head
 e1ee4147140ba35f10877364895a7a6c9c42ba52 refs/pull/61/merge
 eaa71327f0a8eded2014286419f55bd4abf2715b refs/pull/63/head
+1720eec280fee15677fd519d8b1bfd3dbd7cca66 refs/pull/64/head
+d5c41e5634067f8a2630f29e05ab422f2b081b8f refs/pull/65/head
+6fbd05cb5b3560f429949164fdf18844a563c82e refs/pull/66/head
+c3cfccdbfdd2c9c781a1cba1347123a8e1adcd8d refs/pull/67/head
+21ded818916e82f9fe8432224dbfac84846f9229 refs/pull/68/head
+51996f2250506faf586f1610b18a985508b4d864 refs/pull/69/head
+8bde2e9ac0ef7e2f8012af7e49d30826e20cde35 refs/pull/70/head
+453ae0b1fe7ddd319aee57638e3700bfaebf770c refs/pull/71/head
+3b4dce1ddcba357419c716197c5d8207dfcd3c8b refs/pull/72/head
+ce239c80abcba431be0ca9a137eefb54d14afb6e refs/pull/74/head
+49246386f909bb0783c3f96e4a42cdc8a209a78f refs/pull/74/merge
+353bd87671eaa308edba1f34cd263f4145e86a91 refs/pull/75/head
+16e36d805686f8f97ded84d70cec1bf2399c6e94 refs/pull/76/head
+7e1c956eb6336efe253e7637f5b980ec79192f1f refs/pull/77/head
 6262999e999cbeb3ccccf247204709aaf071fb08 refs/pull/9/head
 4cec9859f8867aad047f41ad0fc88b042a73beda refs/pull/9/merge
 9ba73cfd3ecf7a5c97415bc83bd8d641ef068e24 refs/tags/v0.1.0

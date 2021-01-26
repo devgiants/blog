@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/apache.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2021-01-26T09:30:03+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Docker Apache impossible restart : httpd already running]]></title>
+            <link href="/blog/2018/02/15/docker-apache-impossible-restart/"/>
+            <updated>2018-02-15T18:35:36+01:00</updated>
+            <id>/blog/2018/02/15/docker-apache-impossible-restart/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>In Docker stacks I created (<a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress">here</a> and <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-symfony">here</a>), I realized after few usages that I could encounter problem during stack restart. <strong>Apache will not start</strong> with following message : <code>httpd (pid: XX) already running.</code></p>
+
+<h2 id="explanation">Explanation</h2>
+
+<p>I usually use <code>docker-compose stop</code> to stop my stacks between projects. It's different from <code>docker-compose down</code> because it doesn't destroy containers, but just stop them. In an ideal world, no problem with that, furthermore it's a bit faster.</p>
+
+<p>In other hand, if stack stops because of any crash, <strong>containers can be totally unusable</strong>. Due to Apache internal architecture, a new start will find <code>/var/run/apache2/apache2.pid</code> file and container system will not launch Apache <strong>to avoid (as it seems to it) second running instance</strong>.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>2 parts here :
+1. Use <code>docker-compose down</code> rather than <code>docker-compose stop</code>. Dockerily speaking, it's best practice because <strong>each container will be recreated from scratch</strong> each time you need to work with. As you have persisted what you need to store in volumes, you lost nothing.
+2. Customize you Apache image <a href="https://github.com/compagnie-hyperactive/docker-boilerplate-wordpress/blob/f7086f7fa23362b6c64707816fafaee2dbf73e6c/docker/images/apache2.4/Dockerfile#L17">to remove this lock file</a> when container is re-created.</p>
+]]></content>
+        </entry>
+    </feed>

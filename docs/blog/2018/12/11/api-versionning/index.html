@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <title>API versionning strategies &mdash; devGiants &mdash; dev &amp; training</title>
+        <meta charset="utf-8">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="robots" content="index, follow">
+        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+        <link rel="manifest" href="/images/site.webmanifest">
+        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
+        <meta name="msapplication-TileColor" content="#1e1b18">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
+        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
+                                    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="/">
+                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col-12">
+                        <article>
+        <header>
+            <h1>API versionning strategies</h1>
+        </header>
+        <div>
+            <h2 id="context">Context</h2>
+
+<p>API are like any other programmed systems : they evolve during time, either with bugfixes or feature addition. There is a roadmap that can eventually bring to a <strong>backward compatibility break</strong> to ensure proper evolution regarding new features.</p>
+
+<h2 id="versionning">Versionning</h2>
+
+<p>Versionning is important, mainly to provide your API clients ways to ensure they use the proper version regarding their needs.</p>
+
+<p>Few ways : 
+ - Domain name : <code>https://v4.your-api.com</code>
+ - URI prefix : <code>https://your-api.com/api/v4</code>
+ - Query string : <code>https://your-api.com/api/?v=4.0.0</code>
+ - Custom HTTP header : <code>X-API-Version: 4.0.0</code>
+ - <code>Accept</code> HTTP header :  <code>Accept: application/vendor.app.your-app+json; version=4.0.0</code></p>
+
+<p>Keep as the rule of thumb than changing URLs are <strong>generally bad idea</strong>. HTTP headers are the way to go. Below is a configuration possibility for the <code>Accept</code> header.</p>
+
+<h2 id="fosrestbundle-configuration-for-%60accept%60-header">FOSRestBundle configuration for <code>Accept</code> header</h2>
+
+<p>2 keys to add to FOSRestBundle configuration : <code>versionning</code> and <code>view:meme_types</code></p>
+
+<h3 id="versionning">Versionning</h3>
+
+<p>You need to tell FOSRestBundle you are using versionning in your app :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  versioning:
+    enabled: true
+    resolvers:
+      media_type: # Accept header
+        enabled: true
+        regex: '/(v|version)=(?P&lt;version&gt;[0-9\.]+)/'
+</code></pre>
+
+<p>Of course, you an freely adapt the regex to your needs.</p>
+
+<h3 id="add-mime-type">Add MIME type</h3>
+
+<p>As you can see above, the MIME type you send is now custom (<code>application/vendor.app.your-app+json; version=4.0.0</code>). You need to tell FOSRestBundle to accept it :</p>
+
+<pre><code class="yaml">fos_rest:
+  ...
+  view:
+    ...    
+    mime_types:
+      json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+</code></pre>
+
+<p>For the sake of brevity, I just put the matching configurations key with <code>Accept</code> header.</p>
+
+        </div>
+                            <p class="tags">
+            Tags:
+                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/FOS">FOS</a>                        </p>
+        
+                    <nav class="article">
+                <ul>
+                                            <li>Next: <a class="next" href="/blog/2019/10/12/domofony-presentation/" title="Domofony presentation"><span class="title">Domofony presentation</span></a></li>
+                                                                <li>Previous: <a class="previous" href="/blog/2018/11/28/interfaces-configuration-with-debian-9/" title="Interfaces configuration with Debian 9.6"><span class="title">Interfaces configuration with Debian 9.6</span></a></li>
+                                    </ul>
+            </nav>
+            </article>
+
+
+
+                </div>
+                <!--<div class="col-sm-4 sidebar">-->
+                    <!--<div class="card bg-light">-->
+                        <!--<div class="card-header">devGiants</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<small>dev &amp; training</small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="card bg-light sidebar-nav">-->
+                        <!--<div class="card-header">Links</div>-->
+                        <!--<div class="card-body">-->
+                            <!--<ul class="nav flex-column">-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
+                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </main>
+        <footer class="container">
+            <span class="text-muted">&copy; 2021 devGiants</span>
+        </footer>
+
+        <script src="/components/jquery/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
+                
+                <script src="/components/highlightjs/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+                    </body>
+</html>

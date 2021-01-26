@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/console.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2021-01-26T09:30:03+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Website backup PHP component]]></title>
+            <link href="/blog/2018/02/12/website-backup-php-component/"/>
+            <updated>2018-02-12T16:55:24+01:00</updated>
+            <id>/blog/2018/02/12/website-backup-php-component/</id>
+            <content type="html"><![CDATA[<h2 id="context">Context</h2>
+
+<p>I needed for a while to package a PHP component which will allow me to <strong>quickly</strong> and <strong>safely</strong> backup websites I do. Goals below :
+* Command line execution (automation approach)
+* Highly configurable (websites addition, backup medias…)
+* Composer-based approach (PHAR, auto-update).</p>
+
+<p>So I developed <a href="https://github.com/devgiants/websites-backup">websites-backup</a>. Details are below.</p>
+
+<h2 id="component-usage">Component usage</h2>
+
+<p>Using a <a href="https://github.com/devgiants/websites-backup#backup">YAML configuration</a> file, you can setup :
+* <strong>Several sites to backup</strong> (physically on the server and accessible to command system user) : each site is composed with a couple database/files (only MySQL so far)
+* <strong>Several backup medias</strong> : So far, only FTP is developed. Eventually I would like to setup an Amazon and Dropbox gateway. Main goal here is clearly allowing simultaneous and synchronised muliple backup storages.</p>
+
+<p><em>Note : from a security point of view, I recommand to create a system user per site, with read-only rights.</em></p>
+
+<h2 id="symfony-components-based...">Symfony components based...</h2>
+
+<p>I used this project as a <strong>training to use only few Symfony components</strong>. As far as I’m concerned, it’s a very good way to really handle them and focus on their perimeters &amp; limitations. Quick check on <code>composer.json</code> gives the components list:
+* <strong>Console component</strong> : it gives the command line approach &amp; tools. Arguments, options, console styling…
+* <strong>Config component</strong> : it provides the configuration ability, with powerful chained methods to allow you to check and decides what to do with configuration values transmitted to your application.
+* <strong>YAML component</strong> :  the YAML parser, useful to read the quoted above configuration file.</p>
+
+<h2 id="...but-not-only">...But not only</h2>
+
+<p>In order to strenghten the application on usage and maintenance point of views, I alwo use packages :
+* <a href="https://github.com/box-project/box2">The excellent Box</a> : allows you to make configurable PHAR in no-time.
+* Phar update (old but still working) : with a manifest system, provide necessary logic to check newer versions and update if necessary.
+Below is the process I follow :
+1. Make the updates (code, README…) which will be future release
+2. Git updates and coherent tag creation (i.e : 1.0.13)
+3. Application packaging  with Box
+4. Archive and up-to-date manifest publication on GitHub pages (gh-pages branch)</p>
+
+<p>Then, next time application runs, it decides using the manifest if a newer version is available (version numeric comparison, that’s why coherent and consecutive tagging does the trick).  <code>self-update</code> command will actually update the application.</p>
+
+<h2 id="also">Also</h2>
+
+<p>Considering the fact that multiple commands are available using websites-backup, I chose <a href="https://pimple.symfony.com/">Pimple</a> to have a simple but powerful dependency injection container system. I can instanciate dependencies on main application entry point :</p>
+
+<pre><code class="php">$container = new Container();
+$container['tools'] = new BackupTools();
+</code></pre>
+
+<p>And then pass container to all commands :</p>
+
+<pre><code class="php">$application-&gt;add(new Command\BackupCommand('backup', $container));
+$application-&gt;add(new Command\RetrieveBackupCommand('retrieve', $container));
+</code></pre>
+
+<h2 id="roadmap">Roadmap</h2>
+
+<p>OK, things work, but there are <a href="https://github.com/devgiants/websites-backup/projects/1">numerous features and improvements</a> I wish to add. If you find the project interesting and would like to give an hand, fell free to contact me !</p>
+]]></content>
+        </entry>
+    </feed>
