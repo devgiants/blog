@@ -6,8 +6,7 @@ tags:
 - symfony
 - version
 
-excerpt: "For quite a long time now I wondered how could I gracefully handle version management & display
-inside Symfony application. Do you now Shivas Versioning Bundle?"
+excerpt: "For quite a long time now I wondered how could I gracefully handle version management & display inside Symfony application. Do you now Shivas Versioning Bundle?"
 
 ---
 ## Version display. What for ?

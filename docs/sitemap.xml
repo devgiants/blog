@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
     <url>
+    <loc>/blog/2021/01/25/wymfony-version-manager/</loc>
+    <lastmod>2021-01-25T09:40:00+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
     <loc>/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</loc>
     <lastmod>2020-09-10T10:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -117,12 +123,6 @@
     <url>
     <loc>/blog/2018/02/12/website-backup-php-component/</loc>
     <lastmod>2018-02-12T16:55:24+01:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>/blog/2021/01/25/wymfony-version-manager/</loc>
-    <lastmod>2021-01-25T00:00:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/version.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2021-01-26T09:44:41+01:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Symfony version manager]]></title>
+            <link href="/blog/2021/01/25/wymfony-version-manager/"/>
+            <updated>2021-01-25T09:40:00+01:00</updated>
+            <id>/blog/2021/01/25/wymfony-version-manager/</id>
+            <content type="html"><![CDATA[<h2 id="version-display.-what-for-%3F">Version display. What for ?</h2>
+
+<p>From a long-term usage point of view, display application version is critical for <strong>marking</strong> purposes.
+Your users can refer to this number when contacting support, and you can also use this number to quickly ensure
+propoer deploy happened (among other tools provided by your CI/CD stack of course).</p>
+
+<h2 id="how-to-handle-it-%3F">How to handle it ?</h2>
+
+<p>Despite having the point in mind for a long, I never gave a go to a simple search around this topic.
+Doing so I found <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. It just does <strong>everything</strong> I wanted :
+- Twig extension for version number management.
+- Several versions providers (from <code>VERSION</code> file to Git tag handling) tailored for common uses.
+- <a href="https://semver.org/">SemVer</a> based.
+- Default formatters to let you go out-of-the-box</p>
+
+<p>As for all well-developed bundles, you can register your own providers &amp; formatters as services.</p>
+
+<p>Cheers to its author for this work to the community.</p>
+]]></content>
+        </entry>
+    </feed>
