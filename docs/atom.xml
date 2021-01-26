@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2021-01-26T09:44:41+01:00</updated>
+    <updated>2021-01-26T09:46:44+01:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -20,11 +20,14 @@ propoer deploy happened (among other tools provided by your CI/CD stack of cours
 <h2 id="how-to-handle-it-%3F">How to handle it ?</h2>
 
 <p>Despite having the point in mind for a long, I never gave a go to a simple search around this topic.
-Doing so I found <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. It just does <strong>everything</strong> I wanted :
-- Twig extension for version number management.
-- Several versions providers (from <code>VERSION</code> file to Git tag handling) tailored for common uses.
-- <a href="https://semver.org/">SemVer</a> based.
-- Default formatters to let you go out-of-the-box</p>
+Doing so I found <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. It just does <strong>everything</strong> I wanted :</p>
+
+<ul>
+<li>Twig extension for version number management.</li>
+<li>Several versions providers (from <code>VERSION</code> file to Git tag handling) tailored for common uses.</li>
+<li><a href="https://semver.org/">SemVer</a> based.</li>
+<li>Default formatters to let you go out-of-the-box</li>
+</ul>
 
 <p>As for all well-developed bundles, you can register your own providers &amp; formatters as services.</p>
 

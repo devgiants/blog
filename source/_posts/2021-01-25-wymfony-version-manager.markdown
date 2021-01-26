@@ -17,6 +17,7 @@ propoer deploy happened (among other tools provided by your CI/CD stack of cours
 ## How to handle it ?
 Despite having the point in mind for a long, I never gave a go to a simple search around this topic.
 Doing so I found [Shivas versionning bundle](https://github.com/shivas/versioning-bundle). It just does __everything__ I wanted :
+
 - Twig extension for version number management.
 - Several versions providers (from `VERSION` file to Git tag handling) tailored for common uses.
 - [SemVer](https://semver.org/) based.
