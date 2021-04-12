@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/compose.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2021-04-12T12:17:21+02:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Docker compose port mapping subtlety]]></title>
+            <link href="/blog/2021/04/12/docker-compose-port-mapping-subtlety/"/>
+            <updated>2021-04-12T10:40:00+02:00</updated>
+            <id>/blog/2021/04/12/docker-compose-port-mapping-subtlety/</id>
+            <content type="html"><![CDATA[<h2 id="%60docker-compose%60-port-mapping-description"><code>docker-compose</code> port mapping description</h2>
+
+<p><code>docker-compose</code> allows you to specify port mapping between the container you're defining and the host.
+Thus you can reach any service you would register to this port container (i.e Apache/Nginx on 80/443, FTP on 20/21/22...)
+by host ports. According to <a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#ports">compose file syntax</a>, you can use several markups to do so :</p>
+
+<pre><code class="yaml">ports:
+- "3000"
+- "3000-3005"
+- "8000:8000"
+- "9090-9091:8080-8081"
+- "49100:22"
+- "127.0.0.1:8001:8001"
+- "127.0.0.1:5000-5010:5000-5010"
+- "127.0.0.1::5000"
+- "6060:6060/udp"
+- "12400-12500:1240"
+</code></pre>
+
+<h2 id="problem-that-can-arise">Problem that can arise</h2>
+
+<p>I took wrong habits on my early days with <code>docker-compose</code>, such as <strong>not double quoting port mapping specification</strong>.
+So above example become :</p>
+
+<pre><code class="yaml">ports:
+- 3000
+- 3000-3005
+- 8000:8000
+- 9090-9091:8080-8081
+- 49100:22
+- 127.0.0.1:8001:8001
+- 127.0.0.1:5000-5010:5000-5010
+- 127.0.0.1::5000
+- 6060:6060/udp
+- 12400-12500:1240
+</code></pre>
+
+<p>Unquoted, expression like <code>21:21</code> will be handled by <a href="https://yaml.org/spec/1.1/">YAML engine</a> by <a href="https://en.wikipedia.org/wiki/Sexagesimal#cite_note-17">a sexagesimal notation</a> (base-60 value expression)
+The integer obtained can be quite large and will definitely not be the one you expected.</p>
+
+<ul>
+<li>Best case : it raises an exception on your <code>up</code> process because your port number computed is above the <img src="http://www.sciweavers.org/tex2img.php?eq=%202%5E%7B16%7D%20-1&amp;bc=Transparent&amp;fc=Gray&amp;im=png&amp;fs=12&amp;ff=arev&amp;edit=0" alt="equation" /> limit.</li>
+<li>Worst case: it generates a valid free port number and you realize at runtime there is a port communcation problem.</li>
+</ul>
+
+<p><em>Note this will only happens if the port is lower than 60 (to be able to enter in a modulo calculus regarding to base-60).</em></p>
+
+<p><code>docker-compose</code> documentation added a note to underline this case :</p>
+
+<blockquote>
+  <p>When mapping ports in the HOST:CONTAINER format, you may experience erroneous results when using a container port lower than 60, because YAML parses numbers in the format xx:yy as a base-60 value. For this reason, we recommend always explicitly specifying your port mappings as strings.</p>
+</blockquote>
+
+<p><strong>So ALWAYS quote you ports mapping in order to express them as strings.</strong></p>
+]]></content>
+        </entry>
+    </feed>
