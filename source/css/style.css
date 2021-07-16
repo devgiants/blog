@@ -61,6 +61,11 @@ pre, code {
 
 pre code {
     border: none;
+    margin: 0;
+}
+
+h1, h2 {
+    margin-top: 20px !important;
 }
 
 h1, h2, h3, h4 {

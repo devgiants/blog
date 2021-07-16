@@ -45,9 +45,10 @@ Now I focus on this target, by examining ports status :
 nmap debian.home -p-
 ```
 This will perform :
-- A complete port scan, on all ports range (2<sup>16</sup>, 65535)
-- Using TCP SYN port scan
-- With normal timing (3)
+
+ - A complete port scan, on all ports range (2<sup>16</sup>, 65535)
+ - Using TCP SYN port scan
+ - With normal timing (3)
 
 ```
 # nmap debian.home -p-
@@ -174,6 +175,7 @@ On this page you need:
 ```
 
 Multiples informations here :
+
 - `install.php` is mentioned but not found
 - Web app system is ApPHP MicroBlog Free, version 1.0.1
 
