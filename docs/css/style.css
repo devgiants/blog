@@ -56,11 +56,15 @@ pre, code {
     background-color: transparent;
     color: #FFF;
     padding: 3px;
-    margin: 0 3px;
+    margin: 10px 3px;
+}
+
+pre code {
+    border: none;
 }
 
 h1, h2, h3, h4 {
-    margin-bottom: 20px; !important;
+    margin-bottom: 20px !important;
 }
 
 a {
