@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/blog/tags/VM.xml" rel="self"/>
     <link href="/"/>
-    <updated>2021-07-16T22:33:56+02:00</updated>
+    <updated>2021-07-16T22:37:36+02:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -591,7 +591,7 @@ x/100x $esp-200
 
 </code></pre>
 
-<p><code>0xbf9f3588</code> seems to be a good address candidate for jumping into the <a href="https://en.wikipedia.org/wiki/NOP_slide">NOP seld</a></p>
+<p><code>0xbf9f3588</code> seems to be a good address candidate for jumping into the <a href="https://en.wikipedia.org/wiki/NOP_slide">NOP sled</a></p>
 
 <p>I tried to send it again, and got resulting stack :</p>
 

@@ -574,7 +574,7 @@ x/100x $esp-200
 
 ```
 
-`0xbf9f3588` seems to be a good address candidate for jumping into the [NOP seld](https://en.wikipedia.org/wiki/NOP_slide)
+`0xbf9f3588` seems to be a good address candidate for jumping into the [NOP sled](https://en.wikipedia.org/wiki/NOP_slide)
 
 I tried to send it again, and got resulting stack :
 
