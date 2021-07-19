@@ -13,7 +13,7 @@ excerpt: "This is my write-up for Drifting Blues 9 VM, available on HackMyVM pla
 This is my write-up (my very first !) for Drifting Blues 9 VM, available on [HackMyVM](https://hackmyvm.eu/) platform.
 
 ## Enumeration
-After launching VM, I start as always by evaluate network attack footprint.
+After launching VM, I start as always by evaluating network attack footprint.
 
 ### Finding VM IP
 My local subnet is in the CIDR range 192.168.1.0/24, I do a `nmap` quick ping scan
@@ -80,9 +80,10 @@ gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3
 ```
 
 `gobuster` is a powerful directory/file enumerator. Here :
-- Put it in directory/file enumeration mode.
-- Use widely known directories list from `dirbuster` (available in Kali), the medium size one.
-- Focus on `php`, `html`, `txt` and `bak` extensions (for sniffing automatic backup files)
+
+ - Put it in directory/file enumeration mode.
+ - Use widely known directories list from `dirbuster` (available in Kali), the medium size one.
+ - Focus on `php`, `html`, `txt` and `bak` extensions (for sniffing automatic backup files)
 
 ```
 # gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php,html,bak

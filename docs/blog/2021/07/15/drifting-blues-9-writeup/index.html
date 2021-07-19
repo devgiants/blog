@@ -56,7 +56,7 @@
 
 <h2 id="enumeration">Enumeration</h2>
 
-<p>After launching VM, I start as always by evaluate network attack footprint.</p>
+<p>After launching VM, I start as always by evaluating network attack footprint.</p>
 
 <h3 id="finding-vm-ip">Finding VM IP</h3>
 
@@ -126,10 +126,13 @@ I focus on related extensions :</p>
 <pre><code>gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php,html,bak
 </code></pre>
 
-<p><code>gobuster</code> is a powerful directory/file enumerator. Here :
-- Put it in directory/file enumeration mode.
-- Use widely known directories list from <code>dirbuster</code> (available in Kali), the medium size one.
-- Focus on <code>php</code>, <code>html</code>, <code>txt</code> and <code>bak</code> extensions (for sniffing automatic backup files)</p>
+<p><code>gobuster</code> is a powerful directory/file enumerator. Here :</p>
+
+<ul>
+<li>Put it in directory/file enumeration mode.</li>
+<li>Use widely known directories list from <code>dirbuster</code> (available in Kali), the medium size one.</li>
+<li>Focus on <code>php</code>, <code>html</code>, <code>txt</code> and <code>bak</code> extensions (for sniffing automatic backup files)</li>
+</ul>
 
 <pre><code># gobuster dir -u debian.home -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php,html,bak
 ===============================================================
