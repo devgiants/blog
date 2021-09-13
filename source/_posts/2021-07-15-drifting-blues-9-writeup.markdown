@@ -661,7 +661,7 @@ clapton@debian:~$
 Unlucky. Second try, with 1000 occurences :
 
 ```
-clapton@debian:~$ for i in {0..1000}; do ./input $(/tmp/exploit_aslr.py): done
+clapton@debian:~$ for i in {0..1000}; do ./input $(/tmp/exploit_aslr.py); done
 Segmentation fault
 Segmentation fault
 Segmentation fault
