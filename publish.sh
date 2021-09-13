@@ -7,5 +7,5 @@ mv output_prod docs
 echo "devgiants.fr" >> docs/CNAME
 
 git add .
-git commit -m "Add docker-compose port mapping post"
+git commit -m "Commit"
 git push origin master
