@@ -649,7 +649,7 @@ I uploaded it with `weevely` using `:file_upload` command, named `exploit_aslr.p
 
 First try on VM:
 ```
-clapton@debian:~$ for i in {0..100}; do ./input $(/tmp/exploit_aslr.py): done
+clapton@debian:~$ for i in {0..100}; do ./input $(/tmp/exploit_aslr.py); done
 Segmentation fault
 Segmentation fault
 Segmentation fault

