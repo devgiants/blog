@@ -1,212 +1,87 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Named constructor &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Named constructor</h1>
-        </header>
-        <div>
-            <h2 id="how-to-create-an-instance-%3F">How to create an instance ?</h2>
-
-<h3 id="classical-oop">Classical OOP</h3>
-
-<p>In classical OOP approach, you will use the
-<code>__construct</code> magic method to do the job. Let's reuse our <code>Ticket</code> entity 
-described in <a href="https://devgiants.fr/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/">SymfonyWorkflow journey - part 1</a></p>
-
-<pre><code class="php">/**
- * All attributes protected, stick to SOLID principles    
- */
-class Ticket
-{       
-    protected $id;
-
-    protected $title;
-
-    /**
-    * Classical constructor magic method
-    */
-    public function __construct()
-    {
-
-    }
-
-}
-</code></pre>
-
-<p><em>Note : I cleared unnecessary stuff, such as getters/setters, annotations... 
-So the rest look much more like a <strong>value object</strong>.</em></p>
-
-<p>So far, so good. What's wrong with this? Nothing technically speaking, <strong>this does the job</strong>.
-But what if the object is complex, and you have more than one way to create instance (from a business POV) ?
-This is where <strong>named constructors</strong> come into light.</p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Constructeur nommé - devGiants</title><meta name="description" content="Pourquoi utiliser un named constructor ? Sémantique, lisibilité, surcharge... Donnez-lui un nom !"><link rel="canonical" href="https://devgiants.fr/blog/2020/03/04/named-constructors/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2020/03/04/named-constructors/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">04 mars 2020</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Constructeur nommé</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Pourquoi utiliser un named constructor ? Sémantique, lisibilité, surcharge... Donnez-lui un nom !</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/php/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#php </a><a href="/blog/tags/oop/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#oop </a><a href="/blog/tags/semantic/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#semantic </a><a href="/blog/tags/ddd/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#ddd </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="comment-créer-une-instance">Comment créer une instance ?</h2>
+<h3 id="oop-classique">OOP classique</h3>
+<p>Dans une approche OOP classique, on utilise la méthode magique <code>__construct</code> pour faire le travail. Reprenons notre entité <code>Ticket</code> décrite dans <a href="/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/">SymfonyWorkflow journey - part 1</a></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * All attributes protected, stick to SOLID principles    </span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Ticket</span></span>
+<span class="line"><span style="color:#E1E4E8">{       </span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $id;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $title;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">    * Classical constructor magic method</span></span>
+<span class="line"><span style="color:#6A737D">    */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#79B8FF"> __construct</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><em>Note : j’ai supprimé tout ce qui était inutile, comme les getters/setters ou les annotations…
+Le reste ressemble donc davantage à un <strong>value object</strong>.</em></p>
+<p>Jusqu’ici, tout va bien. Qu’est-ce qui cloche ? Rien, techniquement parlant, <strong>ça fait le travail</strong>.
+Mais que faire si l’objet est complexe, et qu’on a plus d’une façon de créer une instance (du point de vue métier) ?
+C’est là que les <strong>named constructors</strong> entrent en scène.</p>
 <h3 id="named-constructor">Named constructor</h3>
-
-<p>This is mostly a kind of static factory (a system to create an object) embedded in object class itself. Above example 
-become :</p>
-
-<p>```php
-/**
-  * All attributes protected, stick to SOLID principles<br />
-  */
- class Ticket
- {<br />
-     protected $id;</p>
-
-<pre><code> protected $title;
-
- /**
- * Constructor becomes protected to ensure there is direct call
- */
- protected function __construct()
- {
-
- }
-
- /**
- * Named constructor example. Static to be called from class itself
- */
- public static function fromTitle(string $title): self
- {
-    $ticket = new static();
-    $ticket-&gt;setTitle($title);
-    return $ticket;  
- } 
-</code></pre>
-
-<p>}
- ```</p>
-
-<p>So instead of doing <code>$ticket = new Ticket()</code> you would do <code>$ticket = Ticket::fromTitle('new title')</code>.</p>
-
-<p><em>Notes : 
-- _Pay attention to <code>self</code> return type. This allow not to hardcode the class return type, hence offers 
-dynamism on override (with precautions though).
-- _In the same way, the <code>new static()</code> allow to instantiate current object instance. In case you extended <code>Ticket</code>,
-you will obtain here the last-in-chain class type.</em></p>
-
-<h2 id="advantages-and...-advantages">Advantages and... advantages</h2>
-
-<p>Not really drawbacks here, let's focus on the advantages</p>
-
-<h3 id="%C2%A0nice-semantics"> Nice semantics</h3>
-
-<p><code>$ticket = Ticket::fromTitle('new title')</code> speaks for itself. More than creating an instance, you <strong>describe the
-intent</strong> which is a key part in complex applications.</p>
-
-<h3 id="override-constructors">Override constructors</h3>
-
-<p>Unlike other languages (such as C++) , <strong>PHP can only have one constructor per class</strong>. If you stick to your class 
-to get an instance, the only way to fulfill different instance creation scenarii is to:</p>
-
+<p>C’est surtout une forme de factory statique, intégrée dans la classe elle-même. L’exemple ci-dessus
+devient :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D">  * All attributes protected, stick to SOLID principles    </span></span>
+<span class="line"><span style="color:#6A737D">  */</span></span>
+<span class="line"><span style="color:#F97583"> class</span><span style="color:#B392F0"> Ticket</span></span>
+<span class="line"><span style="color:#E1E4E8"> {       </span></span>
+<span class="line"><span style="color:#F97583">     protected</span><span style="color:#E1E4E8"> $id;</span></span>
+<span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#F97583">     protected</span><span style="color:#E1E4E8"> $title;</span></span>
+<span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#6A737D">     /**</span></span>
+<span class="line"><span style="color:#6A737D">     * Constructor becomes protected to ensure there is direct call</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">     protected</span><span style="color:#F97583"> function</span><span style="color:#79B8FF"> __construct</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">     {</span></span>
+<span class="line"><span style="color:#E1E4E8">         </span></span>
+<span class="line"><span style="color:#E1E4E8">     }</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">     /**</span></span>
+<span class="line"><span style="color:#6A737D">     * Named constructor example. Static to be called from class itself</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">     public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> fromTitle</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8"> $title)</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">     {</span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticket </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#F97583"> static</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticket</span><span style="color:#F97583">-></span><span style="color:#B392F0">setTitle</span><span style="color:#E1E4E8">($title);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> $ticket;  </span></span>
+<span class="line"><span style="color:#E1E4E8">     } </span></span>
+<span class="line"><span style="color:#E1E4E8"> }</span></span></code></pre>
+<p>Au lieu de faire <code>$ticket = new Ticket()</code>, vous feriez donc <code>$ticket = Ticket::fromTitle('new title')</code>.</p>
+<p>_Notes :</p>
 <ul>
-<li>Low the signature exigence (parameters type-hinting, nullable,...)</li>
-<li>Creates several checks and tests to ensure params passed on creation are still consistent</li>
+<li>_Faites attention au type de retour <code>self</code>. Il permet de ne pas figer le type de retour dans la classe, et offre
+ainsi du dynamisme en cas de surcharge (avec précaution néanmoins).</li>
+<li><em>De la même manière, <code>new static()</code> permet d’instancier l’objet courant. Si vous étendez <code>Ticket</code>,
+vous obtiendrez ici le type de classe le plus bas dans la chaîne.</em></li>
 </ul>
-
-<p>As named constructors are simple static methods, and considering the fact that <code>__construct()</code> is no more available 
-from outside world, you can create <strong>as much named constructors as you want</strong>. And guess what ?</p>
-
+<h2 id="avantages-et-avantages">Avantages et… avantages</h2>
+<p>Pas vraiment d’inconvénient ici, concentrons-nous sur les avantages</p>
+<h3 id="sémantique-agréable">Sémantique agréable</h3>
+<p><code>$ticket = Ticket::fromTitle('new title')</code> parle de lui-même. Plus qu’une simple création d’instance, vous
+<strong>décrivez l’intention</strong>, ce qui est essentiel dans les applications complexes.</p>
+<h3 id="surcharger-les-constructeurs">Surcharger les constructeurs</h3>
+<p>Contrairement à d’autres langages (comme C++), <strong>PHP ne peut avoir qu’un seul constructeur par classe</strong>. Si vous tenez à ce que votre classe fournisse une instance, le seul moyen de gérer différents scénarios de création est de :</p>
 <ul>
-<li>Design intents are still here (<code>Ticket::fromTitle()</code>, <code>Ticket::fromAnotherTicket()</code>...).</li>
-<li>All coherence checks are separated and lies only in named constructor they belong to.</li>
+<li>Réduire les exigences de signature (typage des paramètres, nullable, …)</li>
+<li>Ajouter plusieurs contrôles et tests pour s’assurer que les paramètres fournis à la création restent cohérents</li>
 </ul>
-
-<p>Last but not least, this is totally <strong>framework agnostic</strong>. You can start using them now, with nothing but
-intention.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/oop">oop</a>,                         <a href="/blog/tags/semantic">semantic</a>,                         <a href="/blog/tags/ddd">ddd</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/" title="Simple  method to override configuration for your MySQL container"><span class="title">Simple  method to override configuration for your MySQL container</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/" title="Symfony Workflow component - part 1"><span class="title">Symfony Workflow component - part 1</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<p>Comme les named constructors sont de simples méthodes statiques, et puisque <code>__construct()</code> n’est plus accessible depuis l’extérieur, vous pouvez créer <strong>autant de named constructors que nécessaire</strong>. Et devinez quoi ?</p>
+<ul>
+<li>Les intentions de design restent visibles (<code>Ticket::fromTitle()</code>, <code>Ticket::fromAnotherTicket()</code>…).</li>
+<li>Tous les contrôles de cohérence sont séparés et restent uniquement dans le named constructor auquel ils appartiennent.</li>
+</ul>
+<p>Enfin, et ce n’est pas le moindre avantage, c’est totalement <strong>framework agnostic</strong>. Vous pouvez commencer à les utiliser dès maintenant, sans autre intention que celle-là.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Composant Symfony Workflow - partie 1</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Méthode simple pour surcharger la configuration de votre conteneur MySQL</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

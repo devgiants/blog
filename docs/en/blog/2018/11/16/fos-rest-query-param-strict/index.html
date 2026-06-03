@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>FOS REST Bundle : enforce strict behavior with query params requirements - devGiants</title><meta name="description" content="FOS REST Bundle allows you to choose what to do when query params requirements are not met. Let's see how to choose."><link rel="canonical" href="https://devgiants.fr/en/blog/2018/11/16/fos-rest-query-param-strict/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/en/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/en/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/en/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/blog/2018/11/16/fos-rest-query-param-strict/"> Français </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">November 16, 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">FOS REST Bundle : enforce strict behavior with query params requirements</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">FOS REST Bundle allows you to choose what to do when query params requirements are not met. Let&#39;s see how to choose.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/en/blog/tags/php/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#php </a><a href="/en/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/en/blog/tags/API/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#API </a><a href="/en/blog/tags/REST/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#REST </a><a href="/en/blog/tags/FOS/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#FOS </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="context">Context</h2>
+<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#79B8FF"> PostHandler</span><span style="color:#6A737D"> $postHandler</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#79B8FF"> ParamFetcherInterface</span><span style="color:#6A737D"> $paramFetcher</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\Get("/posts/list")</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="keyword",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="[a-zA-Z0-9]*",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     nullable=true,</span></span>
+<span class="line"><span style="color:#6A737D">     *     description="The keyword to search for."</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="order",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="asc|desc",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="asc",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="Sort order (asc or desc)"</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="limit",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="\d+",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="3",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="Max number of posts per page."</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="page",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="\d+",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="1",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="The page wanted"</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\View(</span></span>
+<span class="line"><span style="color:#6A737D">     *     statusCode = 200,</span></span>
+<span class="line"><span style="color:#6A737D">     *     serializerGroups = {"list"}</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#79B8FF"> Paginator</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> list</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">PostHandler</span><span style="color:#E1E4E8"> $postHandler, </span><span style="color:#79B8FF">ParamFetcherInterface</span><span style="color:#E1E4E8"> $paramFetcher)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        $postsList </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $postHandler</span><span style="color:#F97583">-></span><span style="color:#B392F0">search</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#79B8FF">            intval</span><span style="color:#E1E4E8">($paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'limit'</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#79B8FF">            intval</span><span style="color:#E1E4E8">($paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'page'</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#E1E4E8">            $paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'order'</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            $paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'keyword'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> $postsList;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span></code></pre>
+<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a… posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :</p>
+<ul>
+<li><code>/posts/list?page=2</code> to get page 2, with default <code>limit</code></li>
+<li><code>/posts/list?order=desc</code> to order posts by ID descendant</li>
+<li><code>/posts/list?keyword=test</code> to retrieves only posts with ‘test’ keyword.</li>
+</ul>
+<h2 id="what-if-we-dont-follow-requirements">What if… we don’t follow requirements ?</h2>
+<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
+<ul>
+<li><code>/posts/list?page=a</code></li>
+<li><code>/posts/list?order=other</code></li>
+<li><code>/posts/list?keyword=test%20test2</code></li>
+</ul>
+<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
+<h2 id="what-if-we-want-to-raise-an-error">What if we want to raise an error?</h2>
+<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
+With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>GET http://localhost:8081/posts/list?page=a</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>HTTP/1.1 400 Bad Request</span></span>
+<span class="line"><span>Date: Fri, 16 Nov 2018 16:34:15 GMT</span></span>
+<span class="line"><span>Server: Apache/2.4.18 (Ubuntu)</span></span>
+<span class="line"><span>Cache-Control: no-cache, private</span></span>
+<span class="line"><span>X-Debug-Token: 34ff9b</span></span>
+<span class="line"><span>X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b</span></span>
+<span class="line"><span>X-Previous-Debug-Token: fd05dc</span></span>
+<span class="line"><span>Connection: close</span></span>
+<span class="line"><span>Transfer-Encoding: chunked</span></span>
+<span class="line"><span>Content-Type: application/json</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes</span></span></code></pre> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/en/blog/2018/11/15/composer-global/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Previous article</p> <p class="mt-2 font-medium text-slate-100">Composer usage can also be global</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/en/blog/2018/11/27/netplan-handling-network/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Next article</p> <p class="mt-2 font-medium text-slate-100">Netplan : new way to handle network in Ubuntu 17+</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Static site hosted on GitHub Pages</p> </div> </footer> </body></html>

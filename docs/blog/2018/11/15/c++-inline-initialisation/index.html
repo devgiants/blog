@@ -1,178 +1,68 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>C++ allow inline initialisation &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>C++ allow inline initialisation</h1>
-        </header>
-        <div>
-            <p>As a PHP developer, I was greatly surprised when discovering, while learning C++, the <strong>inline initialisation</strong> process</p>
-
-<p>Using PHP 7, you would start a class for example with :</p>
-
-<pre><code class="php">/**
- * Class User
- * @package
- */
-class User {
-    /**
-     * @var int $id
-     */
-    private int $id;
-
-    /**
-     * @var string $name
-     */
-    private string $name;
-
-    /**
-     * User constructor.
-     *
-     * @param int $id
-     * @param string $name
-     */
-    public function __construct(int $id, string $name) {
-        $this-&gt;id = $id;
-        $this-&gt;name = $name;
-    }
-}
-</code></pre>
-
-<p>Using C++, same class would become</p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>C++ permet l&#39;inline initialisation - devGiants</title><meta name="description" content="J’ai récemment découvert ce sucre syntaxique du C++ pour alléger un constructeur."><link rel="canonical" href="https://devgiants.fr/blog/2018/11/15/c++-inline-initialisation/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/11/15/c++-inline-initialisation/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">15 novembre 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">C++ permet l&#39;inline initialisation</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">J’ai récemment découvert ce sucre syntaxique du C++ pour alléger un constructeur.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/c%2B%2B/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#c++ </a><a href="/blog/tags/initialisation/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#initialisation </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <p>En tant que développeur PHP, j’ai été très surpris en découvrant, en apprenant le C++, le <strong>inline initialisation</strong> process.</p>
+<p>Avec PHP 7, vous commenceriez par exemple une classe comme ceci :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * Class User</span></span>
+<span class="line"><span style="color:#6A737D"> * </span><span style="color:#F97583">@package</span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@var</span><span style="color:#F97583"> int</span><span style="color:#6A737D"> $id</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> $id;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@var</span><span style="color:#F97583"> string</span><span style="color:#6A737D"> $name</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8"> $name;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * User constructor.</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#F97583"> int</span><span style="color:#6A737D"> $id</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#F97583"> string</span><span style="color:#6A737D"> $name</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#79B8FF"> __construct</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> $id, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8"> $name) {</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $id;</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $name;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>En C++, la même classe deviendrait :</p>
 <p><strong>user.h</strong></p>
-
-<pre><code class="c">#ifndef USER_USER_H
-#define USER_USER_H
-
-#include &lt;iostream&gt;
-
-
-class User {
-private:
-    /**
-     *
-     */
-    int m_id;
-
-    /**
-     *
-     */
-    std::string m_name;
-public:
-    /**
-     * Constructor
-     * @param id
-     * @param name
-     */
-    User(int id, std::string name);
-};
-
-#endif //USER_USER_H
-</code></pre>
-
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#F97583">#ifndef</span><span style="color:#B392F0"> USER_USER_H</span></span>
+<span class="line"><span style="color:#F97583">#define</span><span style="color:#B392F0"> USER_USER_H</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">#include</span><span style="color:#9ECBFF"> &#x3C;iostream></span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">class User {</span></span>
+<span class="line"><span style="color:#E1E4E8">private:</span></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    int</span><span style="color:#E1E4E8"> m_id;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#E1E4E8">    std::string m_name;</span></span>
+<span class="line"><span style="color:#E1E4E8">public:</span></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * Constructor</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#FFAB70"> id</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#FFAB70"> name</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#B392F0">    User</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> id, std::string name);</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">#endif</span><span style="color:#6A737D"> //USER_USER_H</span></span></code></pre>
 <p><strong>user.cpp</strong></p>
-
-<pre><code class="c">#include "user.h"
-
-User::User(int id, std::string name) : m_id(id), m_name(name) {
-    // Other logic in constructor
-}
-</code></pre>
-
-<p>The inline initialization takes place where nowadays in PHP you would specify return type. Using this notation, you clearly <strong>light up constructor method body</strong>.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/c%2B%2B">c++</a>,                         <a href="/blog/tags/initialisation">initialisation</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/11/15/composer-global/" title="Composer usage can also be global"><span class="title">Composer usage can also be global</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/05/21/react-php/" title="Introduce React PHP"><span class="title">Introduce React PHP</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#F97583">#include</span><span style="color:#9ECBFF"> "user.h"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">User::</span><span style="color:#B392F0">User</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">int</span><span style="color:#FFAB70"> id</span><span style="color:#E1E4E8">, std::string </span><span style="color:#FFAB70">name</span><span style="color:#E1E4E8">) : </span><span style="color:#B392F0">m_id</span><span style="color:#E1E4E8">(id), </span><span style="color:#B392F0">m_name</span><span style="color:#E1E4E8">(name) {</span></span>
+<span class="line"><span style="color:#6A737D">    // Other logic in constructor</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>L’inline initialisation se place là où, aujourd’hui, en PHP, vous spécifieriez le type de retour. Avec cette notation, vous <strong>allégez clairement le corps du constructeur</strong>.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/15/composer-global/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Composer peut aussi s&#39;utiliser globalement</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/16/fos-rest-query-param-strict/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">FOS REST Bundle : imposer un comportement strict sur les query params</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

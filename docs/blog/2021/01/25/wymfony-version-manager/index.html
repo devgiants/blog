@@ -1,124 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Symfony version manager &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Symfony version manager</h1>
-        </header>
-        <div>
-            <h2 id="version-display.-what-for-%3F">Version display. What for ?</h2>
-
-<p>From a long-term usage point of view, display application version is critical for <strong>marking</strong> purposes.
-Your users can refer to this number when contacting support, and you can also use this number to quickly ensure
-propoer deploy happened (among other tools provided by your CI/CD stack of course).</p>
-
-<h2 id="how-to-handle-it-%3F">How to handle it ?</h2>
-
-<p>Despite having the point in mind for a long, I never gave a go to a simple search around this topic.
-Doing so I found <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. It just does <strong>everything</strong> I wanted :</p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Gestionnaire de version Symfony - devGiants</title><meta name="description" content="Depuis un moment je me demandais comment gérer proprement l’affichage et la gestion de version dans une application Symfony. Connaissez-vous Shivas Versioning Bundle ?"><link rel="canonical" href="https://devgiants.fr/blog/2021/01/25/wymfony-version-manager/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2021/01/25/wymfony-version-manager/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">25 janvier 2021</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Gestionnaire de version Symfony</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Depuis un moment je me demandais comment gérer proprement l’affichage et la gestion de version dans une application Symfony. Connaissez-vous Shivas Versioning Bundle ?</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/version/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#version </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="afficher-la-version-pour-quoi-faire">Afficher la version. Pour quoi faire ?</h2>
+<p>Sur le long terme, afficher la version de l’application est essentiel pour des raisons de <strong>repérage</strong>.
+Vos utilisateurs peuvent citer ce numéro lorsqu’ils contactent le support, et vous pouvez aussi l’utiliser pour vérifier rapidement qu’un déploiement s’est bien déroulé (en plus des autres outils fournis par votre stack CI/CD, bien sûr).</p>
+<h2 id="comment-le-gérer">Comment le gérer ?</h2>
+<p>Même si la question me trottait dans la tête depuis longtemps, je n’avais jamais vraiment pris le temps de chercher une solution simple sur ce sujet.
+En le faisant, j’ai trouvé <a href="https://github.com/shivas/versioning-bundle">Shivas versionning bundle</a>. Il fait tout simplement <strong>tout ce que je voulais</strong> :</p>
 <ul>
-<li>Twig extension for version number management.</li>
-<li>Several versions providers (from <code>VERSION</code> file to Git tag handling) tailored for common uses.</li>
-<li><a href="https://semver.org/">SemVer</a> based.</li>
-<li>Default formatters to let you go out-of-the-box</li>
+<li>Une extension Twig pour gérer le numéro de version.</li>
+<li>Plusieurs fournisseurs de version (du fichier <code>VERSION</code> à la gestion des tags Git) adaptés aux usages courants.</li>
+<li>Basé sur <a href="https://semver.org/">SemVer</a>.</li>
+<li>Des formatters par défaut pour être opérationnel immédiatement.</li>
 </ul>
-
-<p>As for all well-developed bundles, you can register your own providers &amp; formatters as services.</p>
-
-<p>Cheers to its author for this work to the community.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/version">version</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2021/04/12/docker-compose-port-mapping-subtlety/" title="Docker compose port mapping subtlety"><span class="title">Docker compose port mapping subtlety</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/" title="Simple  method to override configuration for your MySQL container"><span class="title">Simple  method to override configuration for your MySQL container</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<p>Comme pour tous les bundles bien conçus, vous pouvez enregistrer vos propres providers et formatters en tant que services.</p>
+<p>Merci à son auteur pour ce travail mis à disposition de la communauté.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Méthode simple pour surcharger la configuration de votre conteneur MySQL</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2021/04/12/docker-compose-port-mapping-subtlety/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Subtilité du mapping de ports avec Docker Compose</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

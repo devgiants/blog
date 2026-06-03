@@ -1,152 +1,39 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Domofony presentation &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Domofony presentation</h1>
-        </header>
-        <div>
-            <h2 id="home-automation">Home automation</h2>
-
-<p>On my previous attempts on DIY home automation, I used the excellent <a href="https://www.openhab.org/">openHAB</a>.
-At first glance, it seemed to have everything I looked for in an home automation context :</p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Présentation de Domofony - devGiants</title><meta name="description" content="Cet article présente l’application Domofony pour le contrôle de la domotique."><link rel="canonical" href="https://devgiants.fr/blog/2019/10/12/domofony-presentation/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2019/10/12/domofony-presentation/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">12 octobre 2019</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Présentation de Domofony</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Cet article présente l’application Domofony pour le contrôle de la domotique.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/php/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#php </a><a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/API/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#API </a><a href="/blog/tags/REST/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#REST </a><a href="/blog/tags/home/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#home </a><a href="/blog/tags/automation/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#automation </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="domotique">Domotique</h2>
+<p>Dans mes précédents essais de domotique DIY, j’utilisais l’excellent <a href="https://www.openhab.org/">openHAB</a>.
+À première vue, il semblait réunir tout ce que je cherchais dans un contexte de domotique :</p>
 <ul>
-<li>Completely open-source</li>
-<li><strong>Technology and vendor agnostic</strong> : one of the most important thing, I didn't want to rely on proprietary technology to build this system. Everything has to be transparent from ground to roof, and modifiable to ensure long-term usage and adaptation</li>
-<li><strong>Ability to program for serious work</strong> : it's utterly important to me that real programmation feature would be available. Way I do things doesn't match with a click-land configuration job. Using <a href="https://www.eclipse.org/xtend/">Xtend</a> (because openHAB written in Java), it allows to create programs to drive your installation.</li>
+<li>Entièrement open-source</li>
+<li><strong>Agnostique vis-à-vis des technologies et des fournisseurs</strong> : c’est l’un des points les plus importants, je ne voulais pas dépendre d’une technologie propriétaire pour construire ce système. Tout doit être transparent du sol au plafond, et modifiable pour garantir une utilisation et une adaptation sur le long terme</li>
+<li><strong>Capacité à programmer pour des usages sérieux</strong> : il est absolument important pour moi qu’une vraie fonctionnalité de programmation soit disponible. La manière dont je travaille ne correspond pas à une configuration à la souris. En utilisant <a href="https://www.eclipse.org/xtend/">Xtend</a> (puisque openHAB est écrit en Java), cela permet de créer des programmes pour piloter l’installation.</li>
 </ul>
-
-<p>So why change? Some cons :</p>
-
+<p>Alors pourquoi changer ? Quelques inconvénients :</p>
 <ul>
-<li>I realized after usage that all the stuff embedded (item branching with technologies, configuration...) simply wasn't for me</li>
-<li>Xtend implementation in this usage, though really neat, does not allow things I wanted (such as script reuse accross handlers...)</li>
-<li>All the Java stuff creates pressure on underlying hardware, thus forcing to have something powerful (old Raspberry Pis was not so good)</li>
+<li>J’ai réalisé à l’usage que tout ce qui est embarqué (branching des items avec les technologies, configuration…) ne me convenait tout simplement pas</li>
+<li>L’implémentation Xtend dans cet usage, bien que vraiment propre, ne permet pas certaines choses que je voulais (comme la réutilisation de scripts entre handlers…)</li>
+<li>Toute la partie Java met la pression sur le hardware sous-jacent, obligeant à avoir quelque chose de puissant (les vieux Raspberry Pi n’étaient pas si bons)</li>
 </ul>
-
-<p>Don't misunderstand me : OpenHAB is great job used y thousand of people accross the world. I just needed something else.</p>
-
+<p>Ne me faites pas dire ce que je n’ai pas dit : OpenHAB est un excellent travail utilisé par des milliers de personnes dans le monde. J’avais simplement besoin d’autre chose.</p>
 <h2 id="domofony">Domofony</h2>
-
 <p><em>Domotique</em> + <em>Symfony</em> = <a href="https://github.com/devgiants/domofony"><strong>Domofony</strong></a>.</p>
-
-<p><em>Domotique</em> is the french word for home automation. First thing to know, I created this project for myself, and share it a good practice, but at start, not all things will be usable by everyone (such as the front-end app I plan to develop tailored to my use).</p>
-
-<p><strong>This is a solution provided by a developer for developers</strong>. Exit click-land, all configuration is done in YAML.</p>
-
-<h3 id="technical-components">Technical components</h3>
-
-<p><img src="https://devgiants.fr/images/posts/domofony/technical_components_with_items.png" alt="Technical components" /></p>
-
-<p>All part showed on above layout will be described and detailed in future posts. That being said, below is a quick description for bigger parts.</p>
-
-<h4 id="front-end-application">Front-end application</h4>
-
-<p>This is the application allowing user to interact with the system. It will consume REST API exposed by the server application.</p>
-
-<h4 id="mosquitto-broker">Mosquitto broker</h4>
-
-<p>The system relies so far on <a href="https://en.wikipedia.org/wiki/MQTT">MQTT protocol</a> 
-(<a href="https://www.linkedin.com/pulse/mqtt-un-protocole-bas%C3%A9-sur-tcp-et-orient%C3%A9-iot-nicolas-bonniot/">here</a> a protocol tour in french) for exchanges between <strong>central system</strong> and <strong>items</strong>.
-This protocol is ideal regarding it's asynchronous sequence and its lightweight. 
-Security is not left aside, although TLS certificate usage means items must be more powerful than simple microcontrollers.</p>
-
-<p><em>Note : an item is the end-device, such as sensor or actuator (or both). In my home automation system, this is mostly <a href="https://en.wikipedia.org/wiki/Single-board_computer">SBC</a> or ESP series microcontrollers</em></p>
-
-<p>Future posts will handle in details <strong>items</strong>, <strong>Symfony application</strong>, <strong>Mosquitto broker &amp; client configuration</strong> and <strong>front-end application</strong>.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/home">home</a>,                         <a href="/blog/tags/automation">automation</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2019/10/13/domofony-symfony-application/" title="Domofony Symfony application - part 1"><span class="title">Domofony Symfony application - part 1</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/12/11/api-versionning/" title="API versionning strategies"><span class="title">API versionning strategies</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<p><em>Domotique</em> est le mot français pour home automation. La première chose à savoir, c’est que j’ai créé ce projet pour moi-même et que je le partage comme bonne pratique, mais qu’à la base, tout ne sera pas forcément utilisable par tout le monde (comme l’application front-end que je prévois de développer pour mon usage).</p>
+<p><strong>C’est une solution fournie par un développeur pour des développeurs</strong>. Exit la click-land, toute la configuration est faite en YAML.</p>
+<h3 id="composants-techniques">Composants techniques</h3>
+<p><img src="/images/posts/domofony/technical_components_with_items.png" alt="Composants techniques"></p>
+<p>Toutes les parties visibles dans le schéma ci-dessus seront décrites et détaillées dans de futurs articles. Cela dit, voici une description rapide des blocs principaux.</p>
+<h4 id="application-front-end">Application front-end</h4>
+<p>C’est l’application qui permet à l’utilisateur d’interagir avec le système. Elle consommera l’API REST exposée par l’application serveur.</p>
+<h4 id="broker-mosquitto">Broker Mosquitto</h4>
+<p>Le système repose pour l’instant sur le protocole <a href="https://en.wikipedia.org/wiki/MQTT">MQTT</a>
+(<a href="https://www.linkedin.com/pulse/mqtt-un-protocole-bas%C3%A9-sur-tcp-et-orient%C3%A9-iot-nicolas-bonniot/">ici</a> un tour d’horizon du protocole en français) pour les échanges entre le <strong>système central</strong> et les <strong>items</strong>.
+Ce protocole est idéal compte tenu de son caractère asynchrone et de sa légèreté.
+La sécurité n’est pas laissée de côté, même si l’utilisation de certificats TLS implique que les items doivent être plus puissants que de simples microcontrôleurs.</p>
+<p><em>Note : un item est le périphérique final, comme un capteur ou un actionneur (ou les deux). Dans mon système de domotique, il s’agit surtout de <a href="https://en.wikipedia.org/wiki/Single-board_computer">SBC</a> ou de microcontrôleurs de la série ESP.</em></p>
+<p>Les prochains articles détailleront <strong>les items</strong>, <strong>l’application Symfony</strong>, <strong>la configuration du broker et du client Mosquitto</strong> et <strong>l’application front-end</strong>.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/12/11/api-versionning/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Stratégies de versioning d&#39;API</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2019/10/13/domofony-symfony-application/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Application Symfony Domofony - partie 1</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

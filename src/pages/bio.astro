@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, locales } from '../lib/i18n';
+
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const bio = (await getCollection('pages')).find((entry) => entry.data.key === 'bio' && entry.data.locale === locale);
+
+if (!bio) {
+  throw new Error(`Bio page not found for locale ${locale}`);
+}
+
+const { Content } = await bio.render();
+---
+
+<BaseLayout title={copy.common.bioLabel} description={copy.common.bioIntro} locale={locale}>
+  <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
+      <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.common.bioKicker}</p>
+      <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{copy.common.bioTitle}</h1>
+      <div class="content prose prose-invert mt-8 max-w-none prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline">
+        <Content />
+      </div>
+    </article>
+
+    <aside class="glass rounded-[2rem] p-6 sm:p-8">
+      <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.common.overview}</p>
+      <div class="mt-5 space-y-4">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <h2 class="text-sm font-semibold text-slate-100">{copy.common.coreStack}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.bioCoreStackText}</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <h2 class="text-sm font-semibold text-slate-100">{copy.common.recurringThemes}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.bioRecurringThemesText}</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <h2 class="text-sm font-semibold text-slate-100">{copy.common.contact}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-300">nicolas AT devgiants.fr</p>
+        </div>
+      </div>
+    </aside>
+  </section>
+</BaseLayout>

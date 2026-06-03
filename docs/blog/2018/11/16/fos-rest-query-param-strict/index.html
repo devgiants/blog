@@ -1,198 +1,92 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>FOS REST Bundle : enforce strict behavior with query params requirements &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>FOS REST Bundle : enforce strict behavior with query params requirements</h1>
-        </header>
-        <div>
-            <h2 id="context">Context</h2>
-
-<p>Playing with <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> on my journey to learn how to create rock-solid APIs, I started to create following action :</p>
-
-<pre><code class="php">/**
-     * @param PostHandler $postHandler
-     * @param ParamFetcherInterface $paramFetcher
-     * @Rest\Get("/posts/list")
-     * @Rest\QueryParam(
-     *     name="keyword",
-     *     requirements="[a-zA-Z0-9]*",     
-     *     nullable=true,
-     *     description="The keyword to search for."
-     * )
-     * @Rest\QueryParam(
-     *     name="order",
-     *     requirements="asc|desc",
-     *     default="asc",     
-     *     description="Sort order (asc or desc)"
-     * )
-     * @Rest\QueryParam(
-     *     name="limit",
-     *     requirements="\d+",
-     *     default="3",     
-     *     description="Max number of posts per page."
-     * )
-     * @Rest\QueryParam(
-     *     name="page",
-     *     requirements="\d+",
-     *     default="1",     
-     *     description="The page wanted"
-     * )
-     * @Rest\View(
-     *     statusCode = 200,
-     *     serializerGroups = {"list"}
-     * )
-     *
-     * @return Paginator
-     */
-    public function list(PostHandler $postHandler, ParamFetcherInterface $paramFetcher)
-    {
-
-
-        $postsList = $postHandler-&gt;search(
-            intval($paramFetcher-&gt;get('limit')),
-            intval($paramFetcher-&gt;get('page')),
-            $paramFetcher-&gt;get('order'),
-            $paramFetcher-&gt;get('keyword')
-        );
-
-        return $postsList;
-    }
-</code></pre>
-
-<p>This simply expose a GET endpoint, with URL <code>/posts/list</code>, in order to return a... posts list. Several <code>QueryParam</code> can be passed in order to filter the obtained list. So, according to requirements given, following calls are acceptable (and processed) :
-- <code>/posts/list?page=2</code> to get page 2, with default <code>limit</code>
-- <code>/posts/list?order=desc</code> to order posts by ID descendant
-- <code>/posts/list?keyword=test</code> to retrieves only posts with 'test' keyword.</p>
-
-<h2 id="what-if...-we-don%27t-follow-requirements-%3F">What if... we don't follow requirements ?</h2>
-
-<p>For each <code>QueryParam</code>, requirements are given in <a href="https://symfony.com/doc/current/routing/conditions.html">an regexp way</a>. Actually, requirements annotations are compiled to PHP. So, if I try :</p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>FOS REST Bundle : imposer un comportement strict sur les query params - devGiants</title><meta name="description" content="FOS REST Bundle permet de choisir quoi faire quand les contraintes sur les query params ne sont pas respectées. Voyons comment faire ce choix."><link rel="canonical" href="https://devgiants.fr/blog/2018/11/16/fos-rest-query-param-strict/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/11/16/fos-rest-query-param-strict/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">16 novembre 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">FOS REST Bundle : imposer un comportement strict sur les query params</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">FOS REST Bundle permet de choisir quoi faire quand les contraintes sur les query params ne sont pas respectées. Voyons comment faire ce choix.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/php/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#php </a><a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/API/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#API </a><a href="/blog/tags/REST/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#REST </a><a href="/blog/tags/FOS/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#FOS </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="contexte">Contexte</h2>
+<p>En expérimentant <a href="https://github.com/FriendsOfSymfony/FOSRestBundle">FOS REST Bundle</a> dans mon parcours pour apprendre à créer des APIs solides, j’ai commencé à écrire l’action suivante :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#79B8FF"> PostHandler</span><span style="color:#6A737D"> $postHandler</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#79B8FF"> ParamFetcherInterface</span><span style="color:#6A737D"> $paramFetcher</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\Get("/posts/list")</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="keyword",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="[a-zA-Z0-9]*",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     nullable=true,</span></span>
+<span class="line"><span style="color:#6A737D">     *     description="The keyword to search for."</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="order",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="asc|desc",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="asc",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="Sort order (asc or desc)"</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="limit",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="\d+",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="3",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="Max number of posts per page."</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\QueryParam(</span></span>
+<span class="line"><span style="color:#6A737D">     *     name="page",</span></span>
+<span class="line"><span style="color:#6A737D">     *     requirements="\d+",</span></span>
+<span class="line"><span style="color:#6A737D">     *     default="1",     </span></span>
+<span class="line"><span style="color:#6A737D">     *     description="The page wanted"</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     * @Rest\View(</span></span>
+<span class="line"><span style="color:#6A737D">     *     statusCode = 200,</span></span>
+<span class="line"><span style="color:#6A737D">     *     serializerGroups = {"list"}</span></span>
+<span class="line"><span style="color:#6A737D">     * )</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#79B8FF"> Paginator</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> list</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">PostHandler</span><span style="color:#E1E4E8"> $postHandler, </span><span style="color:#79B8FF">ParamFetcherInterface</span><span style="color:#E1E4E8"> $paramFetcher)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        $postsList </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $postHandler</span><span style="color:#F97583">-></span><span style="color:#B392F0">search</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#79B8FF">            intval</span><span style="color:#E1E4E8">($paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'limit'</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#79B8FF">            intval</span><span style="color:#E1E4E8">($paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'page'</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#E1E4E8">            $paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'order'</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            $paramFetcher</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'keyword'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> $postsList;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span></code></pre>
+<p>Cela expose simplement un endpoint GET, à l’URL <code>/posts/list</code>, afin de renvoyer une… liste d’articles. Plusieurs <code>QueryParam</code> peuvent être passés pour filtrer la liste obtenue. Selon les contraintes définies, les appels suivants sont donc acceptés (et traités) :</p>
+<ul>
+<li><code>/posts/list?page=2</code> pour obtenir la page 2, avec le <code>limit</code> par défaut</li>
+<li><code>/posts/list?order=desc</code> pour trier les articles par ID décroissant</li>
+<li><code>/posts/list?keyword=test</code> pour récupérer uniquement les articles contenant le mot-clé <code>test</code>.</li>
+</ul>
+<h2 id="et-si-on-ne-respecte-pas-les-contraintes">Et si… on ne respecte pas les contraintes ?</h2>
+<p>Pour chaque <code>QueryParam</code>, les contraintes sont données <a href="https://symfony.com/doc/current/routing/conditions.html">sous forme d’expression régulière</a>. En réalité, les annotations de contraintes sont compilées en PHP. Donc, si j’essaie :</p>
 <ul>
 <li><code>/posts/list?page=a</code></li>
 <li><code>/posts/list?order=other</code></li>
 <li><code>/posts/list?keyword=test%20test2</code></li>
 </ul>
-
-<p>What will happen? Nothing. By default, FOS REST Bundle will take <strong>the offending <code>QueryParam</code> default value instead</strong> of your offending value.</p>
-
-<h2 id="what-if-we-want-to-raise-an-error%3F">What if we want to raise an error?</h2>
-
-<p>Depending to which <code>QueryParam</code> you deal with, you may want to raise an error or not. For the above example, client developers will love you if you provide explicit errors and comprehensive messages for those <code>QueryParam</code>. The solution for that is simple : just add the <code>QueryParam</code> attribute <code>strict</code> to true in order to force FOS REST Bundle to raise an Exception.
-With proper configuration (such as <code>ExceptionController</code>), you achieve to throw out-of-the-box exceptions like this :</p>
-
-<pre><code>GET http://localhost:8081/posts/list?page=a
-
-HTTP/1.1 400 Bad Request
-Date: Fri, 16 Nov 2018 16:34:15 GMT
-Server: Apache/2.4.18 (Ubuntu)
-Cache-Control: no-cache, private
-X-Debug-Token: 34ff9b
-X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b
-X-Previous-Debug-Token: fd05dc
-Connection: close
-Transfer-Encoding: chunked
-Content-Type: application/json
-
-{
-  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""
-}
-
-Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes
-</code></pre>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/php">php</a>,                         <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/API">API</a>,                         <a href="/blog/tags/REST">REST</a>,                         <a href="/blog/tags/FOS">FOS</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/11/27/netplan-handling-network/" title="Netplan : new way to handle network in Ubuntu 17+"><span class="title">Netplan : new way to handle network in Ubuntu 17+</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/11/15/composer-global/" title="Composer usage can also be global"><span class="title">Composer usage can also be global</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<p>Que se passe-t-il ? Rien. Par défaut, FOS REST Bundle prendra <strong>la valeur par défaut du <code>QueryParam</code> fautif</strong> à la place de votre valeur invalide.</p>
+<h2 id="et-si-on-voulait-lever-une-erreur">Et si on voulait lever une erreur ?</h2>
+<p>Selon le <code>QueryParam</code> avec lequel vous travaillez, vous pouvez vouloir lever une erreur ou non. Dans l’exemple ci-dessus, les développeurs clients vous remercieront si vous fournissez des erreurs explicites et des messages complets pour ces <code>QueryParam</code>. La solution est simple : ajoutez l’attribut <code>strict</code> à <code>true</code> sur le <code>QueryParam</code> pour forcer FOS REST Bundle à lever une Exception.
+Avec la bonne configuration (comme <code>ExceptionController</code>), vous obtenez des exceptions prêtes à l’emploi comme celle-ci :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>GET http://localhost:8081/posts/list?page=a</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>HTTP/1.1 400 Bad Request</span></span>
+<span class="line"><span>Date: Fri, 16 Nov 2018 16:34:15 GMT</span></span>
+<span class="line"><span>Server: Apache/2.4.18 (Ubuntu)</span></span>
+<span class="line"><span>Cache-Control: no-cache, private</span></span>
+<span class="line"><span>X-Debug-Token: 34ff9b</span></span>
+<span class="line"><span>X-Debug-Token-Link: http://localhost:8081/_profiler/34ff9b</span></span>
+<span class="line"><span>X-Previous-Debug-Token: fd05dc</span></span>
+<span class="line"><span>Connection: close</span></span>
+<span class="line"><span>Transfer-Encoding: chunked</span></span>
+<span class="line"><span>Content-Type: application/json</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>  "error": "Parameter \"page\" of value \"a\" violated a constraint \"Parameter 'page' value, does not match requirements '\\d+'\""</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>Response code: 400 (Bad Request); Time: 4106ms; Content length: 137 bytes</span></span></code></pre> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/15/c++-inline-initialisation/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">C++ permet l&#39;inline initialisation</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/27/netplan-handling-network/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Netplan : une nouvelle façon de gérer le réseau sous Ubuntu 17+</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

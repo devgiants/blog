@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Configuration des interfaces avec Debian 9.6 - devGiants</title><meta name="description" content="Cet article explique comment rendre persistantes les attributions d’interfaces et les ajuster à vos besoins."><link rel="canonical" href="https://devgiants.fr/blog/2018/11/28/interfaces-configuration-with-debian-9.6/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/11/28/interfaces-configuration-with-debian-9.6/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">28 novembre 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Configuration des interfaces avec Debian 9.6</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Cet article explique comment rendre persistantes les attributions d’interfaces et les ajuster à vos besoins.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/Ubuntu/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#Ubuntu </a><a href="/blog/tags/system/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#system </a><a href="/blog/tags/Netplan/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#Netplan </a><a href="/blog/tags/network/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#network </a><a href="/blog/tags/router/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#router </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="contexte">Contexte</h2>
+<p>Comme je l’ai indiqué <a href="/blog/2018/11/27/netplan-handling-network/">dans mon précédent article</a>, je suis passé d’Ubuntu Server 18.10 à Debian 9.6 pour le système que je construis (un routeur/firewall et serveur d’application pour la domotique). Voici mes traces pour la configuration des interfaces.</p>
+<h2 id="renommage">Renommage</h2>
+<p>Comme je l’ai aussi indiqué <a href="/blog/2018/11/27/netplan-handling-network/">dans mon précédent article</a>, j’ai besoin de renommer les interfaces pour 2 raisons :</p>
+<ul>
+<li>5 interfaces (4 LAN + 1 Wifi) : il faut savoir laquelle j’utilise, d’une <strong>manière cohérente avec mon système</strong>.</li>
+<li>Être sûr d’avoir <strong>des interfaces toujours liées au même adaptateur</strong> (en utilisant le matching sur l’adresse MAC).</li>
+</ul>
+<h3 id="pour-la-session">Pour la session</h3>
+<p>Le code suivant renomme effectivement votre interface <strong>jusqu’au prochain reboot</strong>.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ip link set eth0 down</span></span>
+<span class="line"><span>ip link set eth0 name your_new_name</span></span>
+<span class="line"><span>ip link set your_new_name up</span></span></code></pre>
+<p>Assez inutile pour un usage en production.</p>
+<h3 id="définitivement">Définitivement</h3>
+<p>La solution persistante passe par 2 étapes :</p>
+<h4 id="70-persistent-netrules">70-persistent-net.rules</h4>
+<p>Il s’agit d’un fichier (normalement) généré par <code>/lib/udev/write_net_rules</code>, un outil en ligne de commande fourni <a href="https://www.debian.org/doc/manuals/debian-reference/ch03.en.html#_the_udev_system">avec le système udev</a>. Je dis normalement car sur mon installation Debian fraîche, il n’était pas là. J’en ai créé un à partir d’exemples trouvés sur le web :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/etc/udev/rules.d/70-persistent-net.rules</span></span>
+<span class="line"><span># This file was automatically generated by the /lib/udev/write_net_rules</span></span>
+<span class="line"><span># program, run by the persistent-net-generator.rules rules file.</span></span>
+<span class="line"><span>#</span></span>
+<span class="line"><span># You can modify it, as long as you keep each rule on a single</span></span>
+<span class="line"><span># line, and change only the value of the NAME= key.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:11:22:33:44:55", ATTR{type}=="1", NAME="wan"</span></span></code></pre>
+<p>Il suffit donc de remplacer votre adresse MAC ci-dessus, et l’interface correspondante prendra le nom donné.</p>
+<h4 id="etcnetworkinterfaces">/etc/network/interfaces</h4>
+<p>L’étape suivante consiste à ajuster la déclaration de l’interface dans <code>/etc/network/interfaces</code>. Dans mon cas, pour le moment, c’est :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># The primary network interface</span></span>
+<span class="line"><span>allow-hotplug wan</span></span>
+<span class="line"><span>iface wan inet dhcp</span></span></code></pre>
+<p>Désormais, mon interface <code>wan</code>, qui sera reliée à mon modem 4G, sera l’entrée <code>wan</code> de tout le système. Le routeur 4G récupérera son adresse en DHCP, conformément à la configuration ci-dessus.</p>
+<p>Étapes suivantes à venir :</p>
+<ul>
+<li>Créer l’interface LAN avec un autre adaptateur disponible</li>
+<li>Configurer l’interface Wifi comme Access Point</li>
+<li>Mettre en place un serveur DHCP pour les deux</li>
+<li>Faire le routage du trafic du LAN/Wifi vers le WAN</li>
+<li>Mettre en place un serveur DNS</li>
+<li>Firewall dans les deux sens</li>
+</ul>
+<p>Restez à l’écoute !</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/27/netplan-handling-network/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Netplan : une nouvelle façon de gérer le réseau sous Ubuntu 17+</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/12/02/systemd-presentation/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Présentation de systemd</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

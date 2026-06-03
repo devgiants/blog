@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Symfony stack</title>
+  <desc id="desc">Illustration de remplacement pour l'ancien article Symfony stack.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#0f766e" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" rx="48" fill="url(#g)" />
+  <circle cx="260" cy="220" r="150" fill="rgba(255,255,255,0.08)" />
+  <circle cx="1040" cy="510" r="190" fill="rgba(255,255,255,0.08)" />
+  <g fill="#f8fafc">
+    <text x="96" y="180" font-family="IBM Plex Sans, sans-serif" font-size="44" font-weight="700">Symfony stack</text>
+    <text x="96" y="240" font-family="IBM Plex Sans, sans-serif" font-size="24" opacity="0.82">Docker, PHP, Apache, MySQL</text>
+  </g>
+  <g fill="none" stroke="#f8fafc" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <rect x="96" y="320" width="220" height="160" rx="24" />
+    <rect x="350" y="320" width="220" height="160" rx="24" />
+    <rect x="604" y="320" width="220" height="160" rx="24" />
+    <rect x="858" y="320" width="220" height="160" rx="24" />
+    <path d="M316 400h34" />
+    <path d="M570 400h34" />
+    <path d="M824 400h34" />
+  </g>
+  <g fill="#f8fafc" font-family="IBM Plex Mono, monospace" font-size="26" opacity="0.9">
+    <text x="150" y="418">php</text>
+    <text x="396" y="418">apache</text>
+    <text x="658" y="418">mysql</text>
+    <text x="919" y="418">tools</text>
+  </g>
+</svg>

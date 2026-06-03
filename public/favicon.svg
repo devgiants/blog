@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>devGiants</title>
+  <rect width="128" height="128" rx="28" fill="#0f172a"/>
+  <path d="M34 40h22l12 24 12-24h16L72 88H56L34 40Z" fill="#f8fafc"/>
+  <circle cx="92" cy="38" r="8" fill="#c49333"/>
+</svg>

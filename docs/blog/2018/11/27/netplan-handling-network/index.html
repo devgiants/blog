@@ -1,164 +1,48 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Netplan : new way to handle network in Ubuntu 17+ &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Netplan : new way to handle network in Ubuntu 17+</h1>
-        </header>
-        <div>
-            <h2 id="context">Context</h2>
-
-<p>I started recently a new project : turn a fanless computer to a router (actually it will handle more than that but it goes beyond this post focus). I chose Ubuntu Server 18.10, and when I came to network management and configuration, I discover <a href="https://netplan.io/">Netplan</a>.</p>
-
-<h2 id="what-it-does">What it does</h2>
-
-<p>It gives a bit of <strong>abstraction on network management</strong> mainly by using __ YAML configuration files__. Examples :</p>
-
-<p><strong>For allowing DHCP address assignation for a given interface</strong></p>
-
-<pre><code class="yaml">network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    enp3s0:
-      dhcp4: true
-</code></pre>
-
-<p>You may notice there is a <code>renderer</code> key : you can choose between 2 renderers, networkd (used on server) and NetworkManager (used on desktop machines)
-Below is the system design explanation : 
-<img src="https://assets.ubuntu.com/v1/a1a80854-netplan_design_overview.svg" alt="Netplan design explanation" /></p>
-
-<h2 id="my-needs">My needs</h2>
-
-<p>Having 5 network interfaces on my machine (4 Gigabits LAN + 1 wifi), I wanted to start by assigning comprehensive names. Here it starts :</p>
-
-<p>To rename for example my future WAN interface :</p>
-
-<pre><code class="yaml">network:
-    ethernets:
-        enp1s0:
-            match:
-                macaddress: 40:62:31:01:14:ad
-            addresses: []
-            dhcp4: true
-            set-name: wan
-</code></pre>
-
-<p>This makes sure I handle the right one by matching with MAC address, and set the comprehensive name I'm waiting for.</p>
-
-<p>After each modification, y ou must run <code>sudo netplan apply</code> to handle changes.</p>
-
-<p>After reboot, the <code>ifconfig</code> command gives me :</p>
-
-<pre><code>wan: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
-        inet 192.168.0.108  netmask 255.255.255.0  broadcast 192.168.0.255
-        inet6 fe80::4262:31ff:fe01:14ad  prefixlen 64  scopeid 0x20&lt;link&gt;
-        ether 40:62:31:01:14:ad  txqueuelen 1000  (Ethernet)
-        RX packets 376  bytes 393184 (393.1 KB)
-        RX errors 0  dropped 7  overruns 0  frame 0
-        TX packets 321  bytes 28694 (28.6 KB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device memory 0xf7c00000-f7c1ffff  
-
-</code></pre>
-
-<h2 id="the-trap">The trap</h2>
-
-<p>Few scratches after, I started realizing than it seems to be a bad idea. Many people are angry with it because seems to have no propper and simple way to get rid of it (meaning returning back to <code>/etc/network/interfaces</code>). Also, there is many limitations, the first one I encountered about wifi. I tried to rename wifi interface the same way I did above, and I got an error message telling me for wifi the match condition cannot be used.</p>
-
-<p>That's why I changed my plans by using a Debian 9.6 distro for starting my machine.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/Ubuntu">Ubuntu</a>,                         <a href="/blog/tags/system">system</a>,                         <a href="/blog/tags/Netplan">Netplan</a>,                         <a href="/blog/tags/network">network</a>,                         <a href="/blog/tags/router">router</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/11/28/interfaces-configuration-with-debian-9/" title="Interfaces configuration with Debian 9.6"><span class="title">Interfaces configuration with Debian 9.6</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/11/16/fos-rest-query-param-strict/" title="FOS REST Bundle : enforce strict behavior with query params requirements"><span class="title">FOS REST Bundle : enforce strict behavior with query params requirements</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Netplan : une nouvelle façon de gérer le réseau sous Ubuntu 17+ - devGiants</title><meta name="description" content="Netplan est un nouveau moteur d’abstraction pour la configuration réseau, disponible sous Ubuntu 17+. Il simplifie radicalement les choses pour gérer le réseau... ou pas."><link rel="canonical" href="https://devgiants.fr/blog/2018/11/27/netplan-handling-network/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/11/27/netplan-handling-network/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">27 novembre 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Netplan : une nouvelle façon de gérer le réseau sous Ubuntu 17+</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Netplan est un nouveau moteur d’abstraction pour la configuration réseau, disponible sous Ubuntu 17+. Il simplifie radicalement les choses pour gérer le réseau... ou pas.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/Ubuntu/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#Ubuntu </a><a href="/blog/tags/system/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#system </a><a href="/blog/tags/Netplan/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#Netplan </a><a href="/blog/tags/network/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#network </a><a href="/blog/tags/router/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#router </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="contexte">Contexte</h2>
+<p>J’ai récemment démarré un nouveau projet : transformer un ordinateur fanless en routeur (en réalité, il gèrera plus que ça, mais cela dépasse le cadre de cet article). J’ai choisi Ubuntu Server 18.10, et lorsque je suis arrivé à la gestion et à la configuration réseau, j’ai découvert <a href="https://netplan.io/">Netplan</a>.</p>
+<h2 id="ce-que-ça-fait">Ce que ça fait</h2>
+<p>Cela apporte un peu d’<strong>abstraction à la gestion réseau</strong> principalement à l’aide de <strong>fichiers de configuration YAML</strong>. Exemples :</p>
+<p><strong>Pour autoriser l’attribution DHCP sur une interface donnée</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">network</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span></span>
+<span class="line"><span style="color:#85E89D">  renderer</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">networkd</span></span>
+<span class="line"><span style="color:#85E89D">  ethernets</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enp3s0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      dhcp4</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
+<p>Vous remarquerez peut-être la clé <code>renderer</code> : vous pouvez choisir entre 2 renderers, networkd (utilisé sur serveur) et NetworkManager (utilisé sur les machines de bureau)
+Voici l’explication du design du système :
+<img src="https://assets.ubuntu.com/v1/a1a80854-netplan_design_overview.svg" alt="Netplan design explanation"></p>
+<h2 id="mes-besoins">Mes besoins</h2>
+<p>Avec 5 interfaces réseau sur ma machine (4 LAN Gigabit + 1 wifi), j’ai voulu commencer par leur donner des noms plus explicites. Ça commence ici :</p>
+<p>Pour renommer par exemple ma future interface WAN :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">network</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    ethernets</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        enp1s0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            match</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                macaddress</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">40:62:31:01:14:ad</span></span>
+<span class="line"><span style="color:#85E89D">            addresses</span><span style="color:#E1E4E8">: []</span></span>
+<span class="line"><span style="color:#85E89D">            dhcp4</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">            set-name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">wan</span></span></code></pre>
+<p>Cela garantit que je cible la bonne interface en la faisant correspondre à son adresse MAC, et que je lui donne le nom explicite que j’attends.</p>
+<p>Après chaque modification, il faut exécuter <code>sudo netplan apply</code> pour appliquer les changements.</p>
+<p>Après redémarrage, la commande <code>ifconfig</code> me donne :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>wan: flags=4163&#x3C;UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500</span></span>
+<span class="line"><span>        inet 192.168.0.108  netmask 255.255.255.0  broadcast 192.168.0.255</span></span>
+<span class="line"><span>        inet6 fe80::4262:31ff:fe01:14ad  prefixlen 64  scopeid 0x20&#x3C;link></span></span>
+<span class="line"><span>        ether 40:62:31:01:14:ad  txqueuelen 1000  (Ethernet)</span></span>
+<span class="line"><span>        RX packets 376  bytes 393184 (393.1 KB)</span></span>
+<span class="line"><span>        RX errors 0  dropped 7  overruns 0  frame 0</span></span>
+<span class="line"><span>        TX packets 321  bytes 28694 (28.6 KB)</span></span>
+<span class="line"><span>        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span></span>
+<span class="line"><span>        device memory 0xf7c00000-f7c1ffff  </span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="le-piège">Le piège</h2>
+<p>Quelques grattages plus tard, j’ai commencé à me rendre compte que ce n’était peut-être pas une si bonne idée. Beaucoup de monde lui reproche de ne pas offrir de manière simple et propre de revenir en arrière (c’est-à-dire retourner à <code>/etc/network/interfaces</code>). Il y a aussi de nombreuses limitations, la première que j’ai rencontrée concernant le wifi. J’ai essayé de renommer l’interface wifi de la même manière que ci-dessus, et j’ai obtenu un message d’erreur m’indiquant que pour le wifi, la condition <code>match</code> ne peut pas être utilisée.</p>
+<p>C’est pourquoi j’ai changé mes plans et choisi une distribution Debian 9.6 pour démarrer ma machine.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/16/fos-rest-query-param-strict/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">FOS REST Bundle : imposer un comportement strict sur les query params</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/11/28/interfaces-configuration-with-debian-9.6/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Configuration des interfaces avec Debian 9.6</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

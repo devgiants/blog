@@ -1,182 +1,66 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Flex : mixing autowiring and old-fashioned service way &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Flex : mixing autowiring and old-fashioned service way</h1>
-        </header>
-        <div>
-            <h2 id="context">Context</h2>
-
-<p><a href="https://symfony.com/doc/current/setup/flex.html">Symfony Flex</a> incredibly reduces and simplifies day-to-day Symfony usage. Among other things, <a href="https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container">autowiring</a> is one of the biggest.
-<strong>But what if you need to use some old-school service naming for further usage ?</strong></p>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Flex : mélanger autowiring et déclaration de services à l&#39;ancienne - devGiants</title><meta name="description" content="Pour de nombreuses raisons, vous pouvez vouloir câbler manuellement vos services tout en utilisant Symfony Flex."><link rel="canonical" href="https://devgiants.fr/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">20 février 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Flex : mélanger autowiring et déclaration de services à l&#39;ancienne</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Pour de nombreuses raisons, vous pouvez vouloir câbler manuellement vos services tout en utilisant Symfony Flex.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/service/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#service </a><a href="/blog/tags/container/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#container </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="contexte">Contexte</h2>
+<p><a href="https://symfony.com/doc/current/setup/flex.html">Symfony Flex</a> réduit et simplifie énormément l’usage quotidien de Symfony. Entre autres choses, <a href="https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container">autowiring</a> est l’un des apports les plus importants.
+<strong>Mais que faire si vous avez besoin d’utiliser un ancien mode de nommage des services pour un usage ultérieur ?</strong></p>
 <h2 id="solution">Solution</h2>
-
-<p>For the CMS bundle I'm working on, I needed to refer to an handler for security (successful/failure authentication). Docs states I can use a service name in <code>security.yaml</code> :</p>
-
-<pre><code class="yaml">admin:
-    provider: db_provider # Use any declared provider above
-    form_login:
-        login_path: /admin/login
-        check_path: /admin/login
-        default_target_path: /admin
-        username_parameter: login[username_or_email]
-        password_parameter: login[password]
-
-        success_handler:    app.security_handler
-        failure_handler:    app.security_handler
-</code></pre>
-
-<p>The handler :</p>
-
-<pre><code class="php">use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-
-class SecurityHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
-{
-
-    private $router;
-
-    public function __construct(RouterInterface $router)
-    {
-        $this-&gt;router = $router;
-    }
-
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
-    {
-        // TODO make necessary check to ensure proper redirection after successful authentication   
-        return new RedirectResponse($this-&gt;router-&gt;generate('index'));
-    }
-
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-    {
-        // TODO make necessary check to ensure proper redirection after failure authen authentication
-        return new RedirectResponse($this-&gt;router-&gt;generate('app_login'));
-    }
-}
-
-</code></pre>
-
-<p>But from a Flex point of view, <strong>the constructor with type-hinted arguments is enough</strong>.</p>
-
-<p>The solution is in 2 steps</p>
-
+<p>Pour le bundle CMS sur lequel je travaille, j’avais besoin de faire référence à un handler pour la sécurité (authentification réussie/échouée). La documentation indique que je peux utiliser un nom de service dans <code>security.yaml</code> :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">admin</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    provider</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">db_provider</span><span style="color:#6A737D"> # Use any declared provider above</span></span>
+<span class="line"><span style="color:#85E89D">    form_login</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        login_path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/admin/login</span></span>
+<span class="line"><span style="color:#85E89D">        check_path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/admin/login</span></span>
+<span class="line"><span style="color:#85E89D">        default_target_path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/admin</span></span>
+<span class="line"><span style="color:#85E89D">        username_parameter</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">login[username_or_email]</span></span>
+<span class="line"><span style="color:#85E89D">        password_parameter</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">login[password]</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#85E89D">        success_handler</span><span style="color:#E1E4E8">:    </span><span style="color:#9ECBFF">app.security_handler</span></span>
+<span class="line"><span style="color:#85E89D">        failure_handler</span><span style="color:#E1E4E8">:    </span><span style="color:#9ECBFF">app.security_handler</span></span></code></pre>
+<p>Le handler :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\HttpFoundation\RedirectResponse</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\HttpFoundation\Request</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\Routing\RouterInterface</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\Security\Core\Authentication\Token\TokenInterface</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\Security\Core\Exception\AuthenticationException</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> SecurityHandler</span><span style="color:#F97583"> implements</span><span style="color:#B392F0"> AuthenticationSuccessHandlerInterface</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">AuthenticationFailureHandlerInterface</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">	private</span><span style="color:#E1E4E8"> $router;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">	public</span><span style="color:#F97583"> function</span><span style="color:#79B8FF"> __construct</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">RouterInterface</span><span style="color:#E1E4E8"> $router)</span></span>
+<span class="line"><span style="color:#E1E4E8">	{</span></span>
+<span class="line"><span style="color:#79B8FF">		$this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">router </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $router;</span></span>
+<span class="line"><span style="color:#E1E4E8">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">	public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> onAuthenticationSuccess</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">Request</span><span style="color:#E1E4E8"> $request, </span><span style="color:#79B8FF">TokenInterface</span><span style="color:#E1E4E8"> $token)</span></span>
+<span class="line"><span style="color:#E1E4E8">	{</span></span>
+<span class="line"><span style="color:#6A737D">        // TODO make necessary check to ensure proper redirection after successful authentication   </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> RedirectResponse</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">$this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">router</span><span style="color:#F97583">-></span><span style="color:#B392F0">generate</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'index'</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">	public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> onAuthenticationFailure</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">Request</span><span style="color:#E1E4E8"> $request, </span><span style="color:#79B8FF">AuthenticationException</span><span style="color:#E1E4E8"> $exception)</span></span>
+<span class="line"><span style="color:#E1E4E8">	{</span></span>
+<span class="line"><span style="color:#6A737D">		// TODO make necessary check to ensure proper redirection after failure authen authentication</span></span>
+<span class="line"><span style="color:#F97583">		return</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> RedirectResponse</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">$this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">router</span><span style="color:#F97583">-></span><span style="color:#B392F0">generate</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'app_login'</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">	}</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+<p>Mais du point de vue Flex, <strong>le constructeur avec des arguments typés suffit</strong>.</p>
+<p>La solution se fait en 2 étapes</p>
 <ol>
-<li>Define the service "old-fashioned" way</li>
+<li>Définir le service « à l’ancienne »</li>
 </ol>
-
-<pre><code class="yaml">app.security_handler:
-  class: App\Listener\Security\SecurityHandler
-</code></pre>
-
-<p>But doing so, to core will switch to old way to load service. Meaning that you would have to provide parameters/services for dependancy injection manually.</p>
-
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">app.security_handler</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  class</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">App\Listener\Security\SecurityHandler</span></span></code></pre>
+<p>Mais en procédant ainsi, le coeur bascule sur l’ancien mode de chargement des services. Cela signifie que vous devrez fournir manuellement les paramètres/services pour l’injection de dépendances.</p>
 <ol start="2">
-<li>Define a <a href="https://github.com/compagnie-hyperactive/UserBundle">service alias</a></li>
+<li>Définir un <a href="https://github.com/compagnie-hyperactive/UserBundle">alias de service</a></li>
 </ol>
-
-<pre><code class="yaml">App\Listener\Security\SecurityHandler: '@app.security_handler'
-</code></pre>
-
-<p>This very last step <strong>enable autowiring for your service</strong>. I can use the name in security.yaml as above.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/service">service</a>,                         <a href="/blog/tags/container">container</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/02/20/entire-section-requirements-symfony-config/" title="Symfony Config : how to handle entire section require status ?"><span class="title">Symfony Config : how to handle entire section require status ?</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/02/16/voter-interface-constants/" title="VoterInterface interface constants"><span class="title">VoterInterface interface constants</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">App\Listener\Security\SecurityHandler</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'@app.security_handler'</span></span></code></pre>
+<p>Cette dernière étape <strong>active l’autowiring pour votre service</strong>. Je peux alors utiliser le nom dans <code>security.yaml</code> comme ci-dessus.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/02/16/voter-interface-constants/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Constantes de l&#39;interface VoterInterface</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/02/20/entire-section-requirements-symfony-config/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Symfony Config : comment gérer une section entière obligatoire ?</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

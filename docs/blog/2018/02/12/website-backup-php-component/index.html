@@ -1,156 +1,50 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>Website backup PHP component &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>Website backup PHP component</h1>
-        </header>
-        <div>
-            <h2 id="context">Context</h2>
-
-<p>I needed for a while to package a PHP component which will allow me to <strong>quickly</strong> and <strong>safely</strong> backup websites I do. Goals below :
-* Command line execution (automation approach)
-* Highly configurable (websites addition, backup medias…)
-* Composer-based approach (PHAR, auto-update).</p>
-
-<p>So I developed <a href="https://github.com/devgiants/websites-backup">websites-backup</a>. Details are below.</p>
-
-<h2 id="component-usage">Component usage</h2>
-
-<p>Using a <a href="https://github.com/devgiants/websites-backup#backup">YAML configuration</a> file, you can setup :
-* <strong>Several sites to backup</strong> (physically on the server and accessible to command system user) : each site is composed with a couple database/files (only MySQL so far)
-* <strong>Several backup medias</strong> : So far, only FTP is developed. Eventually I would like to setup an Amazon and Dropbox gateway. Main goal here is clearly allowing simultaneous and synchronised muliple backup storages.</p>
-
-<p><em>Note : from a security point of view, I recommand to create a system user per site, with read-only rights.</em></p>
-
-<h2 id="symfony-components-based...">Symfony components based...</h2>
-
-<p>I used this project as a <strong>training to use only few Symfony components</strong>. As far as I’m concerned, it’s a very good way to really handle them and focus on their perimeters &amp; limitations. Quick check on <code>composer.json</code> gives the components list:
-* <strong>Console component</strong> : it gives the command line approach &amp; tools. Arguments, options, console styling…
-* <strong>Config component</strong> : it provides the configuration ability, with powerful chained methods to allow you to check and decides what to do with configuration values transmitted to your application.
-* <strong>YAML component</strong> :  the YAML parser, useful to read the quoted above configuration file.</p>
-
-<h2 id="...but-not-only">...But not only</h2>
-
-<p>In order to strenghten the application on usage and maintenance point of views, I alwo use packages :
-* <a href="https://github.com/box-project/box2">The excellent Box</a> : allows you to make configurable PHAR in no-time.
-* Phar update (old but still working) : with a manifest system, provide necessary logic to check newer versions and update if necessary.
-Below is the process I follow :
-1. Make the updates (code, README…) which will be future release
-2. Git updates and coherent tag creation (i.e : 1.0.13)
-3. Application packaging  with Box
-4. Archive and up-to-date manifest publication on GitHub pages (gh-pages branch)</p>
-
-<p>Then, next time application runs, it decides using the manifest if a newer version is available (version numeric comparison, that’s why coherent and consecutive tagging does the trick).  <code>self-update</code> command will actually update the application.</p>
-
-<h2 id="also">Also</h2>
-
-<p>Considering the fact that multiple commands are available using websites-backup, I chose <a href="https://pimple.symfony.com/">Pimple</a> to have a simple but powerful dependency injection container system. I can instanciate dependencies on main application entry point :</p>
-
-<pre><code class="php">$container = new Container();
-$container['tools'] = new BackupTools();
-</code></pre>
-
-<p>And then pass container to all commands :</p>
-
-<pre><code class="php">$application-&gt;add(new Command\BackupCommand('backup', $container));
-$application-&gt;add(new Command\RetrieveBackupCommand('retrieve', $container));
-</code></pre>
-
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Composant PHP de sauvegarde de sites web - devGiants</title><meta name="description" content="Je présente ici un composant PHP pour sauvegarder des sites web. Packagé en application PHAR avec auto-update, il permet plusieurs options pour sauvegarder les assets des sites (databases et fichiers) sur plusieurs storages."><link rel="canonical" href="https://devgiants.fr/blog/2018/02/12/website-backup-php-component/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/02/12/website-backup-php-component/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">12 février 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Composant PHP de sauvegarde de sites web</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Je présente ici un composant PHP pour sauvegarder des sites web. Packagé en application PHAR avec auto-update, il permet plusieurs options pour sauvegarder les assets des sites (databases et fichiers) sur plusieurs storages.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/console/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#console </a><a href="/blog/tags/command/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#command </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="contexte">Contexte</h2>
+<p>J’avais besoin depuis un moment de packager un composant PHP qui me permette de sauvegarder <strong>rapidement</strong> et <strong>sûrement</strong> les sites que je réalise. Les objectifs étaient les suivants :</p>
+<ul>
+<li>exécution en ligne de commande (approche automatisable)</li>
+<li>grande configurabilité (ajout de sites, backup medias…)</li>
+<li>approche basée sur Composer (PHAR, auto-update)</li>
+</ul>
+<p>J’ai donc développé <a href="https://github.com/devgiants/websites-backup">websites-backup</a>. Les détails sont ci-dessous.</p>
+<h2 id="utilisation-du-composant">Utilisation du composant</h2>
+<p>À l’aide d’un fichier de configuration <a href="https://github.com/devgiants/websites-backup#backup">YAML</a>, vous pouvez définir :</p>
+<ul>
+<li><strong>Plusieurs sites à sauvegarder</strong> (présents physiquement sur le serveur et accessibles par l’utilisateur système de la commande) : chaque site est composé d’un couple databases/fichiers (seulement MySQL pour le moment)</li>
+<li><strong>Plusieurs backup medias</strong> : à ce stade, seul FTP est développé. À terme, j’aimerais mettre en place une passerelle Amazon et Dropbox. L’objectif ici est clairement de permettre plusieurs storages simultanés et synchronisés.</li>
+</ul>
+<p><em>Note : d’un point de vue sécurité, je recommande de créer un utilisateur système par site, avec des droits en lecture seule.</em></p>
+<h2 id="basé-sur-des-components-symfony">Basé sur des components Symfony…</h2>
+<p>J’ai utilisé ce projet comme <strong>terrain d’entraînement pour n’utiliser que quelques components Symfony</strong>. De mon point de vue, c’est une très bonne manière de les prendre en main pour de vrai et de se concentrer sur leurs périmètres et leurs limitations. Un rapide coup d’œil à <code>composer.json</code> donne la liste des components :</p>
+<ul>
+<li><strong>Console component</strong> : il fournit l’approche et les outils en ligne de commande. Arguments, options, console styling…</li>
+<li><strong>Config component</strong> : il apporte la gestion de configuration, avec des méthodes chaînées puissantes pour vérifier et décider quoi faire des valeurs de configuration transmises à l’application.</li>
+<li><strong>YAML component</strong> : le parser YAML, utile pour lire le fichier de configuration cité au-dessus.</li>
+</ul>
+<h2 id="mais-pas-seulement">…Mais pas seulement</h2>
+<p>Pour renforcer l’application du point de vue usage et maintenance, j’utilise aussi quelques packages :</p>
+<ul>
+<li><a href="https://github.com/box-project/box2">The excellent Box</a> : permet de créer un PHAR configurable en un rien de temps.</li>
+<li>Phar update (ancien mais toujours fonctionnel) : avec un système de manifest, il fournit la logique nécessaire pour vérifier l’existence de nouvelles versions et mettre à jour si besoin.</li>
+</ul>
+<p>Voici le process que je suis :</p>
+<ol>
+<li>Faire les mises à jour (code, README…) qui feront partie de la future release</li>
+<li>Commiter les changements et créer un tag cohérent (par exemple : 1.0.13)</li>
+<li>Packager l’application avec Box</li>
+<li>Publier l’archive et le manifest de mise à jour sur GitHub pages (branche gh-pages)</li>
+</ol>
+<p>Au prochain lancement, l’application décide, à partir du manifest, si une version plus récente est disponible (comparaison numérique des versions, d’où l’intérêt d’un tagging cohérent et séquentiel). La commande <code>self-update</code> met alors effectivement l’application à jour.</p>
+<h2 id="aussi">Aussi</h2>
+<p>Étant donné que plusieurs commandes sont disponibles via websites-backup, j’ai choisi <a href="https://pimple.symfony.com/">Pimple</a> pour disposer d’un container d’injection de dépendances simple mais puissant. Je peux instancier les dépendances au point d’entrée principal de l’application :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#E1E4E8">$container </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> Container</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">$container[</span><span style="color:#9ECBFF">'tools'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> BackupTools</span><span style="color:#E1E4E8">();</span></span></code></pre>
+<p>Puis passer le container à toutes les commandes :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#E1E4E8">$application</span><span style="color:#F97583">-></span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#79B8FF"> Command\BackupCommand</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'backup'</span><span style="color:#E1E4E8">, $container));</span></span>
+<span class="line"><span style="color:#E1E4E8">$application</span><span style="color:#F97583">-></span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#79B8FF"> Command\RetrieveBackupCommand</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'retrieve'</span><span style="color:#E1E4E8">, $container));</span></span></code></pre>
 <h2 id="roadmap">Roadmap</h2>
-
-<p>OK, things work, but there are <a href="https://github.com/devgiants/websites-backup/projects/1">numerous features and improvements</a> I wish to add. If you find the project interesting and would like to give an hand, fell free to contact me !</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/console">console</a>,                         <a href="/blog/tags/command">command</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/02/15/docker-stack-presentation/" title="Docker stacks presentation"><span class="title">Docker stacks presentation</span></a></li>
-                                                        </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<p>OK, ça fonctionne, mais il y a <a href="https://github.com/devgiants/websites-backup/projects/1">de nombreuses fonctionnalités et améliorations</a> que je souhaite ajouter. Si le projet vous intéresse et que vous souhaitez donner un coup de main, n’hésitez pas à me contacter !</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <span></span> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/02/15/docker-stack-presentation/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Présentation des stacks Docker</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

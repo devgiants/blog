@@ -1,152 +1,44 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <title>VoterInterface interface constants &mdash; devGiants &mdash; dev &amp; training</title>
-        <meta charset="utf-8">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="robots" content="index, follow">
-        <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-
-        <link rel="apple-touch-startup-image" href="/images/jackson/2048x2048.png">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#1e1b18">
-        <meta name="msapplication-TileColor" content="#1e1b18">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="/components/highlightjs/styles/solarized_dark.css" />
-        <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="devGiants activity feed" />
-                                    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <span class="first">dev</span><strong><span class="second">Giants</span></strong>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="/blog">Posts Archive</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog/tags">Tags</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-12">
-                        <article>
-        <header>
-            <h1>VoterInterface interface constants</h1>
-        </header>
-        <div>
-            <h2 id="what%27s-happening">What's happening</h2>
-
-<p>Few weeks ago, I got <strong>strange behavior</strong> in voters return while using constants from <code>VoterInterface</code> interface ( <code>VoterInterface::ACCESS_GRANTED</code>, <code>VoterInterface::ACCESS_DENIED</code> and <code>VoterInterface::ACCESS_ABSTAIN</code>). As sidenote, here is the <a href="http://api.symfony.com/3.4/Symfony/Component/Security/Core/Authorization/Voter/VoterInterface.html">involved interface</a>.</p>
-
-<p>Below my <code>Voter</code> initial code:</p>
-
-<pre><code class="php"> /**
-     * @param string $attributes
-     * @param mixed $subject
-     * @param TokenInterface $token
-     * @return int
-     */
-    public function voteOnAttribute($attributes, $subject, TokenInterface $token) {
-
-      $user = $token-&gt;getUser();
-
-      // If managed here, meaning support method said yes and subject got Rolable trait, and therefore getAuthorizedRoles() method.
-
-      // skip everything if no roles set
-      if(count($subject-&gt;getAuthorizedRoles()) &gt; 0) {
-
-        // Roles set and no user. Deny
-        if(!$user instanceof User) {
-            return static::ACCESS_DENIED;
-        }
-
-        // user connected (but skip if admin)
-        if(!$user-&gt;hasRole(User::ROLE_ADMIN)) {
-
-          // User connected, not admin, check roles intersections
-          if(count(array_intersect($subject-&gt;getAuthorizedRoles(), $user-&gt;getRoles())) === 0) {
-            return static::ACCESS_DENIED;
-          }
-        }
-      }
-
-      return static::ACCESS_GRANTED;
-    }
-</code></pre>
-
-<h2 id="a-legacy">A legacy</h2>
-
-<p>As a matter of fact, my <a href="https://stackoverflow.com/questions/44906743/symfony-voter-constant-usages#answer-46253196">StackOverflow post</a> on topic is pointed on <strong>a back-compatibility SF 2.5-</strong>. Doc says for SF 2.5+, voters must return <code>true</code> or <code>false</code>.</p>
-
-<p>It’s really important when it comes to <code>VoterInterface::ACCESS_DENIED</code> because where a today regular Voter must return <code>false</code> in <strong>denied access</strong> case, the matching constant got assigned to -1.</p>
-
-<p>Nonetheless, still a question from my point of view so far : what about <code>VoterInterface::ACCESS_ABSTAIN</code> ? I found the abstaining capability very useful if <code>Voter</code> concludes that it can’t vote.</p>
-
-<p>I will keep this post updated as soon as I will have the answer.</p>
-
-        </div>
-                            <p class="tags">
-            Tags:
-                        <a href="/blog/tags/symfony">symfony</a>,                         <a href="/blog/tags/voters">voters</a>                        </p>
-        
-                    <nav class="article">
-                <ul>
-                                            <li>Next: <a class="next" href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/" title="Flex : mixing autowiring and old-fashioned service way"><span class="title">Flex : mixing autowiring and old-fashioned service way</span></a></li>
-                                                                <li>Previous: <a class="previous" href="/blog/2018/02/15/docker-apache-impossible-restart/" title="Docker Apache impossible restart : httpd already running"><span class="title">Docker Apache impossible restart : httpd already running</span></a></li>
-                                    </ul>
-            </nav>
-            </article>
-
-
-
-                </div>
-                <!--<div class="col-sm-4 sidebar">-->
-                    <!--<div class="card bg-light">-->
-                        <!--<div class="card-header">devGiants</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<small>dev &amp; training</small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="card bg-light sidebar-nav">-->
-                        <!--<div class="card-header">Links</div>-->
-                        <!--<div class="card-body">-->
-                            <!--<ul class="nav flex-column">-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://sculpin.io">sculpin.io</a></li>-->
-                                <!--<li class="nav-item"><a class="nav-link" href="http://twitter.com/getsculpin">@getsculpin</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-        </main>
-        <footer class="container">
-            <span class="text-muted">&copy; 2021 devGiants</span>
-        </footer>
-
-        <script src="/components/jquery/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/components/bootstrap/js/bootstrap.min.js"></script>
-                
-                <script src="/components/highlightjs/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-
-                    </body>
-</html>
+<!DOCTYPE html><html lang="fr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Constantes de l&#39;interface VoterInterface - devGiants</title><meta name="description" content="Un regard plus attentif sur les constantes de l'interface voter pour le contrôle d'accès."><link rel="canonical" href="https://devgiants.fr/blog/2018/02/16/voter-interface-constants/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/en/blog/2018/02/16/voter-interface-constants/"> English </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">16 février 2018</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Constantes de l&#39;interface VoterInterface</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Un regard plus attentif sur les constantes de l&#39;interface voter pour le contrôle d&#39;accès.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/blog/tags/voters/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#voters </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <h2 id="ce-qui-se-passe">Ce qui se passe</h2>
+<p>Il y a quelques semaines, j’ai obtenu un <strong>comportement étrange</strong> dans le retour des voters en utilisant les constantes de l’interface <code>VoterInterface</code> (<code>VoterInterface::ACCESS_GRANTED</code>, <code>VoterInterface::ACCESS_DENIED</code> et <code>VoterInterface::ACCESS_ABSTAIN</code>). En aparté, voici <a href="http://api.symfony.com/3.4/Symfony/Component/Security/Core/Authorization/Voter/VoterInterface.html">l’interface concernée</a>.</p>
+<p>Voici le code initial de mon <code>Voter</code> :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#6A737D"> /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#F97583"> string</span><span style="color:#6A737D"> $attributes</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#F97583"> mixed</span><span style="color:#6A737D"> $subject</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#79B8FF"> TokenInterface</span><span style="color:#6A737D"> $token</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#F97583"> int</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> voteOnAttribute</span><span style="color:#E1E4E8">($attributes, $subject, </span><span style="color:#79B8FF">TokenInterface</span><span style="color:#E1E4E8"> $token) {</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">      $user </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $token</span><span style="color:#F97583">-></span><span style="color:#B392F0">getUser</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">      // If managed here, meaning support method said yes and subject got Rolable trait, and therefore getAuthorizedRoles() method.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">      // skip everything if no roles set</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">count</span><span style="color:#E1E4E8">($subject</span><span style="color:#F97583">-></span><span style="color:#B392F0">getAuthorizedRoles</span><span style="color:#E1E4E8">()) </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Roles set and no user. Deny</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">$user </span><span style="color:#F97583">instanceof</span><span style="color:#79B8FF"> User</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#F97583"> static::</span><span style="color:#79B8FF">ACCESS_DENIED</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // user connected (but skip if admin)</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">$user</span><span style="color:#F97583">-></span><span style="color:#B392F0">hasRole</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">User</span><span style="color:#F97583">::</span><span style="color:#79B8FF">ROLE_ADMIN</span><span style="color:#E1E4E8">)) {</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">          // User connected, not admin, check roles intersections</span></span>
+<span class="line"><span style="color:#F97583">          if</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">count</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">array_intersect</span><span style="color:#E1E4E8">($subject</span><span style="color:#F97583">-></span><span style="color:#B392F0">getAuthorizedRoles</span><span style="color:#E1E4E8">(), $user</span><span style="color:#F97583">-></span><span style="color:#B392F0">getRoles</span><span style="color:#E1E4E8">())) </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#F97583"> static::</span><span style="color:#79B8FF">ACCESS_DENIED</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#F97583"> static::</span><span style="color:#79B8FF">ACCESS_GRANTED</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span></code></pre>
+<h2 id="un-héritage">Un héritage</h2>
+<p>En réalité, mon <a href="https://stackoverflow.com/questions/44906743/symfony-voter-constant-usages#answer-46253196">post StackOverflow</a> sur le sujet pointe vers une <strong>compatibilité ascendante SF 2.5-</strong>. La doc indique qu’à partir de SF 2.5+, les voters doivent retourner <code>true</code> ou <code>false</code>.</p>
+<p>C’est particulièrement important pour <code>VoterInterface::ACCESS_DENIED</code>, parce que là où un Voter moderne doit retourner <code>false</code> en cas d’accès refusé, la constante correspondante vaut <code>-1</code>.</p>
+<p>Cela dit, une question reste ouverte de mon côté : qu’en est-il de <code>VoterInterface::ACCESS_ABSTAIN</code> ? Je trouve la capacité d’abstention très utile quand un <code>Voter</code> conclut qu’il ne peut pas voter.</p>
+<p>Je mettrai cet article à jour dès que j’aurai la réponse.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/02/15/docker-apache-impossible-restart/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article précédent</p> <p class="mt-2 font-medium text-slate-100">Docker Apache impossible à relancer : httpd already running</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Article suivant</p> <p class="mt-2 font-medium text-slate-100">Flex : mélanger autowiring et déclaration de services à l&#39;ancienne</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Site statique hébergé sur GitHub Pages</p> </div> </footer> </body></html>

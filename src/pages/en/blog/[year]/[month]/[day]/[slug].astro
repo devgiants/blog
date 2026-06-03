@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../../../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, locales, withLang } from '../../../../../../lib/i18n';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts')).filter((post) => post.data.locale === 'en').sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+  return posts.map((post, index) => {
+    const year = String(post.data.date.getFullYear());
+    const month = String(post.data.date.getMonth() + 1).padStart(2, '0');
+    const day = String(post.data.date.getDate()).padStart(2, '0');
+    return {
+      params: { year, month, day, slug: post.data.publicSlug ?? post.data.slug ?? post.slug },
+      props: {
+        post,
+        previousPost: posts[index + 1] ?? null,
+        nextPost: posts[index - 1] ?? null,
+      },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const dateLabel = post.data.date.toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+});
+const postSlug = post.data.publicSlug ?? post.data.slug ?? post.slug;
+const path = `/blog/${post.data.date.getFullYear()}/${String(post.data.date.getMonth() + 1).padStart(2, '0')}/${String(post.data.date.getDate()).padStart(2, '0')}/${postSlug}/`;
+const { previousPost, nextPost } = Astro.props;
+const href = (value) => withLang(value, locale);
+---
+
+<BaseLayout title={post.data.title} description={post.data.excerpt || post.data.title} canonical={new URL(withLang(path, locale), Astro.site).toString()} locale={locale}>
+  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
+    <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">{dateLabel}</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{post.data.title}</h1>
+    {post.data.excerpt && <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{post.data.excerpt}</p>}
+
+    {post.data.tags.length > 0 && (
+      <div class="mt-6 flex flex-wrap gap-2">
+        {post.data.tags.map((tag) => (
+          <a
+            href={href(`/blog/tags/${encodeURIComponent(tag)}/`)}
+            class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100">
+      <Content />
+    </div>
+
+    {(previousPost || nextPost) && (
+      <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2">
+        {previousPost ? (
+          <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href={href(`/blog/${previousPost.data.date.getFullYear()}/${String(previousPost.data.date.getMonth() + 1).padStart(2, '0')}/${String(previousPost.data.date.getDate()).padStart(2, '0')}/${previousPost.data.publicSlug ?? previousPost.data.slug ?? previousPost.slug}/`)}>
+            <p class="text-xs uppercase tracking-[0.24em] text-slate-400">{copy.common.previousArticle}</p>
+            <p class="mt-2 font-medium text-slate-100">{previousPost.data.title}</p>
+          </a>
+        ) : <span />}
+        {nextPost ? (
+          <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href={href(`/blog/${nextPost.data.date.getFullYear()}/${String(nextPost.data.date.getMonth() + 1).padStart(2, '0')}/${String(nextPost.data.date.getDate()).padStart(2, '0')}/${nextPost.data.publicSlug ?? nextPost.data.slug ?? nextPost.slug}/`)}>
+            <p class="text-xs uppercase tracking-[0.24em] text-slate-400">{copy.common.nextArticle}</p>
+            <p class="mt-2 font-medium text-slate-100">{nextPost.data.title}</p>
+          </a>
+        ) : <span />}
+      </nav>
+    )}
+  </article>
+</BaseLayout>

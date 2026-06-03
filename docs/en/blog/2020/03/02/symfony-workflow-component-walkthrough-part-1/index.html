@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1220"><title>Symfony Workflow component - part 1 - devGiants</title><meta name="description" content="We start here a journey in often underused Workflow component."><link rel="canonical" href="https://devgiants.fr/en/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/"><meta name="robots" content="index, follow"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" href="/atom.xml" title="devGiants feed"><link rel="stylesheet" href="/_astro/about.zF107A5E.css"></head> <body class="font-sans text-slate-100"> <header class="sticky top-0 z-40 border-b border-white/10 bg-[rgba(11,18,32,0.82)] backdrop-blur-xl"> <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"> <a href="/en/" class="group flex items-center gap-3"> <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">
+DG
+</span> <span class="leading-tight"> <span class="block text-[0.7rem] uppercase tracking-[0.3em] text-slate-400">devGiants</span> <span class="block text-sm font-medium text-slate-100">tech notes</span> </span> </a> <nav class="hidden items-center gap-2 md:flex"> <a class="rounded-full px-4 py-2 text-sm transition bg-white text-slate-950" href="/en/blog/">Blog</a> <a class="rounded-full px-4 py-2 text-sm transition text-slate-300 hover:bg-white/8 hover:text-white" href="/en/bio/">Bio</a> <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href="/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/"> Français </a> </nav> </div> </header> <main class="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10"> <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">March 02, 2020</p> <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">Symfony Workflow component - part 1</h1> <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">We start here a journey in often underused Workflow component.</p> <div class="mt-6 flex flex-wrap gap-2"> <a href="/en/blog/tags/php/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#php </a><a href="/en/blog/tags/symfony/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#symfony </a><a href="/en/blog/tags/component/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#component </a><a href="/en/blog/tags/workflow/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200">
+#workflow </a> </div> <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100"> <p>The <a href="https://symfony.com/doc/current/components/workflow.html">Symfony Workflow component</a>, according to documentation,
+allows to :</p>
+<blockquote>
+<p>The Workflow component provides tools for managing a workflow or finite state machine.</p>
+</blockquote>
+<p>This one-line program can be breathtaking, when we measure the complexity the task can be.
+This feeling passed away, let’s see how this implementation can drastically help us to enforce some rules defined by
+<strong>places</strong> &#x26; <strong>transitions</strong>.</p>
+<p>As a reminder (from doc again), a workflow is</p>
+<blockquote>
+<p>A way to define a process or a life cycle that your object goes through.</p>
+</blockquote>
+<h2 id="2-types-of-workflows">2 types of workflows</h2>
+<p>There are 2 ways : <strong>workflow</strong> or <strong>finite state machine</strong>. Main difference is <strong>workflow allows subject to take simultaneous
+states as the same time</strong>, whereas finite state machine authorize <strong>only one at a time</strong>. This post focuses on the latter.
+As a start, the finite state machine is easier to deal with.</p>
+<h3 id="vocabulary">Vocabulary</h3>
+<p>Let’s define vocabulary first :</p>
+<ul>
+<li><strong>Place</strong> : given state marking the object status (for example “Draft”, “Published”, “Review”…).</li>
+<li><strong>Transition</strong> : named action for moving from one place to another (for example “Publication”
+will drag the state marker from place “Draft” to place “Publish”).</li>
+<li><strong>Definition</strong> : set of places and transitions</li>
+</ul>
+<p>Let’s focus on a classical ticket system, like Redmine. A workflow definition (simplified) could be :</p>
+<p><img src="/images/posts/workflow/ticket_workflow_example.png" alt="Ticket workflow example"></p>
+<p>We now have a definition. Let’s transcript this in configuration :</p>
+<p><kbd>workflow.yaml</kbd></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">framework</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  workflows</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    ticket</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">      # Only one state at a time for target entities</span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'state_machine'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">      # Make log trail cruise</span></span>
+<span class="line"><span style="color:#6A737D">      #      audit_trail:</span></span>
+<span class="line"><span style="color:#6A737D">      #        enabled: true</span></span>
+<span class="line"><span style="color:#85E89D">      marking_store</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'method'</span></span>
+<span class="line"><span style="color:#85E89D">        property</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'state'</span></span>
+<span class="line"><span style="color:#85E89D">      supports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">App\Entity\Ticket</span></span>
+<span class="line"><span style="color:#85E89D">      initial_marking</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::NEW</span></span>
+<span class="line"><span style="color:#85E89D">      places</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::NEW</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::IN_PROGRESS</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::COMMENT</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::SOLVED</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::CLOSED</span></span>
+<span class="line"><span style="color:#85E89D">      transitions</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">        !php/const</span><span style="color:#85E89D"> App\Workflow\Transition\TicketTransitions::START_PROCESS</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          from</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::NEW</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::COMMENT</span></span>
+<span class="line"><span style="color:#85E89D">          to</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::IN_PROGRESS</span></span>
+<span class="line"><span style="color:#F97583">        !php/const</span><span style="color:#85E89D"> App\Workflow\Transition\TicketTransitions::COMMENT</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          from</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::IN_PROGRESS</span></span>
+<span class="line"><span style="color:#85E89D">          to</span><span style="color:#E1E4E8">:   </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::COMMENT</span></span>
+<span class="line"><span style="color:#F97583">        !php/const</span><span style="color:#85E89D"> App\Workflow\Transition\TicketTransitions::SOLVE</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          from</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::IN_PROGRESS</span></span>
+<span class="line"><span style="color:#85E89D">          to</span><span style="color:#E1E4E8">:   </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::SOLVED</span></span>
+<span class="line"><span style="color:#F97583">        !php/const</span><span style="color:#85E89D"> App\Workflow\Transition\TicketTransitions::UNSOLVE</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          from</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::SOLVED</span></span>
+<span class="line"><span style="color:#85E89D">          to</span><span style="color:#E1E4E8">:   </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::IN_PROGRESS</span></span>
+<span class="line"><span style="color:#F97583">        !php/const</span><span style="color:#85E89D"> App\Workflow\Transition\TicketTransitions::CLOSE</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          from</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::SOLVED</span></span>
+<span class="line"><span style="color:#85E89D">          to</span><span style="color:#E1E4E8">:   </span><span style="color:#F97583">!php/const</span><span style="color:#9ECBFF"> App\Workflow\Status\TicketStatuses::CLOSED</span></span></code></pre>
+<p><kbd>App\Workflow\Transition\TicketTransitions</kbd></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">&#x3C;?</span><span style="color:#79B8FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> App\Workflow\Transition</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">final</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TicketTransitions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> START_PROCESS</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'start_process'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> COMMENT</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'comment'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> SOLVE</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'solve'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> UNSOLVE</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'unsolve'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> CLOSE</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'close'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><kbd>App\Workflow\Status\TicketStatuses</kbd></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">&#x3C;?</span><span style="color:#79B8FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> App\Workflow\Status</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">final</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TicketStatuses</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> NEW</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'new'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> IN_PROGRESS</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'in_progress'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> COMMENT</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'comment'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> SOLVED</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'solved'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> CLOSED</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> 'closed'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>You may note the heavy use of YAML PHP constant. YAML is therefore a bit less readable, but this allow to define in a clear way things in PHP
+and use them in YAML files. Coupling usage with Doctrine Enumerations (for example <a href="https://github.com/fre5h/DoctrineEnumBundle">DoctrineEnumBundle</a>) is good practice.</p>
+<p><a href="https://symfony.com/doc/current/workflow.html#creating-a-workflow">Documentation</a> goes through keys and values expected regarding to this configuration.</p>
+<h2 id="the-marking-store">The marking store</h2>
+<p>I redefined on purpose the following part:</p>
+<p><kbd>workflow.yaml</kbd></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">      marking_store</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'method'</span></span>
+<span class="line"><span style="color:#85E89D">        property</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'state'</span></span></code></pre>
+<p>The <code>property</code> key contains the entity attribute that will carry the state (the place)
+the entity is. A <a href="https://symfony.com/blog/new-in-symfony-4-3-workflow-improvements">quite recent move</a> from core team
+introduce few things, especially <a href="https://symfony.com/blog/new-in-symfony-4-3-workflow-improvements#added-a-context-to-workflow-apply">context data</a> that can be useful.</p>
+<p>So the <code>Ticket</code> entity will look like :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">&#x3C;?</span><span style="color:#79B8FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> App\Entity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> App\Behavior\Workflowable</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Doctrine\Common\Collections\ArrayCollection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Doctrine\Common\Collections\Collection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#79B8FF"> Doctrine\ORM\Mapping</span><span style="color:#F97583"> as</span><span style="color:#B392F0"> ORM</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * @ORM\Entity(repositoryClass="App\Repository\TicketRepository")</span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Ticket</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    use</span><span style="color:#79B8FF"> Workflowable</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\Id()</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\GeneratedValue()</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\Column(type="integer")</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $id;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\Column(type="string", length=255)</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $title;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\ManyToOne(targetEntity="App\Entity\Ticket", inversedBy="relatedTickets")</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $parentTicket;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="parentTicket")</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $relatedTickets;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#79B8FF"> __construct</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> ArrayCollection</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getId</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#F97583"> ?int</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">id;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getTitle</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#F97583"> ?string</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">title;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> setTitle</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8"> $title)</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">title </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $title;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getParentTicket</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#F97583"> ?self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">parentTicket;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> setParentTicket</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">?self</span><span style="color:#E1E4E8"> $parentTicket)</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">parentTicket </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $parentTicket;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#79B8FF"> Collection</span><span style="color:#6A737D">|</span><span style="color:#F97583">self</span><span style="color:#6A737D">[]</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getRelatedTickets</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Collection</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> addRelatedTicket</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">self</span><span style="color:#E1E4E8"> $relatedTicket)</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF">$this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets</span><span style="color:#F97583">-></span><span style="color:#B392F0">contains</span><span style="color:#E1E4E8">($relatedTicket)) {</span></span>
+<span class="line"><span style="color:#79B8FF">            $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets[] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $relatedTicket;</span></span>
+<span class="line"><span style="color:#E1E4E8">            $relatedTicket</span><span style="color:#F97583">-></span><span style="color:#B392F0">setParentTicket</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">$this</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> removeRelatedTicket</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">self</span><span style="color:#E1E4E8"> $relatedTicket)</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">$this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets</span><span style="color:#F97583">-></span><span style="color:#B392F0">contains</span><span style="color:#E1E4E8">($relatedTicket)) {</span></span>
+<span class="line"><span style="color:#79B8FF">            $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">relatedTickets</span><span style="color:#F97583">-></span><span style="color:#B392F0">removeElement</span><span style="color:#E1E4E8">($relatedTicket);</span></span>
+<span class="line"><span style="color:#6A737D">            // set the owning side to null (unless already changed)</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> ($relatedTicket</span><span style="color:#F97583">-></span><span style="color:#B392F0">getParentTicket</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">                $relatedTicket</span><span style="color:#F97583">-></span><span style="color:#B392F0">setParentTicket</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>You may note the trait <code>Workflowable</code>. All finite state machine will have the same attribute for carrying place,
+so it can be DRYed like that :</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">&#x3C;?</span><span style="color:#79B8FF">php</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> App\Behavior</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">trait</span><span style="color:#B392F0"> Workflowable</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * @ORM\Column(type="string", length=15, nullable=false)</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@var</span><span style="color:#F97583"> string</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#E1E4E8"> $state;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#F97583"> string</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getState</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#F97583"> ?string</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">state;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    /**</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@param</span><span style="color:#F97583"> string</span><span style="color:#6A737D"> $state</span></span>
+<span class="line"><span style="color:#6A737D">     *</span></span>
+<span class="line"><span style="color:#6A737D">     * </span><span style="color:#F97583">@return</span><span style="color:#79B8FF"> Workflowable</span></span>
+<span class="line"><span style="color:#6A737D">     */</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> setState</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8"> $state,  $context </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [])</span><span style="color:#F97583">:</span><span style="color:#F97583"> self</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">        $this</span><span style="color:#F97583">-></span><span style="color:#E1E4E8">state </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $state;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="what-can-you-do-with-this">What can you do with this ?</h2>
+<p>That being said, how can you lever the definition you just made ? Let’s create a ticket and make a cruise :
+The example is given in a controller for DI simplicy and easy access sake, but let’s keep in mind that must not be done
+in real projects (Single Responsability Principle, not for controller).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> index</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">Registry</span><span style="color:#E1E4E8"> $registry)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        /*****************************************</span></span>
+<span class="line"><span style="color:#6A737D">         * Simple example</span></span>
+<span class="line"><span style="color:#6A737D">         */</span></span>
+<span class="line"><span style="color:#6A737D">        // Create new ticket</span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticket </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> Ticket</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticket</span><span style="color:#F97583">-></span><span style="color:#B392F0">setTitle</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Nice title'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Find workflow by entity</span></span>
+<span class="line"><span style="color:#6A737D">        // Will throw an exception if a same entity is targeted by multiple workflows</span></span>
+<span class="line"><span style="color:#6A737D">        // unless you provide second argument</span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticketWorkflow </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $registry</span><span style="color:#F97583">-></span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">($ticket);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Apply transition</span></span>
+<span class="line"><span style="color:#6A737D">        // Will try to play the transition (move from A place to B place) on the given entity </span></span>
+<span class="line"><span style="color:#E1E4E8">        $ticketWorkflow</span><span style="color:#F97583">-></span><span style="color:#B392F0">apply</span><span style="color:#E1E4E8">($ticket, </span><span style="color:#79B8FF">TicketTransitions</span><span style="color:#F97583">::</span><span style="color:#79B8FF">START_PROCESS</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">      </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> $this</span><span style="color:#F97583">-></span><span style="color:#B392F0">render</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'main.html.twig'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span></code></pre>
+<p>The <code>apply</code> method will try to play transition for changing given entity state. 2 possibilities from here :</p>
+<h3 id="given-transition-is-applyable">Given transition is applyable</h3>
+<p>it means that transition <code>from</code> places contains actual entity state.</p>
+<p><em>Example : as stated in configuration, initial marking for <code>Ticket</code> entity is <code>TicketStatuses::NEW</code> place.
+Quick_look to configuration confirms that this place is allowed as start place for TicketTransitions::START_PROCESS</em></p>
+<p>The workflow given above is dead simple, but as most of you have noticed, <strong>you may specify more than one start place</strong>.
+The opposite is not possible because you wouldn’t know which place to pick up once transition done.</p>
+<h3 id="given-transition-is-not-applyable">Given transition is not applyable</h3>
+<p>The opposite from above. You can’t apply this transition. If you try it, a <code>LogicException</code> will be raised :</p>
+<h3 id="some-reflection">Some reflection</h3>
+<p>For adding dynamism, you can make <strong>some reflection on workflow object</strong>. You can :</p>
+<ul>
+<li>Check if given entity can do transition : <code>$ticketWorkflow->can($ticket, TicketTransitions::START_PROCESS)</code></li>
+<li>Retrieve available transitions for given entity : <code>$ticketWorkflow->getEnabledTransitions($ticket)</code></li>
+</ul>
+<p>Those 2 helpers are immensively useful, because <strong>you can safely make your object cruising according to runtime data</strong>.</p>
+<h2 id="quick-conclusion">Quick conclusion</h2>
+<p>I hope you realize how powerful this structure is and how it can help to strenghten you business rules,
+by constraining entities to planned cruise during its lifetime.</p>
+<p>Next post will focus on the real stuff : events dispatched by the system that will allow you to
+do the serious things.</p> </div> <nav class="mt-12 grid gap-4 border-t border-slate-900/10 pt-8 sm:grid-cols-2"> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-300/40 hover:bg-white/10" href="/en/blog/2019/10/13/domofony-symfony-application/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Previous article</p> <p class="mt-2 font-medium text-slate-100">Domofony Symfony application - part 1</p> </a> <a class="rounded-2xl border border-white/10 bg-white/5 p-4 text-right transition hover:border-cyan-300/40 hover:bg-white/10" href="/en/blog/2020/03/04/named-constructors/"> <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Next article</p> <p class="mt-2 font-medium text-slate-100">Named constructor</p> </a> </nav> </article>  </main> <footer class="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 lg:px-8"> <div class="glass flex flex-col gap-4 rounded-3xl px-6 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"> <p>© 2026 devGiants</p> <p class="font-mono text-xs uppercase tracking-[0.24em] text-slate-400">Static site hosted on GitHub Pages</p> </div> </footer> </body></html>

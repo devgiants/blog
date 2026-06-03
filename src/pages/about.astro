@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, locales } from '../lib/i18n';
+
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const about = (await getCollection('pages')).find((entry) => entry.data.key === 'about' && entry.data.locale === locale);
+
+if (!about) {
+  throw new Error(`About page not found for locale ${locale}`);
+}
+
+const { Content } = await about.render();
+---
+
+<BaseLayout title={copy.common.about} description={copy.common.aboutIntro} locale={locale}>
+  <section class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
+    <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.common.aboutKicker}</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{copy.common.aboutTitle}</h1>
+    <div class="content prose prose-invert mt-8 max-w-none prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline">
+      <Content />
+    </div>
+  </section>
+</BaseLayout>

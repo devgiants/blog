@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, locales, withLang } from '../../../lib/i18n';
+
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const href = (path) => withLang(path, locale);
+const posts = (await getCollection('posts')).filter((post) => post.data.locale === locale);
+const tagCounts = new Map();
+
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+
+const tags = [...tagCounts.entries()].sort(([a], [b]) => a.localeCompare(b, locale === 'en' ? 'en' : 'fr'));
+---
+
+<BaseLayout title={copy.nav.tags} description={copy.common.tagCloud} locale={locale}>
+  <section class="glass-strong rounded-[2rem] p-8 sm:p-10">
+    <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.nav.tags}</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{copy.common.tagCloud}</h1>
+    <div class="mt-8 flex flex-wrap gap-3">
+      {tags.map(([tag, count]) => (
+        <a
+          href={href(`/blog/tags/${encodeURIComponent(tag)}/`)}
+          class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-200"
+        >
+          {tag} <span class="text-slate-400">({count})</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
