@@ -108,3 +108,115 @@ a {
   color: transparent;
   line-height: 1.15;
 }
+
+.project-gallery {
+  display: grid;
+  gap: 1rem;
+}
+
+.project-gallery__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.project-gallery__stage {
+  position: relative;
+}
+
+.project-gallery__slide {
+  display: none;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: rgba(9, 16, 29, 0.7);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.project-gallery__slide img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.project-gallery__caption {
+  margin: 0;
+  padding: 0.9rem 1rem 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.project-gallery__thumbs {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .project-gallery__thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.project-gallery__thumb {
+  display: block;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: rgba(9, 16, 29, 0.6);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.project-gallery__thumb:hover {
+  transform: translateY(-1px);
+  border-color: rgba(45, 212, 191, 0.35);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+}
+
+.project-gallery__thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.project-gallery__thumb span {
+  display: block;
+  padding: 0.65rem 0.75rem 0.78rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+#tsm-slide-1:checked ~ .project-gallery__stage .project-gallery__slide--1,
+#tsm-slide-2:checked ~ .project-gallery__stage .project-gallery__slide--2,
+#tsm-slide-3:checked ~ .project-gallery__stage .project-gallery__slide--3,
+#tsm-slide-4:checked ~ .project-gallery__stage .project-gallery__slide--4 {
+  display: block;
+}
+
+#tsm-slide-1:checked ~ .project-gallery__thumbs label[for='tsm-slide-1'],
+#tsm-slide-2:checked ~ .project-gallery__thumbs label[for='tsm-slide-2'],
+#tsm-slide-3:checked ~ .project-gallery__thumbs label[for='tsm-slide-3'],
+#tsm-slide-4:checked ~ .project-gallery__thumbs label[for='tsm-slide-4'] {
+  border-color: rgba(45, 212, 191, 0.55);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+}
