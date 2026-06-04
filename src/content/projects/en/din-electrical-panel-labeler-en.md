@@ -35,3 +35,4 @@ The document includes DIN calibration with `1U = 17.5 mm` and provides fine-grai
 Labels can include row number, position, width in modules, an icon, a room tag, a background color, and multiline text.
 
 The project is complete and the repository is available on [GitLab](https://gitlab.com/devgiants/web/din-electrical-panel-labeler).
+Gitlab-hosted online version is [here](https://devgiants.gitlab.io/web/din-electrical-panel-labeler/).

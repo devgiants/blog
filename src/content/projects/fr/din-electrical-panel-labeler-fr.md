@@ -34,4 +34,4 @@ Le document intègre une calibration sur les dimensions DIN, avec `1U = 17,5 mm`
 
 Les étiquettes peuvent porter un numéro de rangée, une position, une largeur en modules, une icône, un tag pièce, une couleur de fond et du texte sur plusieurs lignes.
 
-Le projet est terminé et le dépôt est disponible sur [GitLab](https://gitlab.com/devgiants/web/din-electrical-panel-labeler).
+Le projet est terminé et le dépôt est disponible sur [GitLab](https://gitlab.com/devgiants/web/din-electrical-panel-labeler). La version online, hébergée sur Gitlab est [ici](https://devgiants.gitlab.io/web/din-electrical-panel-labeler/).
