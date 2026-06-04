@@ -57,20 +57,7 @@ const projects = (await getCollection('projects'))
 
     <aside class="glass rounded-[2rem] p-6 sm:p-8">
       <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.common.focus}</p>
-      <div class="mt-5 grid gap-4">
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <h2 class="text-sm font-semibold text-slate-100">{copy.common.techBlog}</h2>
-          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeBlogNote}</p>
-        </div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <h2 class="text-sm font-semibold text-slate-100">{copy.common.projectsLabel}</h2>
-          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeProjectsNote}</p>
-        </div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <h2 class="text-sm font-semibold text-slate-100">{copy.common.bioLabel}</h2>
-          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeBioNote}</p>
-        </div>
-      </div>
+      <p class="mt-5 text-sm leading-7 text-slate-300">{copy.common.focusNote}</p>
     </aside>
   </section>
 

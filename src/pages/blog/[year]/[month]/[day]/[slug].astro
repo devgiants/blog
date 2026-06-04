@@ -39,7 +39,7 @@ const href = (value) => withLang(value, locale);
 <BaseLayout title={post.data.title} description={post.data.excerpt || post.data.title} canonical={new URL(path, Astro.site).toString()} locale={locale}>
   <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
     <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">{dateLabel}</p>
-    <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{post.data.title}</h1>
+    <h1 class="mt-3 text-3xl font-semibold leading-[1.15] tracking-tight title-duo sm:text-5xl">{post.data.title}</h1>
     {post.data.excerpt && <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{post.data.excerpt}</p>}
 
     {post.data.tags.length > 0 && (
