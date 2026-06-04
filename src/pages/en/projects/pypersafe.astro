@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, locales, withLang } from '../../../lib/i18n';
+
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const project = (await getCollection('projects')).find((entry) => entry.data.key === 'pypersafe' && entry.data.locale === locale);
+
+if (!project) {
+  throw new Error(`Project page not found for locale ${locale}`);
+}
+
+const { Content } = await project.render();
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary} canonical={new URL(withLang('/projects/pypersafe/', locale), Astro.site).toString()} locale={locale}>
+  <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
+    <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">{copy.common.projectStatus}: {project.data.status}</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight title-duo sm:text-5xl">{project.data.title}</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{project.data.summary}</p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href={project.data.url} target="_blank" rel="noreferrer" class="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-200">
+        GitLab
+      </a>
+      <a href={withLang('/projects/', locale)} class="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:border-cyan-300/40 hover:bg-white/10">
+        {locale === 'en' ? 'Back to projects' : 'Retour aux projets'}
+      </a>
+    </div>
+
+    {project.data.stack.length > 0 && (
+      <div class="mt-6 flex flex-wrap gap-2">
+        {project.data.stack.map((item) => (
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200">
+            {item}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <div class="content prose prose-invert mt-10 max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-pre:bg-slate-950 prose-pre:text-slate-100">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

@@ -8,6 +8,7 @@ export async function GET() {
   const site = import.meta.env.SITE ?? 'https://devgiants.fr';
   const posts = await getCollection('posts');
   const pages = await getCollection('pages');
+  const projects = await getCollection('projects');
   const tags = new Set();
   const blogPageCount = Math.max(1, Math.ceil(posts.length / 10));
   const locales = ['', '/en'];
@@ -19,7 +20,7 @@ export async function GET() {
   const urls = ['/atom.xml', '/robots.txt'];
 
   for (const locale of locales) {
-    urls.push(`${locale || ''}/`, `${locale || ''}/blog/`, `${locale || ''}/blog/tags/`, `${locale || ''}/bio/`, `${locale || ''}/about/`);
+    urls.push(`${locale || ''}/`, `${locale || ''}/blog/`, `${locale || ''}/blog/tags/`, `${locale || ''}/projects/`, `${locale || ''}/bio/`);
 
     for (const post of posts) {
       const date = post.data.date;
@@ -35,6 +36,11 @@ export async function GET() {
     for (const page of pages) {
       if (page.slug === 'bio') continue;
       urls.push(`${locale || ''}/${page.slug}/`);
+    }
+
+    for (const project of projects) {
+      if (project.data.locale !== (locale === '/en' ? 'en' : 'fr')) continue;
+      urls.push(`${locale || ''}/projects/${project.data.publicSlug ?? project.data.slug ?? project.slug}/`);
     }
 
     for (const tag of tags) {

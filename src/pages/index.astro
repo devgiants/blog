@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { getLocale, locales, withLang } from '../lib/i18n';
 
@@ -13,6 +14,10 @@ const posts = (await getCollection('posts'))
   .filter((post) => post.data.locale === locale)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
+const projects = (await getCollection('projects'))
+  .filter((project) => project.data.locale === locale)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 1);
 ---
 
 <BaseLayout
@@ -41,6 +46,9 @@ const posts = (await getCollection('posts'))
         <a href={href('/blog/')} class="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-200">
           {copy.nav.blog}
         </a>
+        <a href={href('/projects/')} class="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:border-cyan-300/40 hover:bg-white/10">
+          {copy.nav.projects}
+        </a>
         <a href={href('/bio/')} class="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:border-cyan-300/40 hover:bg-white/10">
           {copy.nav.bio}
         </a>
@@ -55,8 +63,8 @@ const posts = (await getCollection('posts'))
           <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeBlogNote}</p>
         </div>
         <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <h2 class="text-sm font-semibold text-slate-100">{copy.common.techBlog}</h2>
-          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeBlogNote}</p>
+          <h2 class="text-sm font-semibold text-slate-100">{copy.common.projectsLabel}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-300">{copy.common.homeProjectsNote}</p>
         </div>
         <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
           <h2 class="text-sm font-semibold text-slate-100">{copy.common.bioLabel}</h2>
@@ -65,6 +73,28 @@ const posts = (await getCollection('posts'))
       </div>
     </aside>
   </section>
+
+  {projects.length > 0 && (
+    <section class="mt-16">
+      <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.32em] text-slate-400">{copy.common.projectsKicker}</p>
+          <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-100">{copy.common.projectsTitle}</h2>
+        </div>
+        <a href={href('/projects/')} class="text-sm font-medium text-cyan-300 hover:text-cyan-200">{copy.common.projectsViewAll}</a>
+      </div>
+
+      <div class="grid gap-5 lg:grid-cols-1">
+        {projects.map((project) => (
+          <ProjectCard
+            project={project}
+            locale={locale}
+            detailHref={href(`/projects/${project.data.publicSlug ?? project.data.slug ?? project.slug}/`)}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="mt-16">
     <div class="mb-6 flex items-end justify-between gap-4">

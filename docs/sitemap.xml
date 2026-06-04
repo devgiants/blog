@@ -5,8 +5,8 @@
   <url><loc>https://devgiants.fr/</loc></url>
   <url><loc>https://devgiants.fr/blog/</loc></url>
   <url><loc>https://devgiants.fr/blog/tags/</loc></url>
+  <url><loc>https://devgiants.fr/projects/</loc></url>
   <url><loc>https://devgiants.fr/bio/</loc></url>
-  <url><loc>https://devgiants.fr/about/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/15/docker-apache-impossible-restart/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/15/docker-stack-presentation/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/20/entire-section-requirements-symfony-config/</loc></url>
@@ -30,8 +30,8 @@
   <url><loc>https://devgiants.fr/blog/2021/04/12/docker-compose-port-mapping-subtlety/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/12/website-backup-php-component/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/15/docker-apache-impossible-restart/</loc></url>
-  <url><loc>https://devgiants.fr/blog/2018/02/16/voter-interface-constants/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/15/docker-stack-presentation/</loc></url>
+  <url><loc>https://devgiants.fr/blog/2018/02/16/voter-interface-constants/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/20/entire-section-requirements-symfony-config/</loc></url>
   <url><loc>https://devgiants.fr/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</loc></url>
   <url><loc>https://devgiants.fr/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/</loc></url>
@@ -48,8 +48,8 @@
   <url><loc>https://devgiants.fr/blog/2019/10/12/domofony-presentation/</loc></url>
   <url><loc>https://devgiants.fr/blog/2019/10/13/domofony-symfony-application/</loc></url>
   <url><loc>https://devgiants.fr/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/</loc></url>
-  <url><loc>https://devgiants.fr/blog/2020/03/04/named-constructors/</loc></url>
   <url><loc>https://devgiants.fr/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</loc></url>
+  <url><loc>https://devgiants.fr/blog/2020/03/04/named-constructors/</loc></url>
   <url><loc>https://devgiants.fr/blog/2021/01/25/wymfony-version-manager/</loc></url>
   <url><loc>https://devgiants.fr/blog/2021/04/12/docker-compose-port-mapping-subtlety/</loc></url>
   <url><loc>https://devgiants.fr/blog/2021/07/15/drifting-blues-9-writeup/</loc></url>
@@ -57,10 +57,9 @@
   <url><loc>https://devgiants.fr/blog/3/</loc></url>
   <url><loc>https://devgiants.fr/blog/4/</loc></url>
   <url><loc>https://devgiants.fr/blog/5/</loc></url>
-  <url><loc>https://devgiants.fr/abouten/</loc></url>
-  <url><loc>https://devgiants.fr/aboutfr/</loc></url>
   <url><loc>https://devgiants.fr/bioen/</loc></url>
   <url><loc>https://devgiants.fr/biofr/</loc></url>
+  <url><loc>https://devgiants.fr/projects/pypersafe/</loc></url>
   <url><loc>https://devgiants.fr/blog/tags/docker/</loc></url>
   <url><loc>https://devgiants.fr/blog/tags/apache/</loc></url>
   <url><loc>https://devgiants.fr/blog/tags/stack/</loc></url>
@@ -108,8 +107,8 @@
   <url><loc>https://devgiants.fr/en/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/tags/</loc></url>
+  <url><loc>https://devgiants.fr/en/projects/</loc></url>
   <url><loc>https://devgiants.fr/en/bio/</loc></url>
-  <url><loc>https://devgiants.fr/en/about/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/15/docker-apache-impossible-restart/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/15/docker-stack-presentation/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/20/entire-section-requirements-symfony-config/</loc></url>
@@ -133,8 +132,8 @@
   <url><loc>https://devgiants.fr/en/blog/2021/04/12/docker-compose-port-mapping-subtlety/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/12/website-backup-php-component/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/15/docker-apache-impossible-restart/</loc></url>
-  <url><loc>https://devgiants.fr/en/blog/2018/02/16/voter-interface-constants/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/15/docker-stack-presentation/</loc></url>
+  <url><loc>https://devgiants.fr/en/blog/2018/02/16/voter-interface-constants/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/20/entire-section-requirements-symfony-config/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2018/02/20/mixing-autowiring-with-old-fashoned-service-way/</loc></url>
@@ -151,8 +150,8 @@
   <url><loc>https://devgiants.fr/en/blog/2019/10/12/domofony-presentation/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2019/10/13/domofony-symfony-application/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2020/03/02/symfony-workflow-component-walkthrough-part-1/</loc></url>
-  <url><loc>https://devgiants.fr/en/blog/2020/03/04/named-constructors/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2020/09/10/simple-method-for-pimping-up-your-mysql-container/</loc></url>
+  <url><loc>https://devgiants.fr/en/blog/2020/03/04/named-constructors/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2021/01/25/wymfony-version-manager/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2021/04/12/docker-compose-port-mapping-subtlety/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/2021/07/15/drifting-blues-9-writeup/</loc></url>
@@ -160,10 +159,9 @@
   <url><loc>https://devgiants.fr/en/blog/3/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/4/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/5/</loc></url>
-  <url><loc>https://devgiants.fr/en/abouten/</loc></url>
-  <url><loc>https://devgiants.fr/en/aboutfr/</loc></url>
   <url><loc>https://devgiants.fr/en/bioen/</loc></url>
   <url><loc>https://devgiants.fr/en/biofr/</loc></url>
+  <url><loc>https://devgiants.fr/en/projects/pypersafe/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/tags/docker/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/tags/apache/</loc></url>
   <url><loc>https://devgiants.fr/en/blog/tags/stack/</loc></url>

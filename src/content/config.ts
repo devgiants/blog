@@ -28,9 +28,27 @@ export const collections = {
     type: 'content',
     schema: z
       .object({
-        key: z.enum(['bio', 'about']),
+        key: z.enum(['bio']),
         locale: z.enum(['fr', 'en']),
         title: z.string(),
+      })
+      .passthrough(),
+  }),
+  projects: defineCollection({
+    type: 'content',
+    schema: z
+      .object({
+        key: z.string(),
+        slug: z.string().optional(),
+        publicSlug: z.string().optional(),
+        locale: z.enum(['fr', 'en']),
+        title: z.string(),
+        summary: z.string(),
+        url: z.string().url(),
+        date: z.coerce.date(),
+        status: z.string().optional(),
+        stack: optionalStringArray,
+        featured: z.boolean().optional().default(false),
       })
       .passthrough(),
   }),

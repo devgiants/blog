@@ -1,0 +1,39 @@
+---
+const { project, locale, detailHref } = Astro.props;
+const dateLabel = project.data.date.toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR', {
+  year: 'numeric',
+  month: 'short',
+});
+---
+
+<article class="glass-strong group rounded-3xl p-6 transition-transform duration-300 hover:-translate-y-1">
+  <div class="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.24em] text-slate-400">
+    <span>{dateLabel}</span>
+    {project.data.status && <span>{project.data.status}</span>}
+  </div>
+
+  <h3 class="mt-3 text-xl font-semibold tracking-tight text-slate-100">
+    <a class="after:absolute after:inset-0" href={detailHref}>{project.data.title}</a>
+  </h3>
+
+  <p class="mt-3 text-sm leading-7 text-slate-300">{project.data.summary}</p>
+
+  {project.data.stack.length > 0 && (
+    <div class="mt-5 flex flex-wrap gap-2">
+      {project.data.stack.map((item) => (
+        <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200">
+          {item}
+        </span>
+      ))}
+    </div>
+  )}
+
+  <div class="mt-6 flex items-center justify-between gap-3">
+    <a href={detailHref} class="text-sm font-medium text-cyan-300 transition hover:text-cyan-200">
+      {locale === 'en' ? 'View project' : 'Voir le projet'}
+    </a>
+    <a href={project.data.url} class="text-sm font-medium text-slate-300 transition hover:text-white" target="_blank" rel="noreferrer">
+      GitLab
+    </a>
+  </div>
+</article>

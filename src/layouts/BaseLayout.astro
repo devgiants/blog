@@ -48,7 +48,8 @@ const homeHref = withLang('/', locale);
 
         <nav class="hidden items-center gap-2 md:flex">
           <a class={`rounded-full px-4 py-2 text-sm transition ${currentPath.startsWith('/blog') ? 'bg-white text-slate-950' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`} href={withLang('/blog/', locale)}>{copy.nav.blog}</a>
-          <a class={`rounded-full px-4 py-2 text-sm transition ${currentPath.startsWith('/bio') || currentPath.startsWith('/about') ? 'bg-white text-slate-950' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`} href={withLang('/bio/', locale)}>{copy.nav.bio}</a>
+          <a class={`rounded-full px-4 py-2 text-sm transition ${currentPath.startsWith('/projects') ? 'bg-white text-slate-950' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`} href={withLang('/projects/', locale)}>{copy.nav.projects}</a>
+          <a class={`rounded-full px-4 py-2 text-sm transition ${currentPath.startsWith('/bio') ? 'bg-white text-slate-950' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`} href={withLang('/bio/', locale)}>{copy.nav.bio}</a>
           <a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/8 hover:text-white" href={toggleHref}>
             {copy.nav.language}
           </a>
