@@ -26,51 +26,33 @@ The add-in works on selected `ThreadFeature` objects in a Part document. It expo
 - the `3D Print` workflow
 
 The ISO workflow opens a modeless dialog to choose the sketch template and the pitch offset.
-
 The `3D Print` workflow starts from the selected thread geometry, pre-fills a trapezoidal profile based on the nominal diameter, and lets you tune the dimensions manually. It relies on part of the original thread characteristics, but lets you adjust the parameters so the output stays printable and usable. In particular, it lets you add clearance to match the accuracy of the 3D printer you are targeting.
 
-<div class="project-gallery my-8">
-  <input class="project-gallery__input" type="radio" name="thread-solid-modeler-gallery-en" id="tsm-slide-1" checked />
-  <input class="project-gallery__input" type="radio" name="thread-solid-modeler-gallery-en" id="tsm-slide-2" />
-  <input class="project-gallery__input" type="radio" name="thread-solid-modeler-gallery-en" id="tsm-slide-3" />
-  <input class="project-gallery__input" type="radio" name="thread-solid-modeler-gallery-en" id="tsm-slide-4" />
-
+<div class="project-gallery my-8" data-thread-gallery>
   <div class="project-gallery__stage">
-    <figure class="project-gallery__slide project-gallery__slide--1">
-      <img src="/thread-solid-modeler/female_thread.png" alt="Modeled female thread" />
-      <figcaption class="project-gallery__caption">Main view of the modeled female thread</figcaption>
-    </figure>
-    <figure class="project-gallery__slide project-gallery__slide--2">
-      <img src="/thread-solid-modeler/male_thread_with_progressive_start.png" alt="Male thread with progressive start" />
-      <figcaption class="project-gallery__caption">Male thread with progressive start</figcaption>
-    </figure>
-    <figure class="project-gallery__slide project-gallery__slide--3">
-      <img src="/thread-solid-modeler/thread_male_female_with_clearance_1.png" alt="Male and female assembly with clearance" />
-      <figcaption class="project-gallery__caption">Male / female assembly with clearance</figcaption>
-    </figure>
-    <figure class="project-gallery__slide project-gallery__slide--4">
-      <img src="/thread-solid-modeler/thread_male_female_with_clearance_2.png" alt="Male and female assembly with clearance, alternate view" />
-      <figcaption class="project-gallery__caption">Male / female assembly with clearance, alternate view</figcaption>
+    <figure class="project-gallery__slide is-active" data-gallery-slide>
+      <img src="/thread-solid-modeler/female_thread.png" alt="Modeled female thread" data-gallery-main-image />
+      <figcaption class="project-gallery__caption" data-gallery-main-caption>Main view of the modeled female thread</figcaption>
     </figure>
   </div>
 
-  <div class="project-gallery__thumbs">
-    <label class="project-gallery__thumb" for="tsm-slide-1">
-      <img src="/thread-solid-modeler/female_thread.png" alt="Thumbnail of the modeled female thread" />
+  <div class="project-gallery__thumbs" role="tablist" aria-label="Thread Solid Modeler gallery">
+    <button class="project-gallery__thumb is-active" type="button" data-gallery-thumb data-image="/thread-solid-modeler/female_thread.png" data-alt="Modeled female thread" data-caption="Main view of the modeled female thread">
+      <img src="/thread-solid-modeler/female_thread.png" alt="" aria-hidden="true" />
       <span>Main view</span>
-    </label>
-    <label class="project-gallery__thumb" for="tsm-slide-2">
-      <img src="/thread-solid-modeler/male_thread_with_progressive_start.png" alt="Thumbnail of the male thread with progressive start" />
+    </button>
+    <button class="project-gallery__thumb" type="button" data-gallery-thumb data-image="/thread-solid-modeler/male_thread_with_progressive_start.png" data-alt="Male thread with progressive start" data-caption="Male thread with progressive start">
+      <img src="/thread-solid-modeler/male_thread_with_progressive_start.png" alt="" aria-hidden="true" />
       <span>Progressive start</span>
-    </label>
-    <label class="project-gallery__thumb" for="tsm-slide-3">
-      <img src="/thread-solid-modeler/thread_male_female_with_clearance_1.png" alt="Thumbnail of the male and female assembly with clearance" />
+    </button>
+    <button class="project-gallery__thumb" type="button" data-gallery-thumb data-image="/thread-solid-modeler/thread_male_female_with_clearance_1.png" data-alt="Male and female assembly with clearance" data-caption="Male / female assembly with clearance">
+      <img src="/thread-solid-modeler/thread_male_female_with_clearance_1.png" alt="" aria-hidden="true" />
       <span>Assembly clearance</span>
-    </label>
-    <label class="project-gallery__thumb" for="tsm-slide-4">
-      <img src="/thread-solid-modeler/thread_male_female_with_clearance_2.png" alt="Thumbnail of the male and female assembly with clearance, alternate view" />
+    </button>
+    <button class="project-gallery__thumb" type="button" data-gallery-thumb data-image="/thread-solid-modeler/thread_male_female_with_clearance_2.png" data-alt="Male and female assembly with clearance, alternate view" data-caption="Male / female assembly with clearance, alternate view">
+      <img src="/thread-solid-modeler/thread_male_female_with_clearance_2.png" alt="" aria-hidden="true" />
       <span>Alternate view</span>
-    </label>
+    </button>
   </div>
 </div>
 
@@ -79,3 +61,23 @@ The model is then built from the template or the dedicated profile, and the orig
 The standard generation path supports both standard and tapered threads. The default template is `ISO Template.ipt`, with `BSW Template.ipt` also shipped in the bundle.
 
 The project is complete and the repository is available on [GitHub](https://github.com/devgiants/thread-solid-modeler).
+
+<script is:inline>
+  const gallery = document.querySelector('[data-thread-gallery]');
+  if (gallery) {
+    const mainImage = gallery.querySelector('[data-gallery-main-image]');
+    const mainCaption = gallery.querySelector('[data-gallery-main-caption]');
+    const thumbButtons = [...gallery.querySelectorAll('[data-gallery-thumb]')];
+
+    const activate = (button) => {
+      thumbButtons.forEach((thumb) => thumb.classList.toggle('is-active', thumb === button));
+      mainImage.src = button.dataset.image;
+      mainImage.alt = button.dataset.alt || '';
+      mainCaption.textContent = button.dataset.caption || '';
+    };
+
+    thumbButtons.forEach((button) => {
+      button.addEventListener('click', () => activate(button));
+    });
+  }
+</script>
