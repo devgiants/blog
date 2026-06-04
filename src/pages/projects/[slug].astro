@@ -3,18 +3,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { getLocale, locales, withLang } from '../../lib/i18n';
 
-const locale = getLocale(Astro.url);
-const copy = locales[locale];
-const project = (await getCollection('projects')).find((entry) => entry.data.key === 'pypersafe' && entry.data.locale === locale);
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
 
-if (!project) {
-  throw new Error(`Project page not found for locale ${locale}`);
+  return projects
+    .filter((project) => project.data.locale === 'fr')
+    .map((project) => ({
+      params: { slug: project.data.publicSlug ?? project.data.slug ?? project.slug },
+      props: { project },
+    }));
 }
 
+const locale = getLocale(Astro.url);
+const copy = locales[locale];
+const { project } = Astro.props;
 const { Content } = await project.render();
+const slug = project.data.publicSlug ?? project.data.slug ?? project.slug;
+const path = `/projects/${slug}/`;
 ---
 
-<BaseLayout title={project.data.title} description={project.data.summary} canonical={new URL('/projects/pypersafe/', Astro.site).toString()} locale={locale}>
+<BaseLayout title={project.data.title} description={project.data.summary} canonical={new URL(path, Astro.site).toString()} locale={locale}>
   <article class="glass-strong rounded-[2rem] p-6 sm:p-8 lg:p-10">
     <p class="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">{copy.common.projectStatus}</p>
     <div class="mt-2">
