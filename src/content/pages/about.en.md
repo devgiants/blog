@@ -4,11 +4,8 @@ locale: en
 title: About
 ---
 
-This site brings together technical notes and a compact summary of my background.
+I am a backend developer focused on architecture and tooling, with more than 10 years of experience across both salaried and freelance work.
 
-I use it as a simple publishing space, without a CMS or extra interface layers, so the content stays readable and easy to maintain over time.
+I mainly work on readable, maintainable, and secure products. My focus remains backend, application architecture, applied cybersecurity, and using AI to build efficient, deterministic, maintainable products.
 
-It therefore contains:
-
-- a technical blog written in Markdown
-- a short and useful bio page
+I am looking for missions where I can use SDD to deliver a complete product, or for occasional more classic development work.

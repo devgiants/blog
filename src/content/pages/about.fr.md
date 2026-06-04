@@ -4,12 +4,8 @@ locale: fr
 title: À propos
 ---
 
-Ce site rassemble des notes techniques, quelques projets et un résumé compact de mon parcours.
+Je suis développeur backend, architecture et outillage, avec plus de 10 ans d'expérience, en salarié comme en freelance.
 
-Je l'utilise comme un espace de publication simple, sans CMS ni interface superflue, pour garder les contenus lisibles et facilement maintenables dans le temps.
+Je travaille surtout sur des produits lisibles, maintenables et sûrs. Mon terrain reste le backend, l'architecture applicative, la cybersécurité appliquée et une utilisation de l'IA pour la création efficiente de produits déterministes & maintenables.
 
-On y trouve donc :
-
-- un blog technique en Markdown
-- une sélection de projets récents
-- une page bio courte et utile
+Je recherche surtout des missions où je peux utiliser du SDD pour fournir un produit complet, ou des missions ponctuelles de développement plus classiques.
